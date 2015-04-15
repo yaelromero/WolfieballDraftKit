@@ -211,21 +211,22 @@ public class JsonDraftFileManager implements DraftFileManager {
         JsonObject json = loadJSONFile(jsonFilePath);
         ArrayList<Pitcher> items = new ArrayList<>();
         JsonArray jsonArray = json.getJsonArray(arrayName);
-        for (JsonValue jsV : jsonArray) {
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JsonObject jso = jsonArray.getJsonObject(i);
             Pitcher p = new Pitcher();
-            p.setMLBTeam(json.getString(JSON_MLB_TEAM).replaceAll("\"", ""));
-            p.setLastName(json.getString(JSON_LAST_NAME).replaceAll("\"", ""));
-            p.setFirstName(json.getString(JSON_FIRST_NAME).replaceAll("\"", ""));
-            p.setIPStat(Double.parseDouble(json.getString(JSON_IP_STAT)));
-            p.setERStat(json.getInt(JSON_ER_STAT));
-            p.setWStat(json.getInt(JSON_W_STAT));
-            p.setSVStat(json.getInt(JSON_SV_STAT));
-            p.setHStat(json.getInt(JSON_H_STAT));
-            p.setBBStat(json.getInt(JSON_BB_STAT));
-            p.setKStat(json.getInt(JSON_K_STAT));
-            p.setNotes(json.getString(JSON_NOTES).replaceAll("\"", ""));
-            p.setYOB(json.getInt(JSON_YOB));
-            p.setNOB(json.getString(JSON_NOB).replaceAll("\"", ""));
+            p.setMLBTeam(jso.getString(JSON_MLB_TEAM).replaceAll("\"", ""));
+            p.setLastName(jso.getString(JSON_LAST_NAME).replaceAll("\"", ""));
+            p.setFirstName(jso.getString(JSON_FIRST_NAME).replaceAll("\"", ""));
+            p.setNotes(jso.getString(JSON_NOTES).replaceAll("\"", ""));
+            p.setNOB(jso.getString(JSON_NOB).replaceAll("\"", ""));
+            p.setIPStat(Double.parseDouble(jso.getString(JSON_IP_STAT)));
+            p.setERStat(Integer.parseInt(jso.getString(JSON_ER_STAT)));
+            p.setWStat(Integer.parseInt(jso.getString(JSON_W_STAT)));
+            p.setSVStat(Integer.parseInt(jso.getString(JSON_SV_STAT)));
+            p.setHStat(Integer.parseInt(jso.getString(JSON_H_STAT)));
+            p.setBBStat(Integer.parseInt(jso.getString(JSON_BB_STAT)));
+            p.setKStat(Integer.parseInt(jso.getString(JSON_K_STAT)));
+            p.setYOB(Integer.parseInt(jso.getString(JSON_YOB)));
             items.add(p);
         }
         return items;
@@ -238,21 +239,22 @@ public class JsonDraftFileManager implements DraftFileManager {
         JsonObject json = loadJSONFile(jsonFilePath);
         ArrayList<Hitter> items = new ArrayList<>();
         JsonArray jsonArray = json.getJsonArray(arrayName);
-        for(JsonValue jsV : jsonArray) {
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JsonObject jso = jsonArray.getJsonObject(i);
             Hitter h = new Hitter();
-            h.setMLBTeam(json.getString(JSON_MLB_TEAM).replaceAll("\"", ""));
-            h.setLastName(json.getString(JSON_LAST_NAME).replaceAll("\"", ""));
-            h.setFirstName(json.getString(JSON_FIRST_NAME).replaceAll("\"", ""));
-            h.setQP(json.getString(JSON_QP).replaceAll("\"", ""));
-            h.setABStat(json.getInt(JSON_AB_STAT));
-            h.setRStat(json.getInt(JSON_R_STAT));
-            h.setHStat(json.getInt(JSON_H_STAT));
-            h.setHRStat(json.getInt(JSON_HR_STAT));
-            h.setRBIStat(json.getInt(JSON_RBI_STAT));
-            h.setSBStat(json.getInt(JSON_SB_STAT));
-            h.setNotes(json.getString(JSON_NOTES).replaceAll("\"", ""));
-            h.setYOB(json.getInt(JSON_YOB));
-            h.setNOB(json.getString(JSON_NOB).replaceAll("\"", ""));
+            h.setMLBTeam(jso.getString(JSON_MLB_TEAM).replaceAll("\"", ""));
+            h.setLastName(jso.getString(JSON_LAST_NAME).replaceAll("\"", ""));
+            h.setFirstName(jso.getString(JSON_FIRST_NAME).replaceAll("\"", ""));
+            h.setQP(jso.getString(JSON_QP).replaceAll("\"", ""));
+            h.setABStat(Integer.parseInt(jso.getString(JSON_AB_STAT)));
+            h.setRStat(Integer.parseInt(jso.getString(JSON_R_STAT)));
+            h.setHStat(Integer.parseInt(jso.getString(JSON_H_STAT)));
+            h.setHRStat(Integer.parseInt(jso.getString(JSON_HR_STAT)));
+            h.setRBIStat(Integer.parseInt(jso.getString(JSON_RBI_STAT)));
+            h.setSBStat(Integer.parseInt(jso.getString(JSON_SB_STAT)));
+            h.setNotes(jso.getString(JSON_NOTES).replaceAll("\"", ""));
+            h.setYOB(Integer.parseInt(jso.getString(JSON_YOB)));
+            h.setNOB(jso.getString(JSON_NOB).replaceAll("\"", ""));
             items.add(h);
         }
         return items;
