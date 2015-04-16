@@ -22,8 +22,6 @@ public class DraftDataManager {
     DraftFileManager fileManager;
     
     static String          DEFAULT_TEXT = "Unknown";
-    static List<Team>      DEFAULT_TEAMS = new ArrayList<>();
-    static List<Player>    DEFAULT_FREE_AGENTS = new ArrayList<>();
     
     public DraftDataManager(DraftDataView initView) {
         view = initView;
@@ -50,13 +48,15 @@ public class DraftDataManager {
      * the UI to reflect these changes.
      */
     public void reset() {
-        // CLEAR ALL THE COURSE VALUES
+        // CLEAR ALL THE DRAFT VALUES
+        /*
         draft.setDraftName(DEFAULT_TEXT);
-        draft.setListOfTeams(DEFAULT_TEAMS);
-        draft.setFreeAgents(DEFAULT_FREE_AGENTS);
-        
+        draft.clearListOfTeams();
+        draft.clearFreeAgents();
+        */
         // AND THEN FORCE THE UI TO RELOAD THE UPDATED COURSE
         view.reloadDraft(draft);
+        
     }
     
 }

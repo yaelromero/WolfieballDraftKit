@@ -13,7 +13,6 @@ import wdk.data.Hitter;
 import wdk.data.Pitcher;
 import wdk.data.Player;
 import wdk.data.Team;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -99,13 +98,25 @@ public class WDK_GUI implements DraftDataView {
     Button saveDraftButton;
     Button exportDraftButton;
     Button exitButton;
+    
+    // THIS IS THE SCREEN TOOLBAR AND ITS CONTROLS
+    FlowPane screenToolbarPane;
+    Button fantasyTeamsScreenButton;
+    Button playersScreenButton;
+    Button fantasyStandingsScreenButton;
+    Button draftScreenButton;
+    Button MLBTeamsScreenButton;
 
     // WE'LL ORGANIZE OUR WORKSPACE COMPONENTS USING A BORDER PANE
-    BorderPane workspacePane;
+    VBox workspacePane;
     boolean workspaceActivated;
     
     // WE'LL PUT THE WORKSPACE INSIDE A SCROLL PANE
     ScrollPane workspaceScrollPane;
+    
+    // THESE ARE THE CONTROLS FOR OUR FANTASY TEAMS SCREEN
+    Label fantasyTeamsHeading;
+    GridPane fantasyTeamsPane;
 
     // THESE ARE THE CONTROLS FOR OUR AVAILABLE PLAYERS SCREEN
     GridPane availablePlayersPane;
@@ -201,11 +212,11 @@ public class WDK_GUI implements DraftDataView {
      *
      * @return The DraftSiteExporter used by this UI.
      */
-    /*
+    
     public DraftSiteExporter getSiteExporter() {
         return siteExporter;
     }
-    */
+
 
     /**
      * Accessor method for the window (i.e. stage).
@@ -248,11 +259,9 @@ public class WDK_GUI implements DraftDataView {
      *
      * @param initSiteExporter The DraftSiteExporter to be used by this UI.
      */
-    /*
     public void setSiteExporter(DraftSiteExporter initSiteExporter) {
         siteExporter = initSiteExporter;
     }
-    */
     
     /**
      * This method fully initializes the user interface for use.
@@ -269,7 +278,7 @@ public class WDK_GUI implements DraftDataView {
 
         // INIT THE CENTER WORKSPACE CONTROLS BUT DON'T ADD THEM
         // TO THE WINDOW YET
-        //initWorkspace();
+        initWorkspace(hitters, pitchers);
 
         // NOW SETUP THE EVENT HANDLERS
         initEventHandlers();
@@ -290,6 +299,12 @@ public class WDK_GUI implements DraftDataView {
         }
     }
     
+    @Override
+    public void reloadDraft(Draft draftToReload) {
+       if (!workspaceActivated) {
+            activateWorkspace();
+        }
+    }
     
     /**
      * This method is used to activate/deactivate toolbar buttons when
@@ -311,55 +326,9 @@ public class WDK_GUI implements DraftDataView {
         // ARE NEVER DISABLED SO WE NEVER HAVE TO TOUCH THEM
     }
     
-    
-    @Override
-    public void reloadDraft(Draft draftToReload) {
-       
-    }
-    
-    // INIT ALL THE EVENT HANDLERS
-    private void initEventHandlers() throws IOException {
-        // FIRST THE FILE CONTROLS
-        fileController = new FileController(messageDialog, yesNoCancelDialog, draftFileManager, siteExporter);
-        newDraftButton.setOnAction(e -> {
-            fileController.handleNewCourseRequest(this);
-        });
-    }
-    
     private void initDialogs() {
         messageDialog = new MessageDialog(primaryStage, CLOSE_BUTTON_LABEL);
         yesNoCancelDialog = new YesNoCancelDialog(primaryStage);
-    }
-    
-    // INITIALIZE THE WINDOW (i.e. STAGE) PUTTING ALL THE CONTROLS
-    // THERE EXCEPT THE WORKSPACE, WHICH WILL BE ADDED THE FIRST
-    // TIME A NEW Course IS CREATED OR LOADED
-    private void initWindow(String windowTitle) {
-        // SET THE WINDOW TITLE
-        primaryStage.setTitle(windowTitle);
-
-        // GET THE SIZE OF THE SCREEN
-        Screen screen = Screen.getPrimary();
-        Rectangle2D bounds = screen.getVisualBounds();
-
-        // AND USE IT TO SIZE THE WINDOW
-        primaryStage.setX(bounds.getMinX());
-        primaryStage.setY(bounds.getMinY());
-        primaryStage.setWidth(bounds.getWidth());
-        primaryStage.setHeight(bounds.getHeight());
-
-        // ADD THE TOOLBAR ONLY, NOTE THAT THE WORKSPACE
-        // HAS BEEN CONSTRUCTED, BUT WON'T BE ADDED UNTIL
-        // THE USER STARTS EDITING A COURSE
-        wdkPane = new BorderPane();
-        wdkPane.setTop(fileToolbarPane);
-        primaryScene = new Scene(wdkPane);
-
-        // NOW TIE THE SCENE TO THE WINDOW, SELECT THE STYLESHEET
-        // WE'LL USE TO STYLIZE OUR GUI CONTROLS, AND OPEN THE WINDOW
-        primaryScene.getStylesheets().add(PRIMARY_STYLE_SHEET);
-        primaryStage.setScene(primaryScene);
-        primaryStage.show();
     }
     
     /**
@@ -377,6 +346,79 @@ public class WDK_GUI implements DraftDataView {
         exportDraftButton = initChildButton(fileToolbarPane, WDK_PropertyType.EXPORT_PAGE_ICON, WDK_PropertyType.EXPORT_PAGE_TOOLTIP, true);
         exitButton = initChildButton(fileToolbarPane, WDK_PropertyType.EXIT_ICON, WDK_PropertyType.EXIT_TOOLTIP, false);
     }
+    
+    private void initScreenToolbar() {
+        screenToolbarPane = new FlowPane();
+        
+        fantasyTeamsScreenButton = initChildButton(screenToolbarPane, WDK_PropertyType.HOME_ICON, WDK_PropertyType.HOME_TOOLTIP, false);
+        playersScreenButton = initChildButton(screenToolbarPane, WDK_PropertyType.PLAYERS_ICON, WDK_PropertyType.PLAYERS_TOOLTIP, false);
+        fantasyStandingsScreenButton = initChildButton(screenToolbarPane, WDK_PropertyType.STANDINGS_ICON, WDK_PropertyType.STANDINGS_TOOLTIP, false);
+        draftScreenButton = initChildButton(screenToolbarPane, WDK_PropertyType.DRAFT_SCREEN_ICON, WDK_PropertyType.DRAFT_SCREEN_TOOLTIP, false);
+        MLBTeamsScreenButton = initChildButton(screenToolbarPane, WDK_PropertyType.MLB_TEAMS_ICON, WDK_PropertyType.MLB_TEAMS_TOOLTIP, false);
+        
+    }
+    
+    // CREATES AND SETS UP ALL THE CONTROLS TO GO IN THE APP WORKSPACE
+    private void initWorkspace(ArrayList<Hitter> hitters, ArrayList<Pitcher> pitchers) throws IOException {
+        workspacePane = new VBox();
+        
+        fantasyTeamsPane = new GridPane();
+        fantasyTeamsHeading = initGridLabel(fantasyTeamsPane, WDK_PropertyType.FANTASY_HEADING_LABEL, CLASS_HEADING_LABEL, 0 , 0, 1, 1);
+        workspacePane.getChildren().add(fantasyTeamsPane);
+        
+        // AND NOW PUT IT IN THE WORKSPACE
+        workspaceScrollPane = new ScrollPane();
+        workspaceScrollPane.setContent(workspacePane);
+        workspaceScrollPane.setFitToWidth(true);
+        workspaceScrollPane.getStyleClass().add(CLASS_BORDERED_PANE);
+        
+        // NOTE THAT WE HAVE NOT PUT THE WORKSPACE INTO THE WINDOW,
+        // THAT WILL BE DONE WHEN THE USER EITHER CREATES A NEW
+        // COURSE OR LOADS AN EXISTING ONE FOR EDITING
+        workspaceActivated = false;
+        
+    }
+    
+    
+    // INITIALIZE THE WINDOW (i.e. STAGE) PUTTING ALL THE CONTROLS
+    // THERE EXCEPT THE WORKSPACE, WHICH WILL BE ADDED THE FIRST
+    // TIME A NEW Draft IS CREATED OR LOADED
+    private void initWindow(String windowTitle) {
+        // SET THE WINDOW TITLE
+        primaryStage.setTitle(windowTitle);
+
+        // GET THE SIZE OF THE SCREEN
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+
+        // AND USE IT TO SIZE THE WINDOW
+        primaryStage.setX(bounds.getMinX());
+        primaryStage.setY(bounds.getMinY());
+        primaryStage.setWidth(bounds.getWidth());
+        primaryStage.setHeight(bounds.getHeight());
+
+        // ADD THE TOOLBAR ONLY, NOTE THAT THE WORKSPACE
+        // HAS BEEN CONSTRUCTED, BUT WON'T BE ADDED UNTIL
+        // THE USER STARTS EDITING A Draft
+        wdkPane = new BorderPane();
+        wdkPane.setTop(fileToolbarPane);
+        primaryScene = new Scene(wdkPane);
+
+        // NOW TIE THE SCENE TO THE WINDOW, SELECT THE STYLESHEET
+        // WE'LL USE TO STYLIZE OUR GUI CONTROLS, AND OPEN THE WINDOW
+        primaryScene.getStylesheets().add(PRIMARY_STYLE_SHEET);
+        primaryStage.setScene(primaryScene);
+        primaryStage.show();
+    }
+    
+    // INIT ALL THE EVENT HANDLERS
+    private void initEventHandlers() throws IOException {
+        // FIRST THE FILE CONTROLS
+        fileController = new FileController(messageDialog, yesNoCancelDialog, draftFileManager, siteExporter);
+        newDraftButton.setOnAction(e -> {
+            fileController.handleNewDraftRequest(this);
+        });
+    }
 
     // INIT A BUTTON AND ADD IT TO A CONTAINER IN A TOOLBAR
     private Button initChildButton(Pane toolbar, WDK_PropertyType icon, WDK_PropertyType tooltip, boolean disabled) {
@@ -390,5 +432,28 @@ public class WDK_GUI implements DraftDataView {
         button.setTooltip(buttonTooltip);
         toolbar.getChildren().add(button);
         return button;
+    }
+    
+    // INIT A LABEL AND SET IT'S STYLESHEET CLASS
+    private Label initLabel(WDK_PropertyType labelProperty, String styleClass) {
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String labelText = props.getProperty(labelProperty);
+        Label label = new Label(labelText);
+        label.getStyleClass().add(styleClass);
+        return label;
+    }
+    
+    // INIT A LABEL AND PUT IT IN A TOOLBAR
+    private Label initChildLabel(Pane container, WDK_PropertyType labelProperty, String styleClass) {
+        Label label = initLabel(labelProperty, styleClass);
+        container.getChildren().add(label);
+        return label;
+    }
+    
+    // INIT A LABEL AND PLACE IT IN A GridPane INIT ITS PROPER PLACE
+    private Label initGridLabel(GridPane container, WDK_PropertyType labelProperty, String styleClass, int col, int row, int colSpan, int rowSpan) {
+        Label label = initLabel(labelProperty, styleClass);
+        container.add(label, col, row, colSpan, rowSpan);
+        return label;
     }
 }

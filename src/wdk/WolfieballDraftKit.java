@@ -53,7 +53,7 @@ public class WolfieballDraftKit extends Application {
                 JsonDraftFileManager jsonFileManager = new JsonDraftFileManager();
                 
                 // AND THIS ONE WILL DO THE DRAFT PAGE EXPORTING
-                // DraftSiteExporter exporter = new DraftSiteExporter(PATH_BASE, PATH_SITES);
+                //DraftSiteExporter exporter = new DraftSiteExporter(PATH_BASE, PATH_SITES);
                 
                 ArrayList<Pitcher> pitchers = jsonFileManager.loadPitchers(JSON_FILE_PATH_PITCHERS);
                 ArrayList<Hitter> hitters = jsonFileManager.loadHitters(JSON_FILE_PATH_HITTERS);
@@ -62,7 +62,7 @@ public class WolfieballDraftKit extends Application {
                 // INITIALIZE THE USER INTERFACE COMPONENTS
                 gui = new WDK_GUI(primaryStage);
                 gui.setDraftFileManager(jsonFileManager);
-                // gui.setSiteExporter(exporter);
+                //gui.setSiteExporter(exporter);
                 
                 // CONSTRUCT THE DATA MANAGER AND GIVE IT TO THE GUI
                 DraftDataManager dataManager = new DraftDataManager(gui); 

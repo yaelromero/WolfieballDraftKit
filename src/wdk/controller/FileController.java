@@ -27,17 +27,17 @@ import properties_manager.PropertiesManager;
  * This controller class provides responses to interactions with the buttons in
  * the file toolbar.
  *
- * @author Richard McKenna
+ * @author Yael
  */
 public class FileController {
 
     // WE WANT TO KEEP TRACK OF WHEN SOMETHING HAS NOT BEEN SAVED
     private boolean saved;
 
-    // THIS GUY KNOWS HOW TO READ AND WRITE COURSE DATA
+    // THIS GUY KNOWS HOW TO READ AND WRITE DRAFT DATA
     private DraftFileManager courseIO;
 
-    // THIS GUY KNOWS HOW TO EXPORT COURSE SCHEDULE PAGES
+    // THIS GUY KNOWS HOW TO EXPORT THE DRAFT PAGE
     private DraftSiteExporter exporter;
 
     // THIS WILL PROVIDE FEEDBACK TO THE USER WHEN SOMETHING GOES WRONG
@@ -74,7 +74,7 @@ public class FileController {
         
         // KEEP THESE GUYS FOR LATER
         courseIO = initCourseIO;
-        //exporter = initExporter;
+        exporter = initExporter;
         
         // BE READY FOR ERRORS
         errorHandler = ErrorHandler.getErrorHandler();
@@ -87,13 +87,13 @@ public class FileController {
     
     /**
      * This method marks the appropriate variable such that we know
-     * that the current Course has been edited since it's been saved.
+     * that the current Draft has been edited since it's been saved.
      * The UI is then updated to reflect this.
      * 
-     * @param gui The user interface editing the Course.
+     * @param gui The user interface editing the Draft.
      */
     public void markAsEdited(WDK_GUI gui) {
-        // THE Course OBJECT IS NOW DIRTY
+        // THE Draft OBJECT IS NOW DIRTY
         saved = false;
         
         // LET THE UI KNOW
@@ -101,12 +101,12 @@ public class FileController {
     }
 
     /**
-     * This method starts the process of editing a new Course. If a course is
+     * This method starts the process of editing a new Draft. If a draft is
      * already being edited, it will prompt the user to save it first.
      * 
      * @param gui The user interface editing the Course.
      */
-    public void handleNewCourseRequest(WDK_GUI gui) {
+    public void handleNewDraftRequest(WDK_GUI gui) {
         try {
             // WE MAY HAVE TO SAVE CURRENT WORK
             boolean continueToMakeNew = true;
@@ -310,8 +310,9 @@ public class FileController {
         // IF THE USER SAID NO, WE JUST GO ON WITHOUT SAVING
         // BUT FOR BOTH YES AND NO WE DO WHATEVER THE USER
         // HAD IN MIND IN THE FIRST PLACE
-        */
         return true;      
+        */
+        return false;
     }
 
 
