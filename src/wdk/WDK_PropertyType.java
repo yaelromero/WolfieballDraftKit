@@ -38,7 +38,9 @@ public enum WDK_PropertyType {
         DRAFT_SCREEN_TOOLTIP,
         MLB_TEAMS_TOOLTIP,
         PLAYERS_TOOLTIP,
-        STANDINGS_TOOLTIP,       
+        STANDINGS_TOOLTIP, 
+        ADD_PLAYER_TOOLTIP,
+        REMOVE_PLAYER_TOOLTIP,
 
         // FOR DRAFT EDIT WORKSPACE
         FANTASY_HEADING_LABEL,

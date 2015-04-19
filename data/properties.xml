@@ -33,6 +33,8 @@
         <property name="MLB_TEAMS_TOOLTIP"          value="View the MLB Teams Screen"></property>
         <property name="PLAYERS_TOOLTIP"            value="View the Players Screen"></property>
         <property name="STANDINGS_TOOLTIP"          value="View the Fantasy Standings Screen"></property>
+        <property name="ADD_PLAYER_TOOLTIP"         value="Add a New Player"></property>
+        <property name="REMOVE_PLAYER_TOOLTIP"      value="Remove Player"></property>
                 
         <!-- GUI LABELS -->
         <property name="FANTASY_HEADING_LABEL"      value="Fantasy Teams"></property>

@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -33,6 +34,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -46,6 +48,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import properties_manager.PropertiesManager;
+import wdk.controller.ScreenController;
 
 /**
  * This class provides the Graphical User Interface for this application,
@@ -66,7 +69,7 @@ public class WDK_GUI implements DraftDataView {
     static final String CLASS_SUBHEADING_LABEL = "subheading_label";
     static final String CLASS_PROMPT_LABEL = "prompt_label";
     static final String EMPTY_TEXT = "";
-    static final int LARGE_TEXT_FIELD_LENGTH = 20;
+    static final int LARGE_TEXT_FIELD_LENGTH = 100;
     static final int SMALL_TEXT_FIELD_LENGTH = 5;
 
     // THIS MANAGES ALL OF THE APPLICATION'S DATA
@@ -80,6 +83,9 @@ public class WDK_GUI implements DraftDataView {
 
     // THIS HANDLES INTERACTIONS WITH FILE-RELATED CONTROLS
     FileController fileController;
+    
+    // THIS HANDLES INTERACTIONS WITH SCREEN-RELATED CONTROLS
+    ScreenController screenController;
     
     // THIS IS THE APPLICATION WINDOW
     Stage primaryStage;
@@ -108,7 +114,7 @@ public class WDK_GUI implements DraftDataView {
     Button MLBTeamsScreenButton;
 
     // WE'LL ORGANIZE OUR WORKSPACE COMPONENTS USING A BORDER PANE
-    VBox workspacePane;
+    BorderPane workspacePane;
     boolean workspaceActivated;
     
     // WE'LL PUT THE WORKSPACE INSIDE A SCROLL PANE
@@ -116,10 +122,23 @@ public class WDK_GUI implements DraftDataView {
     
     // THESE ARE THE CONTROLS FOR OUR FANTASY TEAMS SCREEN
     Label fantasyTeamsHeading;
-    GridPane fantasyTeamsPane;
+    VBox fantasyTeamsPane;
+    
+    // THESE ARE THE CONTROLS FOR OUR DRAFT SCREEN
+    Label draftScreenLabel;
+    VBox draftScreenPane;
+    
+    // THESE ARE THE CONTROLS FOR OUR STANDINGS SCREEN
+    Label standingsScreenLabel;
+    VBox standingsScreenPane;
+    
+    // THESE ARE THE CONTROLS FOR OUR MLB TEAM SCREEN
+    Label MLBTeamsScreenLabel;
+    VBox MLBTeamsScreenPane;
 
     // THESE ARE THE CONTROLS FOR OUR AVAILABLE PLAYERS SCREEN
-    GridPane availablePlayersPane;
+    VBox availablePlayersPane;
+    GridPane plusMinusSearch;
     Label availablePlayersLabel;
     Button addPlayerButton;
     Button removePlayerButton;
@@ -136,7 +155,7 @@ public class WDK_GUI implements DraftDataView {
     RadioButton OFRadioButton;
     RadioButton URadioButton;
     RadioButton PRadioButton;
-    FlowPane radioButtonPane;
+    HBox radioButtonPane;
     TableView<Player> availablePlayersTable;
     TableColumn playerFirstNameColumn;
     TableColumn playerLastNameColumn;
@@ -197,6 +216,15 @@ public class WDK_GUI implements DraftDataView {
     public FileController getFileController() {
         return fileController;
     }
+    
+    /**
+     * Accessor method for the screen controller.
+     * 
+     * @return the ScreenController used by this UI.
+     */
+    public ScreenController getScreenController() {
+        return screenController;
+    }
 
     /**
      * Accessor method for the draft file manager.
@@ -228,9 +256,21 @@ public class WDK_GUI implements DraftDataView {
         return primaryStage;
     }
     
+    /**
+     * Accessor method for the message dialog.
+     * 
+     * @return the MessageDialog used by this UI.
+     */
+    
     public MessageDialog getMessageDialog() {
         return messageDialog;
     }
+    
+    /**
+     * Accessor method for the YesNoCancelDialog.
+     * 
+     * @return  the YesNoCancelDialog used by this UI.
+     */
     
     public YesNoCancelDialog getYesNoCancelDialog() {
         return yesNoCancelDialog;
@@ -273,12 +313,13 @@ public class WDK_GUI implements DraftDataView {
         // INIT THE DIALOGS
         initDialogs();
         
-        // INIT THE TOOLBAR
+        // INIT THE TOOLBARS
         initFileToolbar();
+        initScreenToolbar();
 
         // INIT THE CENTER WORKSPACE CONTROLS BUT DON'T ADD THEM
         // TO THE WINDOW YET
-        initWorkspace(hitters, pitchers);
+        initWorkspace();
 
         // NOW SETUP THE EVENT HANDLERS
         initEventHandlers();
@@ -295,6 +336,7 @@ public class WDK_GUI implements DraftDataView {
         if (!workspaceActivated) {
             // PUT THE WORKSPACE IN THE GUI
             wdkPane.setCenter(workspaceScrollPane);
+            wdkPane.setBottom(screenToolbarPane);
             workspaceActivated = true;
         }
     }
@@ -359,19 +401,21 @@ public class WDK_GUI implements DraftDataView {
     }
     
     // CREATES AND SETS UP ALL THE CONTROLS TO GO IN THE APP WORKSPACE
-    private void initWorkspace(ArrayList<Hitter> hitters, ArrayList<Pitcher> pitchers) throws IOException {
-        workspacePane = new VBox();
+    private void initWorkspace() throws IOException {
+        workspacePane = new BorderPane();
+        fantasyTeamsPane = new VBox();
         
-        fantasyTeamsPane = new GridPane();
-        fantasyTeamsHeading = initGridLabel(fantasyTeamsPane, WDK_PropertyType.FANTASY_HEADING_LABEL, CLASS_HEADING_LABEL, 0 , 0, 1, 1);
-        workspacePane.getChildren().add(fantasyTeamsPane);
-        
+        fantasyTeamsHeading = initLabel(WDK_PropertyType.FANTASY_HEADING_LABEL, CLASS_HEADING_LABEL);
+        fantasyTeamsPane.getChildren().add(fantasyTeamsHeading);
+ 
+        workspacePane.setCenter(fantasyTeamsPane);
+
         // AND NOW PUT IT IN THE WORKSPACE
         workspaceScrollPane = new ScrollPane();
         workspaceScrollPane.setContent(workspacePane);
         workspaceScrollPane.setFitToWidth(true);
         workspaceScrollPane.getStyleClass().add(CLASS_BORDERED_PANE);
-        
+     
         // NOTE THAT WE HAVE NOT PUT THE WORKSPACE INTO THE WINDOW,
         // THAT WILL BE DONE WHEN THE USER EITHER CREATES A NEW
         // COURSE OR LOADS AN EXISTING ONE FOR EDITING
@@ -379,6 +423,91 @@ public class WDK_GUI implements DraftDataView {
         
     }
     
+    public void showPlayersScreen() {
+        availablePlayersPane = new VBox();
+        availablePlayersLabel = initLabel(WDK_PropertyType.PLAYERS_HEADING_LABEL, CLASS_HEADING_LABEL); 
+        availablePlayersPane.getChildren().add(availablePlayersLabel);
+               
+        // THESE ARE THE CONTROLS FOR ADDING A PLAYER, REMOVING A PLAYER, AND SEARCHING
+        // THE THREE CONTROLS WILL BE ADDED TO A GRIDPANE
+        plusMinusSearch = new GridPane();
+        addPlayerButton = initGridButton(plusMinusSearch, WDK_PropertyType.ADD_ICON, WDK_PropertyType.ADD_PLAYER_TOOLTIP, false, 0, 0, 1, 1);
+        removePlayerButton = initGridButton(plusMinusSearch, WDK_PropertyType.MINUS_ICON, WDK_PropertyType.REMOVE_PLAYER_TOOLTIP, false, 1, 0, 1, 1);
+        searchPlayersLabel = initGridLabel(plusMinusSearch, WDK_PropertyType.SEARCH_LABEL, CLASS_PROMPT_LABEL, 2, 0, 1, 1);
+        plusMinusSearch.setMargin(searchPlayersLabel, new Insets(0, 0, 0, 45));
+        availablePlayersPane.getChildren().add(plusMinusSearch);
+        searchPlayersTextField = initGridTextField(plusMinusSearch, LARGE_TEXT_FIELD_LENGTH, EMPTY_TEXT, true, 3, 0, 1, 1);
+        
+        // THESE ARE THE CONTROLS FOR THE RADIO BUTTONS TO SELECT A PLAYER POSITION
+        // THEY WILL BE ADDED TO A FLOW PANE
+        
+        radioButtonPane = new HBox();
+        allRadioButton = new RadioButton("All");
+        CRadioButton = new RadioButton("C");
+        oneBRadioButton = new RadioButton("1B");
+        CIRadioButton = new RadioButton("CI");
+        threeBRadioButton = new RadioButton("3B");
+        twoBRadioButton = new RadioButton("2B");
+        MIRadioButton = new RadioButton("MI");
+        SSRadioButton = new RadioButton("SS");
+        OFRadioButton = new RadioButton("OF");
+        URadioButton = new RadioButton("U");
+        PRadioButton = new RadioButton("P");
+        radioButtonPane.getChildren().addAll(allRadioButton, CRadioButton, oneBRadioButton,
+                CIRadioButton, threeBRadioButton, twoBRadioButton, MIRadioButton,
+                SSRadioButton, OFRadioButton, URadioButton, PRadioButton);
+        ToggleGroup group = new ToggleGroup();
+        allRadioButton.setToggleGroup(group);
+        CRadioButton.setToggleGroup(group);
+        oneBRadioButton.setToggleGroup(group);
+        CIRadioButton.setToggleGroup(group);
+        threeBRadioButton.setToggleGroup(group);
+        twoBRadioButton.setToggleGroup(group);
+        MIRadioButton.setToggleGroup(group);
+        SSRadioButton.setToggleGroup(group);
+        OFRadioButton.setToggleGroup(group);
+        URadioButton.setToggleGroup(group);
+        PRadioButton.setToggleGroup(group);
+        radioButtonPane.setSpacing(50);
+        radioButtonPane.setPadding(new Insets (15, 12, 15, 12));
+        
+        radioButtonPane.getStyleClass().add(CLASS_BORDERED_PANE);
+        availablePlayersPane.getChildren().add(radioButtonPane);
+        
+        // PUT THEM INTO THE WORKSPACE PANE AND PUT THE PANE INTO THE SCROLLPANE
+        workspacePane.setCenter(availablePlayersPane);
+        workspaceScrollPane.setContent(workspacePane);
+    }
+    
+    public void showFantasyTeamsScreen() {   
+        workspacePane.setCenter(fantasyTeamsPane);
+        workspaceScrollPane.setContent(workspacePane);
+    }
+    
+    public void showDraftScreen() {
+        draftScreenPane = new VBox();
+        draftScreenLabel = initLabel(WDK_PropertyType.DRAFT_HEADING_LABEL, CLASS_HEADING_LABEL);
+        draftScreenPane.getChildren().add(draftScreenLabel);
+        workspacePane.setCenter(draftScreenPane);
+        workspaceScrollPane.setContent(workspacePane);     
+    }
+    
+    public void showStandingsScreen() {
+        standingsScreenPane = new VBox();
+        standingsScreenLabel = initLabel(WDK_PropertyType.STANDINGS_HEADING_LABEL, CLASS_HEADING_LABEL);
+        standingsScreenPane.getChildren().add(standingsScreenLabel);
+        workspacePane.setCenter(standingsScreenPane);
+        workspaceScrollPane.setContent(workspacePane);
+    }
+    
+    public void showMLBScreen() {
+        MLBTeamsScreenPane = new VBox();
+        MLBTeamsScreenLabel = initLabel(WDK_PropertyType.MLB_TEAMS_HEADING_LABEL, CLASS_HEADING_LABEL);
+        MLBTeamsScreenPane.getChildren().add(MLBTeamsScreenLabel);
+        workspacePane.setCenter(MLBTeamsScreenPane);
+        workspaceScrollPane.setContent(workspacePane);
+
+    }
     
     // INITIALIZE THE WINDOW (i.e. STAGE) PUTTING ALL THE CONTROLS
     // THERE EXCEPT THE WORKSPACE, WHICH WILL BE ADDED THE FIRST
@@ -418,6 +547,28 @@ public class WDK_GUI implements DraftDataView {
         newDraftButton.setOnAction(e -> {
             fileController.handleNewDraftRequest(this);
         });
+        
+        screenController = new ScreenController();
+        fantasyTeamsScreenButton.setOnAction(e -> {
+            screenController.handleFantasyTeamsScreenRequest(this);
+        });
+        
+        playersScreenButton.setOnAction(e -> {
+            screenController.handlePlayersScreenRequest(this);
+        });
+        
+        draftScreenButton.setOnAction(e -> {
+            screenController.handleDraftScreenRequest(this);
+        });
+        
+        fantasyStandingsScreenButton.setOnAction(e -> {
+            screenController.handleStandingsScreenRequest(this);
+        });
+        
+        MLBTeamsScreenButton.setOnAction(e -> {
+            screenController.handleMLBScreenRequest(this);
+        });
+        
     }
 
     // INIT A BUTTON AND ADD IT TO A CONTAINER IN A TOOLBAR
@@ -450,10 +601,35 @@ public class WDK_GUI implements DraftDataView {
         return label;
     }
     
-    // INIT A LABEL AND PLACE IT IN A GridPane INIT ITS PROPER PLACE
+    // INIT A LABEL AND PLACE IT IN A GridPane IN ITS PROPER PLACE
     private Label initGridLabel(GridPane container, WDK_PropertyType labelProperty, String styleClass, int col, int row, int colSpan, int rowSpan) {
         Label label = initLabel(labelProperty, styleClass);
         container.add(label, col, row, colSpan, rowSpan);
         return label;
+    }
+    
+    // INIT A TEXT FIELD AND PUT IT IN A GridPane
+    private TextField initGridTextField(GridPane container, int size, String initText, boolean editable, int col, int row, int colSpan, int rowSpan) {
+        TextField tf = new TextField();
+        tf.setPrefColumnCount(size);
+        tf.setText(initText);
+        tf.setEditable(editable);
+        container.add(tf, col, row, colSpan, rowSpan);
+        return tf;
+    }
+    
+    // INIT A BUTTON AND ADD IT TO A GRIDPANE
+    private Button initGridButton(GridPane container, WDK_PropertyType icon, WDK_PropertyType tooltip, 
+            boolean disabled, int col, int row, int colSpan, int rowSpan) {
+        PropertiesManager props = PropertiesManager.getPropertiesManager();
+        String imagePath = "file:" + PATH_IMAGES + props.getProperty(icon.toString());
+        Image buttonImage = new Image(imagePath);
+        Button button = new Button();
+        button.setDisable(disabled);
+        button.setGraphic(new ImageView(buttonImage));
+        Tooltip buttonTooltip = new Tooltip(props.getProperty(tooltip.toString()));
+        button.setTooltip(buttonTooltip);
+        container.add(button, col, row, colSpan, rowSpan);
+        return button;
     }
 }
