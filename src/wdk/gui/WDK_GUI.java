@@ -22,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -35,11 +36,13 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -481,6 +484,7 @@ public class WDK_GUI implements DraftDataView {
         
         // THESE ARE THE CONTROLS FOR THE PLAYER TABLE
         availablePlayersTable = new TableView();
+        availablePlayersTable.setEditable(true);
         playerFirstNameColumn = new TableColumn(COL_FIRST_NAME);
         playerFirstNameColumn.setPrefWidth(120);
         playerLastNameColumn = new TableColumn(COL_LAST_NAME);
@@ -498,6 +502,16 @@ public class WDK_GUI implements DraftDataView {
         playerEstValColumn.setPrefWidth(120);
         playerNotesColumn = new TableColumn(COL_NOTES);
         playerNotesColumn.setPrefWidth(120);
+        playerNotesColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+            playerNotesColumn.setOnEditCommit(
+                new EventHandler<CellEditEvent<Player, String>>() {
+                @Override
+                public void handle(CellEditEvent<Player, String> event) {
+                    ((Player)event.getTableView().getItems().get(event.getTablePosition().getRow())
+                    ).setNotes(event.getNewValue());
+        }
+    }
+);
         
         // POPULATE THE TABLE
         
@@ -721,8 +735,7 @@ public class WDK_GUI implements DraftDataView {
             completePlayers.add(h);
         }
     }
-    
-    
+ 
     public void searchByKey(String oldValue, String newValue, ObservableList CPlayers, 
             ObservableList oneBPlayers, ObservableList CIPlayers, ObservableList threeBPlayers, 
             ObservableList twoBPlayers, ObservableList MIPlayers, ObservableList SSPlayers, 
