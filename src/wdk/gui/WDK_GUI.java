@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -155,7 +156,7 @@ public class WDK_GUI implements DraftDataView {
     RadioButton OFRadioButton;
     RadioButton URadioButton;
     RadioButton PRadioButton;
-    HBox radioButtonPane;
+    FlowPane radioButtonPane;
     TableView<Player> availablePlayersTable;
     TableColumn playerFirstNameColumn;
     TableColumn playerLastNameColumn;
@@ -441,7 +442,9 @@ public class WDK_GUI implements DraftDataView {
         // THESE ARE THE CONTROLS FOR THE RADIO BUTTONS TO SELECT A PLAYER POSITION
         // THEY WILL BE ADDED TO A FLOW PANE
         
-        radioButtonPane = new HBox();
+        radioButtonPane = new FlowPane();
+        radioButtonPane.setPrefHeight(80);
+        radioButtonPane.setAlignment(Pos.CENTER_LEFT);
         allRadioButton = new RadioButton("All");
         CRadioButton = new RadioButton("C");
         oneBRadioButton = new RadioButton("1B");
@@ -468,11 +471,43 @@ public class WDK_GUI implements DraftDataView {
         OFRadioButton.setToggleGroup(group);
         URadioButton.setToggleGroup(group);
         PRadioButton.setToggleGroup(group);
-        radioButtonPane.setSpacing(50);
-        radioButtonPane.setPadding(new Insets (15, 12, 15, 12));
-        
+        radioButtonPane.setHgap(20);     
         radioButtonPane.getStyleClass().add(CLASS_BORDERED_PANE);
         availablePlayersPane.getChildren().add(radioButtonPane);
+        
+        // THESE ARE THE CONTROLS FOR THE PLAYER TABLE
+        availablePlayersTable = new TableView();
+        playerFirstNameColumn = new TableColumn(COL_FIRST_NAME);
+        playerLastNameColumn = new TableColumn(COL_LAST_NAME);
+        playerProTeamColumn = new TableColumn(COL_PRO_TEAM);
+        playerPositionsColumn = new TableColumn(COL_POSITIONS);
+        playerYearOfBirthColumn = new TableColumn(COL_YEAR_OF_BIRTH);
+        playerRWColumn = new TableColumn(COL_RW);
+        playerHRSVColumn = new TableColumn(COL_HRSV);
+        playerRBIKColumn = new TableColumn(COL_RBIK);
+        playerSBERAColumn = new TableColumn(COL_SBERA);
+        playerBAWHIPColumn = new TableColumn(COL_BAWHIP);
+        playerEstValColumn = new TableColumn(COL_EST_VAL);
+        playerEstValColumn.setPrefWidth(120);
+        playerNotesColumn = new TableColumn(COL_NOTES);
+        playerNotesColumn.setPrefWidth(120);
+        
+        
+        availablePlayersTable.getColumns().add(playerFirstNameColumn);
+        availablePlayersTable.getColumns().add(playerLastNameColumn);
+        availablePlayersTable.getColumns().add(playerProTeamColumn);
+        availablePlayersTable.getColumns().add(playerPositionsColumn);
+        availablePlayersTable.getColumns().add(playerYearOfBirthColumn);
+        availablePlayersTable.getColumns().add(playerRWColumn);
+        availablePlayersTable.getColumns().add(playerHRSVColumn);
+        availablePlayersTable.getColumns().add(playerRBIKColumn);
+        availablePlayersTable.getColumns().add(playerSBERAColumn);
+        availablePlayersTable.getColumns().add(playerBAWHIPColumn);
+        availablePlayersTable.getColumns().add(playerEstValColumn);
+        availablePlayersTable.getColumns().add(playerNotesColumn);
+        
+        
+        availablePlayersPane.getChildren().add(availablePlayersTable);
         
         // PUT THEM INTO THE WORKSPACE PANE AND PUT THE PANE INTO THE SCROLLPANE
         workspacePane.setCenter(availablePlayersPane);
