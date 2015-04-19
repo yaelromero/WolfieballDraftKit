@@ -654,7 +654,14 @@ public class WDK_GUI implements DraftDataView {
                 availablePlayersTable.setItems(PPlayers);
             }
         });
-  
+ 
+        // DETERMINES HOW TO POPULATE THE TABLE WHEN USER TYPES IN THE SEARCH BAR
+        searchPlayersTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchByKey((String)oldValue, (String)newValue, CPlayers, oneBPlayers,
+                    CIPlayers, threeBPlayers, twoBPlayers, MIPlayers, SSPlayers, OFPlayers,
+                    UPlayers, PPlayers);
+        });
+      
         availablePlayersTable.getColumns().add(playerFirstNameColumn);
         availablePlayersTable.getColumns().add(playerLastNameColumn);
         availablePlayersTable.getColumns().add(playerProTeamColumn);
@@ -690,7 +697,7 @@ public class WDK_GUI implements DraftDataView {
                 tempSBOrERA = bd.doubleValue();
                 p.setSBOrERAStat(tempSBOrERA);
                 
-                double tempBAOrWHIP = ((double)(p.getROrWStat() + p.getHStat())/(p.getIPStat()));
+                double tempBAOrWHIP = ((double)(p.getBBStat() + p.getHStat())/(p.getIPStat()));
                 BigDecimal db = new BigDecimal(tempBAOrWHIP).setScale(2, RoundingMode.HALF_EVEN);
                 tempBAOrWHIP = db.doubleValue();
                 p.setBAOrWHIPStat(tempBAOrWHIP);
@@ -713,6 +720,61 @@ public class WDK_GUI implements DraftDataView {
         for(Hitter h: hitters) {
             completePlayers.add(h);
         }
+    }
+    
+    
+    public void searchByKey(String oldValue, String newValue, ObservableList CPlayers, 
+            ObservableList oneBPlayers, ObservableList CIPlayers, ObservableList threeBPlayers, 
+            ObservableList twoBPlayers, ObservableList MIPlayers, ObservableList SSPlayers, 
+            ObservableList OFPlayers, ObservableList UPlayers, ObservableList PPlayers) {
+        if(oldValue != null && (newValue.length() < oldValue.length()) && allRadioButton.isSelected()) {
+            availablePlayersTable.setItems(completePlayers);
+        }
+        else if(oldValue != null && (newValue.length() < oldValue.length()) && CRadioButton.isSelected()) {
+            availablePlayersTable.setItems(CPlayers);
+        }
+        else if(oldValue != null && (newValue.length() < oldValue.length()) && oneBRadioButton.isSelected()) {
+            availablePlayersTable.setItems(oneBPlayers);
+        }
+        else if(oldValue != null && (newValue.length() < oldValue.length()) && CIRadioButton.isSelected()) {
+            availablePlayersTable.setItems(CIPlayers);
+        }
+        else if(oldValue != null && (newValue.length() < oldValue.length()) && threeBRadioButton.isSelected()) {
+            availablePlayersTable.setItems(threeBPlayers);
+        }
+        else if(oldValue != null && (newValue.length() < oldValue.length()) && twoBRadioButton.isSelected()) {
+            availablePlayersTable.setItems(twoBPlayers);
+        }
+        else if(oldValue != null && (newValue.length() < oldValue.length()) && MIRadioButton.isSelected()) {
+            availablePlayersTable.setItems(MIPlayers);
+        }
+        else if(oldValue != null && (newValue.length() < oldValue.length()) && SSRadioButton.isSelected()) {
+            availablePlayersTable.setItems(SSPlayers);
+        }
+        else if(oldValue != null && (newValue.length() < oldValue.length()) && OFRadioButton.isSelected()) {
+            availablePlayersTable.setItems(OFPlayers);
+        }
+        else if(oldValue != null && (newValue.length() < oldValue.length()) && URadioButton.isSelected()) {
+            availablePlayersTable.setItems(UPlayers);
+        }
+        else if(oldValue != null && (newValue.length() < oldValue.length()) && PRadioButton.isSelected()) {
+            availablePlayersTable.setItems(PPlayers);
+        }
+        else if(oldValue != null && (newValue.length() < oldValue.length())) {
+            availablePlayersTable.setItems(completePlayers);
+        }
+        
+        newValue = (String)newValue.toUpperCase();
+        ObservableList searchResults = FXCollections.observableArrayList();
+        for(Object entry: availablePlayersTable.getItems()) {
+            Player currPlayer = (Player)entry;
+            String firstName = currPlayer.getFirstName();
+            String lastName = currPlayer.getLastName();
+            if(firstName.toUpperCase().contains(newValue) || lastName.toUpperCase().contains(newValue)) {
+                searchResults.add(currPlayer);
+            }
+        }
+        availablePlayersTable.setItems(searchResults);
     }
     
     public void showFantasyTeamsScreen() {   
