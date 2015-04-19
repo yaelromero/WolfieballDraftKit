@@ -22,6 +22,7 @@ import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import properties_manager.PropertiesManager;
+import static wdk.WDK_PropertyType.PROP_APP_TITLE;
 
 /**
  * This controller class provides responses to interactions with the buttons in
@@ -107,6 +108,7 @@ public class FileController {
      * @param gui The user interface editing the Course.
      */
     public void handleNewDraftRequest(WDK_GUI gui) {
+        /*
         try {
             // WE MAY HAVE TO SAVE CURRENT WORK
             boolean continueToMakeNew = true;
@@ -117,10 +119,11 @@ public class FileController {
             }
             
             // IF THE USER REALLY WANTS TO MAKE A NEW DRAFT
-            if (continueToMakeNew) {
+            if (continueToMakeNew) {*/
                 // RESET THE DATA, WHICH SHOULD TRIGGER A RESET OF THE UI
                 DraftDataManager dataManager = gui.getDataManager();
                 dataManager.reset();
+                gui.showFantasyTeamsScreen();
                 saved = false;
 
                 // REFRESH THE GUI, WHICH WILL ENABLE AND DISABLE
@@ -129,11 +132,11 @@ public class FileController {
 
                 // TELL THE USER THE COURSE HAS BEEN CREATED
                 messageDialog.show(properties.getProperty(NEW_DRAFT_CREATED_MESSAGE));
-            }
+            /*}
         } catch (IOException ioe) {
             // SOMETHING WENT WRONG, PROVIDE FEEDBACK
             errorHandler.handleNewDraftError();
-        }
+        }*/
     }
 
     /**

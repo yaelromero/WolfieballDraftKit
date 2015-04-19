@@ -506,28 +506,28 @@ public class WDK_GUI implements DraftDataView {
             playerNotesColumn.setOnEditCommit(
                 new EventHandler<CellEditEvent<Player, String>>() {
                 @Override
-                public void handle(CellEditEvent<Player, String> event) {
-                    ((Player)event.getTableView().getItems().get(event.getTablePosition().getRow())
-                    ).setNotes(event.getNewValue());
-        }
-    }
-);
+                    public void handle(CellEditEvent<Player, String> event) {
+                        ((Player)event.getTableView().getItems().get(event.getTablePosition().getRow())
+                        ).setNotes(event.getNewValue());
+                    }
+                }
+            );
         
         // POPULATE THE TABLE
         
         // DEFAULT POPULATION OF TABLE
-        playerFirstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("firstName"));
-        playerLastNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
-        playerProTeamColumn.setCellValueFactory(new PropertyValueFactory<String, String>("MLBTeam"));
-        playerPositionsColumn.setCellValueFactory(new PropertyValueFactory<String, String>("QPOrRole"));
-        playerYearOfBirthColumn.setCellValueFactory(new PropertyValueFactory<String, String>("YOB"));
-        playerRWColumn.setCellValueFactory(new PropertyValueFactory<String, String>("ROrWStat"));
-        playerHRSVColumn.setCellValueFactory(new PropertyValueFactory<String, String>("HROrSVStat"));
-        playerRBIKColumn.setCellValueFactory(new PropertyValueFactory<String, String>("RBIOrKStat"));
-        playerSBERAColumn.setCellValueFactory(new PropertyValueFactory<String, String>("SBOrERAStat"));
-        playerBAWHIPColumn.setCellValueFactory(new PropertyValueFactory<String, String>("BAOrWHIPStat"));
-        playerEstValColumn.setCellValueFactory(new PropertyValueFactory<String, String>("EstValStat"));
-        playerNotesColumn.setCellValueFactory(new PropertyValueFactory<String, String>("notes"));
+        playerFirstNameColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("firstName"));
+        playerLastNameColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("lastName"));
+        playerProTeamColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("MLBTeam"));
+        playerPositionsColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("QPOrRole"));
+        playerYearOfBirthColumn.setCellValueFactory(new PropertyValueFactory<Player, Integer>("YOB"));
+        playerRWColumn.setCellValueFactory(new PropertyValueFactory<Player, Integer>("ROrWStat"));
+        playerHRSVColumn.setCellValueFactory(new PropertyValueFactory<Player, Integer>("HROrSVStat"));
+        playerRBIKColumn.setCellValueFactory(new PropertyValueFactory<Player, Integer>("RBIOrKStat"));
+        playerSBERAColumn.setCellValueFactory(new PropertyValueFactory<Player, Double>("SBOrERAStat"));
+        playerBAWHIPColumn.setCellValueFactory(new PropertyValueFactory<Player, Double>("BAOrWHIPStat"));
+        playerEstValColumn.setCellValueFactory(new PropertyValueFactory<Player, Integer>("EstValStat"));
+        playerNotesColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("notes"));
         availablePlayersTable.setItems(completePlayers);
         
         // DETERMINES HOW TO POPULATE THE TABLE IF THE ALL RADIO BUTTON IS SELECTED
