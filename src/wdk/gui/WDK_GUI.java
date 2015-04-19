@@ -501,6 +501,7 @@ public class WDK_GUI implements DraftDataView {
         
         // POPULATE THE TABLE
         
+        // DEFAULT POPULATION OF TABLE
         playerFirstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("firstName"));
         playerLastNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
         playerProTeamColumn.setCellValueFactory(new PropertyValueFactory<String, String>("MLBTeam"));
@@ -513,8 +514,146 @@ public class WDK_GUI implements DraftDataView {
         playerBAWHIPColumn.setCellValueFactory(new PropertyValueFactory<String, String>("BAOrWHIPStat"));
         playerEstValColumn.setCellValueFactory(new PropertyValueFactory<String, String>("EstValStat"));
         playerNotesColumn.setCellValueFactory(new PropertyValueFactory<String, String>("notes"));
-        
         availablePlayersTable.setItems(completePlayers);
+        
+        // DETERMINES HOW TO POPULATE THE TABLE IF THE ALL RADIO BUTTON IS SELECTED
+        allRadioButton.setOnAction(e -> { 
+            if(allRadioButton.isSelected()) {
+                availablePlayersTable.setItems(completePlayers);
+            }
+        });
+        
+        // DETERMINES HOW TO POPULATE THE TABLE IF THE C RADIO BUTTON IS SELECTED
+        ObservableList CPlayers = FXCollections.observableArrayList();
+        for(int i = 0; i < completePlayers.size(); i++) {
+            if((((Player)completePlayers.get(i)).getQPOrRole().contains("C"))) {
+                CPlayers.add((Player)completePlayers.get(i));
+            }
+        }
+        CRadioButton.setOnAction(e -> {
+            if(CRadioButton.isSelected()) {
+                availablePlayersTable.setItems(CPlayers);
+            }
+        });
+        
+        // DETERMINES HOW TO POPULATE THE TABLE IF THE 1B RADIO BUTTON IS SELECTED
+        ObservableList oneBPlayers = FXCollections.observableArrayList();
+        for(int i = 0; i < completePlayers.size(); i++) {
+            if((((Player)completePlayers.get(i)).getQPOrRole().contains("1B"))) {
+                oneBPlayers.add((Player)completePlayers.get(i));
+            }
+        }
+        oneBRadioButton.setOnAction(e -> {
+            if(oneBRadioButton.isSelected()) {
+                availablePlayersTable.setItems(oneBPlayers);
+            }
+        });
+        
+        // DETERMINES HOW TO POPULATE THE TABLE IF THE CI RADIO BUTTON IS SELECTED
+        ObservableList CIPlayers = FXCollections.observableArrayList();
+        for(int i = 0; i < completePlayers.size(); i++) {
+            if((((Player)completePlayers.get(i)).getQPOrRole().contains("1B")) ||
+               (((Player)completePlayers.get(i)).getQPOrRole().contains("3B"))) {
+                CIPlayers.add((Player)completePlayers.get(i));
+            } 
+        }
+        CIRadioButton.setOnAction(e -> {
+            if(CIRadioButton.isSelected()) {
+                availablePlayersTable.setItems(CIPlayers);
+            }
+        });
+        
+        // DETERMINES HOW TO POPULATE THE TABLE IF THE 3B RADIO BUTTON IS SELECTED
+       ObservableList threeBPlayers = FXCollections.observableArrayList();
+        for(int i = 0; i < completePlayers.size(); i++) {
+            if((((Player)completePlayers.get(i)).getQPOrRole().contains("3B"))) {
+                threeBPlayers.add((Player)completePlayers.get(i));
+            }
+        }
+        threeBRadioButton.setOnAction(e -> {
+            if(threeBRadioButton.isSelected()) {
+                availablePlayersTable.setItems(threeBPlayers);
+            }
+        });
+        
+        // DETERMINES HOW TO POPULATE THE TABLE IF THE 2B RADIO BUTTON IS SELECTED
+        ObservableList twoBPlayers = FXCollections.observableArrayList();
+        for(int i = 0; i < completePlayers.size(); i++) {
+            if((((Player)completePlayers.get(i)).getQPOrRole().contains("2B"))) {
+                twoBPlayers.add((Player)completePlayers.get(i));
+            }
+        }
+        twoBRadioButton.setOnAction(e -> {
+            if(twoBRadioButton.isSelected()) {
+                availablePlayersTable.setItems(twoBPlayers);
+            }
+        });
+        
+        // DETERMINES HOW TO POPULATE THE TABLE IF THE MI RADIO BUTTON IS SELECTED
+        ObservableList MIPlayers = FXCollections.observableArrayList();
+        for(int i = 0; i < completePlayers.size(); i++) {
+            if((((Player)completePlayers.get(i)).getQPOrRole().contains("2B")) ||
+               (((Player)completePlayers.get(i)).getQPOrRole().contains("SS"))) {
+                MIPlayers.add((Player)completePlayers.get(i));
+            } 
+        }
+        MIRadioButton.setOnAction(e -> {
+            if(MIRadioButton.isSelected()) {
+                availablePlayersTable.setItems(MIPlayers);
+            }
+        });
+        
+        // DETERMINES HOW TO POPULATE THE TABLE IF THE SS RADIO BUTTON IS SELECTED
+        ObservableList SSPlayers = FXCollections.observableArrayList();
+        for(int i = 0; i < completePlayers.size(); i++) {
+            if((((Player)completePlayers.get(i)).getQPOrRole().contains("SS"))) {
+                SSPlayers.add((Player)completePlayers.get(i));
+            }
+        }
+        SSRadioButton.setOnAction(e -> {
+            if(SSRadioButton.isSelected()) {
+                availablePlayersTable.setItems(SSPlayers);
+            }
+        });
+        
+        // DETERMINES HOW TO POPULATE THE TABLE IF THE OF RADIO BUTTON IS SELECTED
+        ObservableList OFPlayers = FXCollections.observableArrayList();
+        for(int i = 0; i < completePlayers.size(); i++) {
+            if((((Player)completePlayers.get(i)).getQPOrRole().contains("OF"))) {
+                OFPlayers.add((Player)completePlayers.get(i));
+            }
+        }
+        OFRadioButton.setOnAction(e -> {
+            if(OFRadioButton.isSelected()) {
+                availablePlayersTable.setItems(OFPlayers);
+            }
+        });
+        
+        // DETERMINES HOW TO POPULATE THE TABLE IS THE U RADIO BUTTON IS SELECTED
+        ObservableList UPlayers = FXCollections.observableArrayList();
+        for(int i = 0; i < completePlayers.size(); i++) {
+            if(!(((Player)completePlayers.get(i)).getQPOrRole().contains("P"))) {
+                UPlayers.add((Player)completePlayers.get(i));
+            }
+        }
+        URadioButton.setOnAction(e -> {
+            if(URadioButton.isSelected()) {
+                availablePlayersTable.setItems(UPlayers);
+            }
+        });
+        
+        // DETERMINES HOW TO POPULATE THE TABLE IS THE P RADIO BUTTON IS SELECTED
+        ObservableList PPlayers = FXCollections.observableArrayList();
+        for(int i = 0; i < completePlayers.size(); i++) {
+            if((((Player)completePlayers.get(i)).getQPOrRole().contains("P"))) {
+                PPlayers.add((Player)completePlayers.get(i));
+            }
+        }
+        PRadioButton.setOnAction(e -> {
+            if(PRadioButton.isSelected()) {
+                availablePlayersTable.setItems(PPlayers);
+            }
+        });
   
         availablePlayersTable.getColumns().add(playerFirstNameColumn);
         availablePlayersTable.getColumns().add(playerLastNameColumn);
