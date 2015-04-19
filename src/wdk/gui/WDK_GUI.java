@@ -14,6 +14,8 @@ import wdk.data.Pitcher;
 import wdk.data.Player;
 import wdk.data.Team;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -49,6 +51,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import properties_manager.PropertiesManager;
+import sun.plugin2.jvm.RemoteJVMLauncher.CallBack;
 import wdk.controller.ScreenController;
 
 /**
@@ -138,6 +141,7 @@ public class WDK_GUI implements DraftDataView {
     VBox MLBTeamsScreenPane;
 
     // THESE ARE THE CONTROLS FOR OUR AVAILABLE PLAYERS SCREEN
+    ObservableList completePlayers;
     VBox availablePlayersPane;
     GridPane plusMinusSearch;
     Label availablePlayersLabel;
@@ -157,7 +161,7 @@ public class WDK_GUI implements DraftDataView {
     RadioButton URadioButton;
     RadioButton PRadioButton;
     FlowPane radioButtonPane;
-    TableView<Player> availablePlayersTable;
+    TableView<String> availablePlayersTable;
     TableColumn playerFirstNameColumn;
     TableColumn playerLastNameColumn;
     TableColumn playerProTeamColumn;
@@ -310,7 +314,7 @@ public class WDK_GUI implements DraftDataView {
      * @param windowTitle The text to appear in the UI window's title bar.
      * @throws IOException Thrown if any initialization files fail to load.
      */
-    public void initGUI(String windowTitle, ArrayList<Pitcher> pitchers, ArrayList<Hitter> hitters) throws IOException {
+    public void initGUI(String windowTitle) throws IOException {
         // INIT THE DIALOGS
         initDialogs();
         
@@ -478,9 +482,12 @@ public class WDK_GUI implements DraftDataView {
         // THESE ARE THE CONTROLS FOR THE PLAYER TABLE
         availablePlayersTable = new TableView();
         playerFirstNameColumn = new TableColumn(COL_FIRST_NAME);
+        playerFirstNameColumn.setPrefWidth(120);
         playerLastNameColumn = new TableColumn(COL_LAST_NAME);
+        playerLastNameColumn.setPrefWidth(120);
         playerProTeamColumn = new TableColumn(COL_PRO_TEAM);
         playerPositionsColumn = new TableColumn(COL_POSITIONS);
+        playerPositionsColumn.setPrefWidth(120);
         playerYearOfBirthColumn = new TableColumn(COL_YEAR_OF_BIRTH);
         playerRWColumn = new TableColumn(COL_RW);
         playerHRSVColumn = new TableColumn(COL_HRSV);
@@ -492,7 +499,23 @@ public class WDK_GUI implements DraftDataView {
         playerNotesColumn = new TableColumn(COL_NOTES);
         playerNotesColumn.setPrefWidth(120);
         
+        // POPULATE THE TABLE
         
+        playerFirstNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("firstName"));
+        playerLastNameColumn.setCellValueFactory(new PropertyValueFactory<String, String>("lastName"));
+        playerProTeamColumn.setCellValueFactory(new PropertyValueFactory<String, String>("MLBTeam"));
+        playerPositionsColumn.setCellValueFactory(new PropertyValueFactory<String, String>("QPOrRole"));
+        playerYearOfBirthColumn.setCellValueFactory(new PropertyValueFactory<String, String>("YOB"));
+        playerRWColumn.setCellValueFactory(new PropertyValueFactory<String, String>("ROrWStat"));
+        playerHRSVColumn.setCellValueFactory(new PropertyValueFactory<String, String>("HROrSVStat"));
+        playerRBIKColumn.setCellValueFactory(new PropertyValueFactory<String, String>("RBIOrKStat"));
+        playerSBERAColumn.setCellValueFactory(new PropertyValueFactory<String, String>("SBOrERAStat"));
+        playerBAWHIPColumn.setCellValueFactory(new PropertyValueFactory<String, String>("BAOrWHIPStat"));
+        playerEstValColumn.setCellValueFactory(new PropertyValueFactory<String, String>("EstValStat"));
+        playerNotesColumn.setCellValueFactory(new PropertyValueFactory<String, String>("notes"));
+        
+        availablePlayersTable.setItems(completePlayers);
+  
         availablePlayersTable.getColumns().add(playerFirstNameColumn);
         availablePlayersTable.getColumns().add(playerLastNameColumn);
         availablePlayersTable.getColumns().add(playerProTeamColumn);
@@ -512,6 +535,45 @@ public class WDK_GUI implements DraftDataView {
         // PUT THEM INTO THE WORKSPACE PANE AND PUT THE PANE INTO THE SCROLLPANE
         workspacePane.setCenter(availablePlayersPane);
         workspaceScrollPane.setContent(workspacePane);
+    }
+    
+    public void makePlayersArray(ArrayList <Pitcher> pitchers, ArrayList <Hitter> hitters) {
+        completePlayers = FXCollections.observableArrayList();
+        
+        for(Pitcher p: pitchers) {
+            if(p.getIPStat() == 0.0) {
+                p.setSBOrERAStat(0.0);
+                p.setBAOrWHIPStat(0.0);
+            }
+            else {
+                double tempSBOrERA = ((double)p.getERStat() * 9)/(p.getIPStat());
+                BigDecimal bd = new BigDecimal(tempSBOrERA).setScale(2, RoundingMode.HALF_EVEN);
+                tempSBOrERA = bd.doubleValue();
+                p.setSBOrERAStat(tempSBOrERA);
+                
+                double tempBAOrWHIP = ((double)(p.getROrWStat() + p.getHStat())/(p.getIPStat()));
+                BigDecimal db = new BigDecimal(tempBAOrWHIP).setScale(2, RoundingMode.HALF_EVEN);
+                tempBAOrWHIP = db.doubleValue();
+                p.setBAOrWHIPStat(tempBAOrWHIP);
+            }
+        }
+        for(Pitcher p: pitchers) {
+            completePlayers.add(p);
+        }
+        for(Hitter h: hitters) {
+            if(h.getABStat() == 0.0) {
+                h.setBAOrWHIPStat(0.0);
+            }
+            else {
+                double tempBAOrWHIP = ((double)(h.getHStat()) / h.getABStat());
+                BigDecimal db = new BigDecimal(tempBAOrWHIP).setScale(2, RoundingMode.HALF_EVEN);
+                tempBAOrWHIP = db.doubleValue();
+                h.setBAOrWHIPStat(tempBAOrWHIP);
+            }
+        }
+        for(Hitter h: hitters) {
+            completePlayers.add(h);
+        }
     }
     
     public void showFantasyTeamsScreen() {   

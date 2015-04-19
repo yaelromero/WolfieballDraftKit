@@ -70,7 +70,8 @@ public class WolfieballDraftKit extends Application {
 
                 // FINALLY, START UP THE USER INTERFACE WINDOW AFTER ALL
                 // REMAINING INITIALIZATION
-                gui.initGUI(appTitle, pitchers, hitters);                
+                gui.initGUI(appTitle);      
+                gui.makePlayersArray(pitchers, hitters);
             }
             catch(IOException ioe) {
                 eH = ErrorHandler.getErrorHandler();

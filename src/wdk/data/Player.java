@@ -1,7 +1,9 @@
 package wdk.data;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -26,6 +28,12 @@ public class Player {
     final IntegerProperty estVal;
     final IntegerProperty HStat;
     final StringProperty notes;
+    final IntegerProperty ROrWStat;
+    final IntegerProperty HROrSVStat;
+    final IntegerProperty RBIOrKStat;
+    final DoubleProperty SBOrERAStat;
+    final DoubleProperty BAOrWHIPStat;
+    final StringProperty QPOrRole;
     
     public static final String DEFAULT_FIRST_NAME = "<ENTER FIRST NAME>";
     public static final String DEFAULT_LAST_NAME = "<ENTER LAST NAME>";
@@ -38,6 +46,12 @@ public class Player {
     public static final int DEFAULT_H_STAT = 0;
     public static final int DEFAULT_AGE = 0;
     public static final int DEFAULT_EST_VAL = 0;
+    public static final int DEFAULT_RORW_STAT = 0;
+    public static final int DEFAULT_HRORSV_STAT = 0;
+    public static final int DEFAULT_RBIORK_STAT = 0;
+    public static final Double DEFAULT_SBORERA_STAT = 0.0;
+    public static final Double DEFAULT_BAORWHIP_STAT = 0.0;
+    public static final String DEFAULT_QPORROLE = "<ENTER QP/ROLE>";
     
     public Player() {
         firstName = new SimpleStringProperty(DEFAULT_FIRST_NAME);
@@ -51,6 +65,12 @@ public class Player {
         age = new SimpleIntegerProperty(DEFAULT_AGE);
         estVal = new SimpleIntegerProperty(DEFAULT_EST_VAL);
         HStat = new SimpleIntegerProperty(DEFAULT_H_STAT);
+        ROrWStat = new SimpleIntegerProperty(DEFAULT_RORW_STAT);
+        HROrSVStat = new SimpleIntegerProperty(DEFAULT_HRORSV_STAT);
+        RBIOrKStat = new SimpleIntegerProperty(DEFAULT_RBIORK_STAT);
+        SBOrERAStat = new SimpleDoubleProperty(DEFAULT_SBORERA_STAT);
+        BAOrWHIPStat = new SimpleDoubleProperty(DEFAULT_BAORWHIP_STAT);
+        QPOrRole = new SimpleStringProperty(DEFAULT_QPORROLE);
     }
     
     public void reset() {
@@ -64,6 +84,25 @@ public class Player {
         setAge(DEFAULT_AGE);
         setHStat(DEFAULT_H_STAT);
         setEstVal(DEFAULT_EST_VAL);
+        setROrWStat(DEFAULT_RORW_STAT);
+        setHROrSVStat(DEFAULT_HRORSV_STAT);
+        setRBIOrKStat(DEFAULT_RBIORK_STAT);
+        setSBOrERAStat(DEFAULT_SBORERA_STAT);
+        setBAOrWHIPStat(DEFAULT_BAORWHIP_STAT);
+        setQPOrRole(DEFAULT_QPORROLE);
+        
+    }
+    
+    public void setQPOrRole(String initQPOrRole) {
+        QPOrRole.set(initQPOrRole);
+    }
+    
+    public String getQPOrRole() {
+        return QPOrRole.get();
+    }
+    
+    public StringProperty QPOrRoleProperty() {
+        return QPOrRole;
     }
     
     public void setFirstName(String initFirstName) {
@@ -197,4 +236,65 @@ public class Player {
     public IntegerProperty HStatProperty() {
         return HStat;
     }
+    
+    public void setROrWStat(int initROrWStat) {
+        ROrWStat.set(initROrWStat);
+    }
+    
+    public int getROrWStat() {
+        return ROrWStat.get();
+    }
+    
+    public IntegerProperty ROrWStatProperty() {
+        return ROrWStat;
+    }
+  
+    public void setHROrSVStat(int initHROrSVStat) {
+        HROrSVStat.set(initHROrSVStat);
+    }
+    
+    public int getHROrSVStat() {
+        return HROrSVStat.get();
+    }
+    
+    public IntegerProperty HROrSVStatProperty() {
+        return HROrSVStat;
+    }
+ 
+    public void setRBIOrKStat(int initRBIOrKStat) {
+        RBIOrKStat.set(initRBIOrKStat);
+    }
+    
+    public int getRBIOrKStat() {
+        return RBIOrKStat.get();
+    }
+    
+    public IntegerProperty RBIOrKStatProperty() {
+        return RBIOrKStat;
+    }
+    
+    public void setSBOrERAStat(double initSBOrERAStat) {
+        SBOrERAStat.set(initSBOrERAStat);
+    }
+    
+    public double getSBOrERAStat() {
+        return SBOrERAStat.get();
+    }
+    
+    public DoubleProperty SBOrERAStatProperty() {
+        return SBOrERAStat;
+    }
+    
+    public void setBAOrWHIPStat(double initBAOrWHIPStat) {
+        BAOrWHIPStat.set(initBAOrWHIPStat);
+    }
+    
+    public double getBAOrWHIPStat() {
+        return BAOrWHIPStat.get();
+    }
+    
+    public DoubleProperty BAOrWHIPStatProperty() {
+        return BAOrWHIPStat;
+    }
+    
 }

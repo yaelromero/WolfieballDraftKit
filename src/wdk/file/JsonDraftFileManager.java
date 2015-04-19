@@ -221,12 +221,13 @@ public class JsonDraftFileManager implements DraftFileManager {
             p.setNOB(jso.getString(JSON_NOB).replaceAll("\"", ""));
             p.setIPStat(Double.parseDouble(jso.getString(JSON_IP_STAT)));
             p.setERStat(Integer.parseInt(jso.getString(JSON_ER_STAT)));
-            p.setWStat(Integer.parseInt(jso.getString(JSON_W_STAT)));
-            p.setSVStat(Integer.parseInt(jso.getString(JSON_SV_STAT)));
+            p.setROrWStat(Integer.parseInt(jso.getString(JSON_W_STAT)));
+            p.setHROrSVStat(Integer.parseInt(jso.getString(JSON_SV_STAT)));
             p.setHStat(Integer.parseInt(jso.getString(JSON_H_STAT)));
             p.setBBStat(Integer.parseInt(jso.getString(JSON_BB_STAT)));
-            p.setKStat(Integer.parseInt(jso.getString(JSON_K_STAT)));
+            p.setRBIOrKStat(Integer.parseInt(jso.getString(JSON_K_STAT)));
             p.setYOB(Integer.parseInt(jso.getString(JSON_YOB)));
+            p.setQPOrRole("P");
             items.add(p);
         }
         return items;
@@ -245,13 +246,13 @@ public class JsonDraftFileManager implements DraftFileManager {
             h.setMLBTeam(jso.getString(JSON_MLB_TEAM).replaceAll("\"", ""));
             h.setLastName(jso.getString(JSON_LAST_NAME).replaceAll("\"", ""));
             h.setFirstName(jso.getString(JSON_FIRST_NAME).replaceAll("\"", ""));
-            h.setQP(jso.getString(JSON_QP).replaceAll("\"", ""));
+            h.setQPOrRole(jso.getString(JSON_QP).replaceAll("\"", ""));
             h.setABStat(Integer.parseInt(jso.getString(JSON_AB_STAT)));
-            h.setRStat(Integer.parseInt(jso.getString(JSON_R_STAT)));
+            h.setROrWStat(Integer.parseInt(jso.getString(JSON_R_STAT)));
             h.setHStat(Integer.parseInt(jso.getString(JSON_H_STAT)));
-            h.setHRStat(Integer.parseInt(jso.getString(JSON_HR_STAT)));
-            h.setRBIStat(Integer.parseInt(jso.getString(JSON_RBI_STAT)));
-            h.setSBStat(Integer.parseInt(jso.getString(JSON_SB_STAT)));
+            h.setHROrSVStat(Integer.parseInt(jso.getString(JSON_HR_STAT)));
+            h.setRBIOrKStat(Integer.parseInt(jso.getString(JSON_RBI_STAT)));
+            h.setSBOrERAStat(Integer.parseInt(jso.getString(JSON_SB_STAT)));
             h.setNotes(jso.getString(JSON_NOTES).replaceAll("\"", ""));
             h.setYOB(Integer.parseInt(jso.getString(JSON_YOB)));
             h.setNOB(jso.getString(JSON_NOB).replaceAll("\"", ""));
@@ -262,6 +263,7 @@ public class JsonDraftFileManager implements DraftFileManager {
     
     
     // MAKES AND RETURNS A JSON OBJECT FOR THE PROVIDED HITTER
+    
     private JsonObject makeHitterJsonObject(Hitter hitter) {
         JsonObject jso = Json.createObjectBuilder().add(JSON_FIRST_NAME, hitter.getFirstName())
                                                    .add(JSON_LAST_NAME, hitter.getLastName())
@@ -276,13 +278,13 @@ public class JsonDraftFileManager implements DraftFileManager {
                                                    .add(JSON_NOTES, hitter.getNotes())
                                                    .add(JSON_POSITION, hitter.getPosition())
                                                    .add(JSON_GAMES_PLAYED, hitter.getGamesPlayed())
-                                                   .add(JSON_R_STAT, hitter.getRStat())
-                                                   .add(JSON_HR_STAT, hitter.getHRStat())
-                                                   .add(JSON_RBI_STAT, hitter.getRBIStat())
+                                                   .add(JSON_R_STAT, hitter.getROrWStat())
+                                                   .add(JSON_HR_STAT, hitter.getHROrSVStat())
+                                                   .add(JSON_RBI_STAT, hitter.getRBIOrKStat())
                                                    .add(JSON_AB_STAT, hitter.getABStat())
-                                                   .add(JSON_SB_STAT, hitter.getSBStat())
-                                                   .add(JSON_BA_STAT, hitter.getBAStat())
-                                                   .add(JSON_QP, hitter.getQP())
+                                                   .add(JSON_SB_STAT, hitter.getSBOrERAStat())
+                                                   .add(JSON_BA_STAT, hitter.getBAOrWHIPStat())
+                                                   .add(JSON_QP, hitter.getQPOrRole())
                                                    .build();
         return jso;
     }
@@ -301,15 +303,15 @@ public class JsonDraftFileManager implements DraftFileManager {
                                                    .add(JSON_H_STAT, pitcher.getHStat())
                                                    .add(JSON_EST_VAL, pitcher.getEstVal())
                                                    .add(JSON_NOTES, pitcher.getNotes())
-                                                   .add(JSON_ROLE, pitcher.getRole())
-                                                   .add(JSON_W_STAT, pitcher.getWStat())
-                                                   .add(JSON_K_STAT, pitcher.getKStat())
-                                                   .add(JSON_SV_STAT, pitcher.getSVStat())
+                                                   .add(JSON_ROLE, pitcher.getQPOrRole())
+                                                   .add(JSON_W_STAT, pitcher.getROrWStat())
+                                                   .add(JSON_K_STAT, pitcher.getRBIOrKStat())
+                                                   .add(JSON_SV_STAT, pitcher.getHROrSVStat())
                                                    .add(JSON_ER_STAT, pitcher.getERStat())
                                                    .add(JSON_H_STAT, pitcher.getHStat())
                                                    .add(JSON_BB_STAT, pitcher.getBBStat())
-                                                   .add(JSON_ERA_STAT, pitcher.getERAStat())
-                                                   .add(JSON_WHIP_STAT, pitcher.getWHIPStat())
+                                                   .add(JSON_ERA_STAT, pitcher.getSBOrERAStat())
+                                                   .add(JSON_WHIP_STAT, pitcher.getBAOrWHIPStat())
                                                    .add(JSON_IP_STAT, pitcher.getIPStat())
                                                    .build();
         return jso;
