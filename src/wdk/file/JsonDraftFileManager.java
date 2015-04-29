@@ -24,6 +24,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonWriter;
 import javax.json.JsonValue;
+import wdk.data.MLBTeam;
 
 /**
  * This is a DraftFileManager that uses the JSON file format to 
@@ -268,7 +269,7 @@ public class JsonDraftFileManager implements DraftFileManager {
         JsonObject jso = Json.createObjectBuilder().add(JSON_FIRST_NAME, hitter.getFirstName())
                                                    .add(JSON_LAST_NAME, hitter.getLastName())
                                                    .add(JSON_CONTRACT, hitter.getContract().toString())
-                                                   .add(JSON_MLB_TEAM, hitter.getMLBTeam())
+                                                   .add(JSON_MLB_TEAM, hitter.getMLBTeam().toString())
                                                    .add(JSON_SALARY, hitter.getSalary())
                                                    .add(JSON_AGE, hitter.getAge())
                                                    .add(JSON_NOB, hitter.getNOB())
@@ -295,7 +296,7 @@ public class JsonDraftFileManager implements DraftFileManager {
         JsonObject jso = Json.createObjectBuilder().add(JSON_FIRST_NAME, pitcher.getFirstName())
                                                    .add(JSON_LAST_NAME, pitcher.getLastName())
                                                    .add(JSON_CONTRACT, pitcher.getContract().toString())
-                                                   .add(JSON_MLB_TEAM, pitcher.getMLBTeam())
+                                                   .add(JSON_MLB_TEAM, pitcher.getMLBTeam().toString())
                                                    .add(JSON_SALARY, pitcher.getSalary())
                                                    .add(JSON_AGE, pitcher.getAge())
                                                    .add(JSON_NOB, pitcher.getNOB())

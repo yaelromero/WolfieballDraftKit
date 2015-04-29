@@ -1,7 +1,11 @@
 package wdk.data;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import wdk.file.DraftFileManager;
 
 /**
@@ -23,8 +27,46 @@ public class DraftDataManager {
     
     static String          DEFAULT_TEXT = "Unknown";
     
-    public DraftDataManager(DraftDataView initView) {
+    public DraftDataManager(DraftDataView initView, ArrayList<Pitcher> pitchers, ArrayList<Hitter> hitters) {
+        ObservableList completePlayers = FXCollections.observableArrayList();
+        
+        for(Pitcher p: pitchers) {
+            if(p.getIPStat() == 0.0) {
+                p.setSBOrERAStat(0.0);
+                p.setBAOrWHIPStat(0.0);
+            }
+            else {
+                double tempSBOrERA = ((double)p.getERStat() * 9)/(p.getIPStat());
+                BigDecimal bd = new BigDecimal(tempSBOrERA).setScale(2, RoundingMode.HALF_EVEN);
+                tempSBOrERA = bd.doubleValue();
+                p.setSBOrERAStat(tempSBOrERA);
+                
+                double tempBAOrWHIP = ((double)(p.getBBStat() + p.getHStat())/(p.getIPStat()));
+                BigDecimal db = new BigDecimal(tempBAOrWHIP).setScale(2, RoundingMode.HALF_EVEN);
+                tempBAOrWHIP = db.doubleValue();
+                p.setBAOrWHIPStat(tempBAOrWHIP);
+            }
+        }
+        for(Pitcher p: pitchers) {
+            completePlayers.add(p);
+        }
+        for(Hitter h: hitters) {
+            if(h.getABStat() == 0.0) {
+                h.setBAOrWHIPStat(0.0);
+            }
+            else {
+                double tempBAOrWHIP = ((double)(h.getHStat()) / h.getABStat());
+                BigDecimal db = new BigDecimal(tempBAOrWHIP).setScale(2, RoundingMode.HALF_EVEN);
+                tempBAOrWHIP = db.doubleValue();
+                h.setBAOrWHIPStat(tempBAOrWHIP);
+            }
+        }
+        for(Hitter h: hitters) {
+            completePlayers.add(h);
+        }
         view = initView;
+        
+        draft = new Draft(completePlayers);
     }
     
     /**
@@ -52,8 +94,8 @@ public class DraftDataManager {
         /*
         draft.setDraftName(DEFAULT_TEXT);
         draft.clearListOfTeams();
-        draft.clearFreeAgents();
         */
+        //draft.clearFreeAgents();
         // AND THEN FORCE THE UI TO RELOAD THE UPDATED COURSE
         view.reloadDraft(draft);
         

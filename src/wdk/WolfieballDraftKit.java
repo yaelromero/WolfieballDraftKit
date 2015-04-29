@@ -65,13 +65,12 @@ public class WolfieballDraftKit extends Application {
                 //gui.setSiteExporter(exporter);
                 
                 // CONSTRUCT THE DATA MANAGER AND GIVE IT TO THE GUI
-                DraftDataManager dataManager = new DraftDataManager(gui); 
+                DraftDataManager dataManager = new DraftDataManager(gui, pitchers, hitters); 
                 gui.setDataManager(dataManager);
 
                 // FINALLY, START UP THE USER INTERFACE WINDOW AFTER ALL
                 // REMAINING INITIALIZATION
                 gui.initGUI(appTitle);      
-                gui.makePlayersArray(pitchers, hitters);
             }
             catch(IOException ioe) {
                 eH = ErrorHandler.getErrorHandler();

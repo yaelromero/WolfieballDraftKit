@@ -38,7 +38,7 @@ public class Player {
     public static final String DEFAULT_FIRST_NAME = "<ENTER FIRST NAME>";
     public static final String DEFAULT_LAST_NAME = "<ENTER LAST NAME>";
     public static final Contract DEFAULT_CONTRACT = S1;
-    public static final String DEFAULT_MLB_TEAM = "<ENTER MLB_TEAM>";
+    public static final String DEFAULT_MLB_TEAM = "<ENTER MLB TEAM>";
     public static final String DEFAULT_NOB = "<ENTER NOB>";
     public static final int DEFAULT_YOB = 0;
     public static final String DEFAULT_NOTES = "<ENTER NOTES>";
@@ -51,7 +51,7 @@ public class Player {
     public static final int DEFAULT_RBIORK_STAT = 0;
     public static final Double DEFAULT_SBORERA_STAT = 0.0;
     public static final Double DEFAULT_BAORWHIP_STAT = 0.0;
-    public static final String DEFAULT_QPORROLE = "<ENTER QP/ROLE>";
+    public static final String DEFAULT_QPORROLE = "";
     
     public Player() {
         firstName = new SimpleStringProperty(DEFAULT_FIRST_NAME);
@@ -103,6 +103,31 @@ public class Player {
     
     public StringProperty QPOrRoleProperty() {
         return QPOrRole;
+    }
+    
+    public void addOnToQPOrRole(String additionToQP) {
+        if(getQPOrRole().equals("")) {
+            QPOrRole.set(additionToQP);
+        }
+        else
+            QPOrRole.set(getQPOrRole() + "_" + additionToQP);
+    }
+    
+    public void removeQPOrRole(String removal) {
+        String r = removal.substring(0, 1);
+        String[] split = {};
+        if(getQPOrRole().contains(r)) {
+            if(getQPOrRole().indexOf(r) == 0) {
+                split = getQPOrRole().split(r);
+            }
+            else
+                split = getQPOrRole().split("_" + removal);
+        }
+        
+        String newQPOrRole = "";
+        for(int i = 0; i < split.length; i++) {
+            newQPOrRole += i;
+        }
     }
     
     public void setFirstName(String initFirstName) {

@@ -1,7 +1,7 @@
 package wdk.data;
 
-import java.util.ArrayList;
-import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -10,12 +10,12 @@ import java.util.List;
 
 public class Draft {
     String draftName;
-    List<Team> listOfTeams;
-    List<Player> freeAgents;
+    ObservableList<Team> listOfTeams;
+    ObservableList<Player> freeAgents;
     
-    public Draft() {
-        listOfTeams = new ArrayList<>();
-        freeAgents = new ArrayList<>();
+    public Draft(ObservableList initFreeAgents) {
+        listOfTeams = FXCollections.observableArrayList();
+        freeAgents = initFreeAgents;
     }
     
     public String getDraftName() {
@@ -26,11 +26,11 @@ public class Draft {
         this.draftName = draftName;
     }
     
-    public void setListOfTeams(List<Team> listOfTeams) {
+    public void setListOfTeams(ObservableList<Team> listOfTeams) {
         this.listOfTeams = listOfTeams;
     }
     
-    public List<Team> getListOfTeams() {
+    public ObservableList<Team> getListOfTeams() {
         return listOfTeams;
     }
     
@@ -46,11 +46,11 @@ public class Draft {
         listOfTeams.remove(a);
     }
     
-    public void setFreeAgents(List<Player> freeAgents) {
+    public void setFreeAgents(ObservableList<Player> freeAgents) {
         this.freeAgents = freeAgents;
     }
     
-    public List<Player> getFreeAgents() {
+    public ObservableList<Player> getFreeAgents() {
         return freeAgents;
     }
     

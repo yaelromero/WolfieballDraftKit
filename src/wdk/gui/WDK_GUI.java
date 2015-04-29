@@ -55,6 +55,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import properties_manager.PropertiesManager;
 import sun.plugin2.jvm.RemoteJVMLauncher.CallBack;
+import wdk.controller.DraftEditController;
+import wdk.controller.PlayerController;
 import wdk.controller.ScreenController;
 
 /**
@@ -91,8 +93,14 @@ public class WDK_GUI implements DraftDataView {
     // THIS HANDLES INTERACTIONS WITH FILE-RELATED CONTROLS
     FileController fileController;
     
+    // THIS HANDLES INTERACTIONS WITH DRAFT INFO CONTROLS
+    DraftEditController draftController;
+    
     // THIS HANDLES INTERACTIONS WITH SCREEN-RELATED CONTROLS
     ScreenController screenController;
+    
+    // THIS HANDLES INTERACTIONS WITH PLAYER-RELATED CONTROLS
+    PlayerController playerController;
     
     // THIS IS THE APPLICATION WINDOW
     Stage primaryStage;
@@ -144,7 +152,6 @@ public class WDK_GUI implements DraftDataView {
     VBox MLBTeamsScreenPane;
 
     // THESE ARE THE CONTROLS FOR OUR AVAILABLE PLAYERS SCREEN
-    ObservableList completePlayers;
     VBox availablePlayersPane;
     GridPane plusMinusSearch;
     Label availablePlayersLabel;
@@ -164,7 +171,7 @@ public class WDK_GUI implements DraftDataView {
     RadioButton URadioButton;
     RadioButton PRadioButton;
     FlowPane radioButtonPane;
-    TableView<String> availablePlayersTable;
+    TableView<Player> availablePlayersTable;
     TableColumn playerFirstNameColumn;
     TableColumn playerLastNameColumn;
     TableColumn playerProTeamColumn;
@@ -205,6 +212,7 @@ public class WDK_GUI implements DraftDataView {
      */
     public WDK_GUI(Stage initPrimaryStage) {
         primaryStage = initPrimaryStage;
+        
     }
     
     /**
@@ -376,6 +384,16 @@ public class WDK_GUI implements DraftDataView {
         // ARE NEVER DISABLED SO WE NEVER HAVE TO TOUCH THEM
     }
     
+    /**
+     * This function loads all the values currently in the user interface
+     * into the draft argument.
+     * 
+     * @param draft The draft to be updated using the data from the UI controls.
+     */
+    public void updateDraftInfo(Draft draft) {
+        draft.setFreeAgents(availablePlayersTable.getItems());
+    }
+    
     private void initDialogs() {
         messageDialog = new MessageDialog(primaryStage, CLOSE_BUTTON_LABEL);
         yesNoCancelDialog = new YesNoCancelDialog(primaryStage);
@@ -512,7 +530,6 @@ public class WDK_GUI implements DraftDataView {
                     }
                 }
             );
-        
         // POPULATE THE TABLE
         
         // DEFAULT POPULATION OF TABLE
@@ -528,20 +545,20 @@ public class WDK_GUI implements DraftDataView {
         playerBAWHIPColumn.setCellValueFactory(new PropertyValueFactory<Player, Double>("BAOrWHIPStat"));
         playerEstValColumn.setCellValueFactory(new PropertyValueFactory<Player, Integer>("EstValStat"));
         playerNotesColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("notes"));
-        availablePlayersTable.setItems(completePlayers);
+        availablePlayersTable.setItems(dataManager.getDraft().getFreeAgents());
         
         // DETERMINES HOW TO POPULATE THE TABLE IF THE ALL RADIO BUTTON IS SELECTED
         allRadioButton.setOnAction(e -> { 
             if(allRadioButton.isSelected()) {
-                availablePlayersTable.setItems(completePlayers);
+                availablePlayersTable.setItems(dataManager.getDraft().getFreeAgents());
             }
         });
         
         // DETERMINES HOW TO POPULATE THE TABLE IF THE C RADIO BUTTON IS SELECTED
         ObservableList CPlayers = FXCollections.observableArrayList();
-        for(int i = 0; i < completePlayers.size(); i++) {
-            if((((Player)completePlayers.get(i)).getQPOrRole().contains("C"))) {
-                CPlayers.add((Player)completePlayers.get(i));
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("C"))) {
+                CPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
             }
         }
         CRadioButton.setOnAction(e -> {
@@ -552,9 +569,9 @@ public class WDK_GUI implements DraftDataView {
         
         // DETERMINES HOW TO POPULATE THE TABLE IF THE 1B RADIO BUTTON IS SELECTED
         ObservableList oneBPlayers = FXCollections.observableArrayList();
-        for(int i = 0; i < completePlayers.size(); i++) {
-            if((((Player)completePlayers.get(i)).getQPOrRole().contains("1B"))) {
-                oneBPlayers.add((Player)completePlayers.get(i));
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("1B"))) {
+                oneBPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
             }
         }
         oneBRadioButton.setOnAction(e -> {
@@ -565,10 +582,10 @@ public class WDK_GUI implements DraftDataView {
         
         // DETERMINES HOW TO POPULATE THE TABLE IF THE CI RADIO BUTTON IS SELECTED
         ObservableList CIPlayers = FXCollections.observableArrayList();
-        for(int i = 0; i < completePlayers.size(); i++) {
-            if((((Player)completePlayers.get(i)).getQPOrRole().contains("1B")) ||
-               (((Player)completePlayers.get(i)).getQPOrRole().contains("3B"))) {
-                CIPlayers.add((Player)completePlayers.get(i));
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("1B")) ||
+               (((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("3B"))) {
+                CIPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
             } 
         }
         CIRadioButton.setOnAction(e -> {
@@ -579,9 +596,9 @@ public class WDK_GUI implements DraftDataView {
         
         // DETERMINES HOW TO POPULATE THE TABLE IF THE 3B RADIO BUTTON IS SELECTED
        ObservableList threeBPlayers = FXCollections.observableArrayList();
-        for(int i = 0; i < completePlayers.size(); i++) {
-            if((((Player)completePlayers.get(i)).getQPOrRole().contains("3B"))) {
-                threeBPlayers.add((Player)completePlayers.get(i));
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("3B"))) {
+                threeBPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
             }
         }
         threeBRadioButton.setOnAction(e -> {
@@ -592,9 +609,9 @@ public class WDK_GUI implements DraftDataView {
         
         // DETERMINES HOW TO POPULATE THE TABLE IF THE 2B RADIO BUTTON IS SELECTED
         ObservableList twoBPlayers = FXCollections.observableArrayList();
-        for(int i = 0; i < completePlayers.size(); i++) {
-            if((((Player)completePlayers.get(i)).getQPOrRole().contains("2B"))) {
-                twoBPlayers.add((Player)completePlayers.get(i));
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("2B"))) {
+                twoBPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
             }
         }
         twoBRadioButton.setOnAction(e -> {
@@ -605,10 +622,10 @@ public class WDK_GUI implements DraftDataView {
         
         // DETERMINES HOW TO POPULATE THE TABLE IF THE MI RADIO BUTTON IS SELECTED
         ObservableList MIPlayers = FXCollections.observableArrayList();
-        for(int i = 0; i < completePlayers.size(); i++) {
-            if((((Player)completePlayers.get(i)).getQPOrRole().contains("2B")) ||
-               (((Player)completePlayers.get(i)).getQPOrRole().contains("SS"))) {
-                MIPlayers.add((Player)completePlayers.get(i));
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("2B")) ||
+               (((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("SS"))) {
+                MIPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
             } 
         }
         MIRadioButton.setOnAction(e -> {
@@ -619,9 +636,9 @@ public class WDK_GUI implements DraftDataView {
         
         // DETERMINES HOW TO POPULATE THE TABLE IF THE SS RADIO BUTTON IS SELECTED
         ObservableList SSPlayers = FXCollections.observableArrayList();
-        for(int i = 0; i < completePlayers.size(); i++) {
-            if((((Player)completePlayers.get(i)).getQPOrRole().contains("SS"))) {
-                SSPlayers.add((Player)completePlayers.get(i));
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("SS"))) {
+                SSPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
             }
         }
         SSRadioButton.setOnAction(e -> {
@@ -632,9 +649,9 @@ public class WDK_GUI implements DraftDataView {
         
         // DETERMINES HOW TO POPULATE THE TABLE IF THE OF RADIO BUTTON IS SELECTED
         ObservableList OFPlayers = FXCollections.observableArrayList();
-        for(int i = 0; i < completePlayers.size(); i++) {
-            if((((Player)completePlayers.get(i)).getQPOrRole().contains("OF"))) {
-                OFPlayers.add((Player)completePlayers.get(i));
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("OF"))) {
+                OFPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
             }
         }
         OFRadioButton.setOnAction(e -> {
@@ -645,9 +662,9 @@ public class WDK_GUI implements DraftDataView {
         
         // DETERMINES HOW TO POPULATE THE TABLE IS THE U RADIO BUTTON IS SELECTED
         ObservableList UPlayers = FXCollections.observableArrayList();
-        for(int i = 0; i < completePlayers.size(); i++) {
-            if(!(((Player)completePlayers.get(i)).getQPOrRole().contains("P"))) {
-                UPlayers.add((Player)completePlayers.get(i));
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if(!(((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("P"))) {
+                UPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
             }
         }
         URadioButton.setOnAction(e -> {
@@ -658,9 +675,9 @@ public class WDK_GUI implements DraftDataView {
         
         // DETERMINES HOW TO POPULATE THE TABLE IS THE P RADIO BUTTON IS SELECTED
         ObservableList PPlayers = FXCollections.observableArrayList();
-        for(int i = 0; i < completePlayers.size(); i++) {
-            if((((Player)completePlayers.get(i)).getQPOrRole().contains("P"))) {
-                PPlayers.add((Player)completePlayers.get(i));
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("P"))) {
+                PPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
             }
         }
         PRadioButton.setOnAction(e -> {
@@ -695,45 +712,20 @@ public class WDK_GUI implements DraftDataView {
         // PUT THEM INTO THE WORKSPACE PANE AND PUT THE PANE INTO THE SCROLLPANE
         workspacePane.setCenter(availablePlayersPane);
         workspaceScrollPane.setContent(workspacePane);
-    }
-    
-    public void makePlayersArray(ArrayList <Pitcher> pitchers, ArrayList <Hitter> hitters) {
-        completePlayers = FXCollections.observableArrayList();
         
-        for(Pitcher p: pitchers) {
-            if(p.getIPStat() == 0.0) {
-                p.setSBOrERAStat(0.0);
-                p.setBAOrWHIPStat(0.0);
-            }
-            else {
-                double tempSBOrERA = ((double)p.getERStat() * 9)/(p.getIPStat());
-                BigDecimal bd = new BigDecimal(tempSBOrERA).setScale(2, RoundingMode.HALF_EVEN);
-                tempSBOrERA = bd.doubleValue();
-                p.setSBOrERAStat(tempSBOrERA);
-                
-                double tempBAOrWHIP = ((double)(p.getBBStat() + p.getHStat())/(p.getIPStat()));
-                BigDecimal db = new BigDecimal(tempBAOrWHIP).setScale(2, RoundingMode.HALF_EVEN);
-                tempBAOrWHIP = db.doubleValue();
-                p.setBAOrWHIPStat(tempBAOrWHIP);
-            }
-        }
-        for(Pitcher p: pitchers) {
-            completePlayers.add(p);
-        }
-        for(Hitter h: hitters) {
-            if(h.getABStat() == 0.0) {
-                h.setBAOrWHIPStat(0.0);
-            }
-            else {
-                double tempBAOrWHIP = ((double)(h.getHStat()) / h.getABStat());
-                BigDecimal db = new BigDecimal(tempBAOrWHIP).setScale(2, RoundingMode.HALF_EVEN);
-                tempBAOrWHIP = db.doubleValue();
-                h.setBAOrWHIPStat(tempBAOrWHIP);
-            }
-        }
-        for(Hitter h: hitters) {
-            completePlayers.add(h);
-        }
+        draftController = new DraftEditController();
+        addPlayerButton.setOnAction(e -> {
+            playerController.handleAddNewPlayerRequest(this);
+            draftController.handleDraftChangeRequest(this);
+            availablePlayersTable.setVisible(false);
+            availablePlayersTable.setVisible(true);
+        });
+        removePlayerButton.setOnAction(e -> {
+            playerController.handleRemovePlayerRequest(this, availablePlayersTable.getSelectionModel().getSelectedItem());
+            draftController.handleDraftChangeRequest(this);
+            availablePlayersTable.setVisible(false);
+            availablePlayersTable.setVisible(true);
+        });
     }
  
     public void searchByKey(String oldValue, String newValue, ObservableList CPlayers, 
@@ -741,7 +733,7 @@ public class WDK_GUI implements DraftDataView {
             ObservableList twoBPlayers, ObservableList MIPlayers, ObservableList SSPlayers, 
             ObservableList OFPlayers, ObservableList UPlayers, ObservableList PPlayers) {
         if(oldValue != null && (newValue.length() < oldValue.length()) && allRadioButton.isSelected()) {
-            availablePlayersTable.setItems(completePlayers);
+            availablePlayersTable.setItems(dataManager.getDraft().getFreeAgents());
         }
         else if(oldValue != null && (newValue.length() < oldValue.length()) && CRadioButton.isSelected()) {
             availablePlayersTable.setItems(CPlayers);
@@ -774,7 +766,7 @@ public class WDK_GUI implements DraftDataView {
             availablePlayersTable.setItems(PPlayers);
         }
         else if(oldValue != null && (newValue.length() < oldValue.length())) {
-            availablePlayersTable.setItems(completePlayers);
+            availablePlayersTable.setItems(dataManager.getDraft().getFreeAgents());
         }
         
         newValue = (String)newValue.toUpperCase();
@@ -858,6 +850,16 @@ public class WDK_GUI implements DraftDataView {
         newDraftButton.setOnAction(e -> {
             fileController.handleNewDraftRequest(this);
         });
+        loadDraftButton.setOnAction(e -> {
+            fileController.handleLoadDraftRequest(this);
+        });
+        saveDraftButton.setOnAction(e -> {
+            fileController.handleSaveDraftRequest(this, dataManager.getDraft());
+        });
+
+        exitButton.setOnAction(e -> {
+            fileController.handleExitRequest(this);
+        });
         
         screenController = new ScreenController();
         fantasyTeamsScreenButton.setOnAction(e -> {
@@ -879,6 +881,11 @@ public class WDK_GUI implements DraftDataView {
         MLBTeamsScreenButton.setOnAction(e -> {
             screenController.handleMLBScreenRequest(this);
         });
+        
+        
+        // AND NOW THE PLAYER ADDING AND EDITING CONTROLS
+        
+        playerController = new PlayerController(primaryStage, dataManager.getDraft(), messageDialog, yesNoCancelDialog);
         
     }
 
