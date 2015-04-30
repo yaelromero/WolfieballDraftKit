@@ -65,4 +65,19 @@ public class Draft {
     public void removeFreeAgent(Player p) {
         freeAgents.remove(p);
     }
+    
+    public boolean checkForSame(Player pl) {
+        boolean exists = false;
+        for(int i = 0; i < freeAgents.size(); i++) {
+            if(freeAgents.get(i).getFirstName().equalsIgnoreCase(pl.getFirstName()) &&
+                freeAgents.get(i).getLastName().equalsIgnoreCase(pl.getLastName())) {
+                exists = true;
+                break;
+            }
+            else {
+                exists = false;
+            }
+        }
+        return exists;
+    }
 }

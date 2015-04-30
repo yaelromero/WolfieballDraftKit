@@ -13,6 +13,9 @@ import properties_manager.PropertiesManager;
 import static wdk.WDK_PropertyType.REMOVE_ITEM_MESSAGE;
 import wdk.data.Draft;
 import wdk.data.DraftDataManager;
+import static wdk.data.Player.DEFAULT_FIRST_NAME;
+import static wdk.data.Player.DEFAULT_LAST_NAME;
+import static wdk.data.Player.DEFAULT_MLB_TEAM;
 
 /**
  * This controller class handles the responses to all player
@@ -45,8 +48,21 @@ public class PlayerController {
             // GET THE LECTURE ITEM
             Player pl = sid.getPlayer();
             
-            // AND ADD IT AS A ROW TO THE TABLE
-            draft.addFreeAgent(pl);
+            if(pl.getFirstName().equalsIgnoreCase(DEFAULT_FIRST_NAME) ||
+                    pl.getLastName().equalsIgnoreCase(DEFAULT_LAST_NAME) ||
+                    pl.getMLBTeam().equalsIgnoreCase(DEFAULT_MLB_TEAM) ||
+                    pl.getQPOrRole().isEmpty()) {
+                messageDialog.show("Please enter all values for the player");
+            }
+            else {
+                if(draft.checkForSame(pl) == true) {
+                    messageDialog.show("A player with the same name already exists!");
+                }
+                else {
+                    // AND ADD IT AS A ROW TO THE TABLE
+                    draft.addFreeAgent(pl);
+                }
+            }
         }
         else {
             // THE USER MUST HAVE PRESSED CANCEL, SO

@@ -105,31 +105,6 @@ public class Player {
         return QPOrRole;
     }
     
-    public void addOnToQPOrRole(String additionToQP) {
-        if(getQPOrRole().equals("")) {
-            QPOrRole.set(additionToQP);
-        }
-        else
-            QPOrRole.set(getQPOrRole() + "_" + additionToQP);
-    }
-    
-    public void removeQPOrRole(String removal) {
-        String r = removal.substring(0, 1);
-        String[] split = {};
-        if(getQPOrRole().contains(r)) {
-            if(getQPOrRole().indexOf(r) == 0) {
-                split = getQPOrRole().split(r);
-            }
-            else
-                split = getQPOrRole().split("_" + removal);
-        }
-        
-        String newQPOrRole = "";
-        for(int i = 0; i < split.length; i++) {
-            newQPOrRole += i;
-        }
-    }
-    
     public void setFirstName(String initFirstName) {
         firstName.set(initFirstName);
     }

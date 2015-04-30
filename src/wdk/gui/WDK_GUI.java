@@ -30,11 +30,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -79,7 +77,7 @@ public class WDK_GUI implements DraftDataView {
     static final String CLASS_PROMPT_LABEL = "prompt_label";
     static final String EMPTY_TEXT = "";
     static final int LARGE_TEXT_FIELD_LENGTH = 100;
-    static final int SMALL_TEXT_FIELD_LENGTH = 5;
+    static final int SMALL_TEXT_FIELD_LENGTH = 20;
 
     // THIS MANAGES ALL OF THE APPLICATION'S DATA
     DraftDataManager dataManager;
@@ -137,7 +135,32 @@ public class WDK_GUI implements DraftDataView {
     
     // THESE ARE THE CONTROLS FOR OUR FANTASY TEAMS SCREEN
     Label fantasyTeamsHeading;
+    GridPane namePlusMinusEditSel;
     VBox fantasyTeamsPane;
+    VBox startingLineupBox;
+    Label startingLineupLabel;
+    Button addTeamButton;
+    Button removeTeamButton;
+    Button editTeamButton;
+    Label draftNameLabel;
+    TextField draftNameTextField;
+    Label selectFantasyTeamLabel;
+    ComboBox selectFantasyTeamComboBox;
+    TableView<Player> teamTable;
+    TableColumn pPositionColumn;
+    TableColumn pFirstNameColumn;
+    TableColumn pLastNameColumn;
+    TableColumn pProTeamColumn;
+    TableColumn pPositionsColumn;
+    TableColumn pRWColumn;
+    TableColumn pHRSVColumn;
+    TableColumn pRBIKColumn;
+    TableColumn pSBERAColumn;
+    TableColumn pBAWHIPColumn;
+    TableColumn pEstimatedValueColumn;
+    TableColumn pContractColumn;
+    TableColumn pSalaryColumn;
+    
     
     // THESE ARE THE CONTROLS FOR OUR DRAFT SCREEN
     Label draftScreenLabel;
@@ -198,6 +221,10 @@ public class WDK_GUI implements DraftDataView {
     static final String COL_BAWHIP = "BA/WHIP";
     static final String COL_EST_VAL = "Estimated Value";
     static final String COL_NOTES = "Notes";
+    
+    static final String COL_POSITION = "Position";
+    static final String COL_CONTRACT = "Contact";
+    static final String COL_SALARY = "Salary";
    
     // HERE ARE OUR DIALOGS
     MessageDialog messageDialog;
@@ -391,7 +418,7 @@ public class WDK_GUI implements DraftDataView {
      * @param draft The draft to be updated using the data from the UI controls.
      */
     public void updateDraftInfo(Draft draft) {
-        draft.setFreeAgents(availablePlayersTable.getItems());
+        draft.setFreeAgents(dataManager.getDraft().getFreeAgents());
     }
     
     private void initDialogs() {
@@ -434,6 +461,60 @@ public class WDK_GUI implements DraftDataView {
         fantasyTeamsHeading = initLabel(WDK_PropertyType.FANTASY_HEADING_LABEL, CLASS_HEADING_LABEL);
         fantasyTeamsPane.getChildren().add(fantasyTeamsHeading);
  
+        // THESE ARE THE CONTROLS FOR ADDING A TEAM, REMOVING A TEAM, EDITING A TEAM,
+        // SELECTING A TEAM AND ADDING A DRAFT NAME
+        namePlusMinusEditSel = new GridPane();
+        draftNameLabel = initGridLabel(namePlusMinusEditSel, WDK_PropertyType.DRAFT_NAME_LABEL, CLASS_PROMPT_LABEL, 0, 0, 2, 1);
+        draftNameTextField = initGridTextField(namePlusMinusEditSel, SMALL_TEXT_FIELD_LENGTH, EMPTY_TEXT, true, 2, 0, 4, 1);
+        addTeamButton = initGridButton(namePlusMinusEditSel, WDK_PropertyType.ADD_ICON, WDK_PropertyType.ADD_TEAM_TOOLTIP, false, 0, 1, 1, 1);
+        removeTeamButton = initGridButton(namePlusMinusEditSel, WDK_PropertyType.MINUS_ICON, WDK_PropertyType.REMOVE_TEAM_TOOLTIP, false, 1, 1, 1, 1);
+        editTeamButton = initGridButton(namePlusMinusEditSel, WDK_PropertyType.EDIT_ICON, WDK_PropertyType.EDIT_TEAM_TOOLTIP, false, 2, 1, 1, 1);       
+        selectFantasyTeamLabel = initGridLabel(namePlusMinusEditSel, WDK_PropertyType.SELECT_TEAM_LABEL, CLASS_PROMPT_LABEL, 3, 1, 2, 1);
+        selectFantasyTeamComboBox = initGridComboBox(namePlusMinusEditSel, 5, 1, 1, 1);
+        fantasyTeamsPane.getChildren().add(namePlusMinusEditSel);
+        
+        
+        // THESE ARE THE CONTROLS FOR THE PLAYER TABLE
+        teamTable = new TableView();
+        teamTable.setEditable(true);
+        pPositionColumn = new TableColumn(COL_POSITION);
+        pFirstNameColumn = new TableColumn(COL_FIRST_NAME);
+        pFirstNameColumn.setPrefWidth(120);
+        pLastNameColumn = new TableColumn(COL_LAST_NAME);
+        pLastNameColumn.setPrefWidth(120);
+        pProTeamColumn = new TableColumn(COL_PRO_TEAM);
+        pPositionsColumn = new TableColumn(COL_POSITIONS);
+        pPositionsColumn.setPrefWidth(120);
+        pRWColumn = new TableColumn(COL_RW);
+        pHRSVColumn = new TableColumn(COL_HRSV);
+        pRBIKColumn = new TableColumn(COL_RBIK);
+        pSBERAColumn = new TableColumn(COL_SBERA);
+        pBAWHIPColumn = new TableColumn(COL_BAWHIP);
+        pEstimatedValueColumn = new TableColumn(COL_EST_VAL);
+        pEstimatedValueColumn.setPrefWidth(120);
+        pContractColumn = new TableColumn(COL_CONTRACT);
+        pSalaryColumn = new TableColumn(COL_SALARY);
+        
+        teamTable.getColumns().add(pPositionColumn);
+        teamTable.getColumns().add(pFirstNameColumn);
+        teamTable.getColumns().add(pLastNameColumn);
+        teamTable.getColumns().add(pProTeamColumn);
+        teamTable.getColumns().add(pPositionsColumn);
+        teamTable.getColumns().add(pRWColumn);
+        teamTable.getColumns().add(pHRSVColumn);
+        teamTable.getColumns().add(pRBIKColumn);
+        teamTable.getColumns().add(pSBERAColumn);
+        teamTable.getColumns().add(pBAWHIPColumn);
+        teamTable.getColumns().add(pEstimatedValueColumn);
+        teamTable.getColumns().add(pContractColumn);
+        teamTable.getColumns().add(pSalaryColumn);
+        
+        startingLineupBox = new VBox();
+        startingLineupLabel = initLabel(WDK_PropertyType.STARTING_LINEUP_LABEL, CLASS_SUBHEADING_LABEL);
+        startingLineupBox.getChildren().add(startingLineupLabel);
+        startingLineupBox.getChildren().add(teamTable);
+        startingLineupBox.getStyleClass().add(CLASS_BORDERED_PANE);
+        fantasyTeamsPane.getChildren().add(startingLineupBox);
         workspacePane.setCenter(fantasyTeamsPane);
 
         // AND NOW PUT IT IN THE WORKSPACE
@@ -685,6 +766,7 @@ public class WDK_GUI implements DraftDataView {
                 availablePlayersTable.setItems(PPlayers);
             }
         });
+  
  
         // DETERMINES HOW TO POPULATE THE TABLE WHEN USER TYPES IN THE SEARCH BAR
         searchPlayersTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -714,18 +796,125 @@ public class WDK_GUI implements DraftDataView {
         workspaceScrollPane.setContent(workspacePane);
         
         draftController = new DraftEditController();
+        playerController = new PlayerController(primaryStage, dataManager.getDraft(), messageDialog, yesNoCancelDialog);
         addPlayerButton.setOnAction(e -> {
             playerController.handleAddNewPlayerRequest(this);
             draftController.handleDraftChangeRequest(this);
-            availablePlayersTable.setVisible(false);
-            availablePlayersTable.setVisible(true);
+            updateCPlayers(CPlayers);
+            updateOneBPlayers(oneBPlayers);
+            updateThreeBPlayers(threeBPlayers);
+            updateTwoBPlayers(twoBPlayers);
+            updateMIPlayers(MIPlayers);
+            updateSSPlayers(SSPlayers);
+            updateOFPlayers(OFPlayers);
+            updateUPlayers(UPlayers);
+            updatePPlayers(PPlayers);
         });
         removePlayerButton.setOnAction(e -> {
             playerController.handleRemovePlayerRequest(this, availablePlayersTable.getSelectionModel().getSelectedItem());
             draftController.handleDraftChangeRequest(this);
-            availablePlayersTable.setVisible(false);
-            availablePlayersTable.setVisible(true);
+            updateCPlayers(CPlayers);
+            updateOneBPlayers(oneBPlayers);
+            updateThreeBPlayers(threeBPlayers);
+            updateTwoBPlayers(twoBPlayers);
+            updateMIPlayers(MIPlayers);
+            updateSSPlayers(SSPlayers);
+            updateOFPlayers(OFPlayers);
+            updateUPlayers(UPlayers);
+            updatePPlayers(PPlayers);
         });
+    }
+    
+    public void updateCPlayers(ObservableList CPlayers) {
+        CPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("C"))) {
+                CPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
+    }
+    
+    public void updateOneBPlayers(ObservableList oneBPlayers) {
+        oneBPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("1B"))) {
+                oneBPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
+    }
+    
+    public void updateCIPlayers(ObservableList CIPlayers) {
+        CIPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("1B")) ||
+               (((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("3B"))) {
+                CIPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            } 
+        }
+    }
+    
+    public void updateThreeBPlayers(ObservableList threeBPlayers) {
+        threeBPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("3B"))) {
+                threeBPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
+    }
+    
+    public void updateTwoBPlayers(ObservableList twoBPlayers) {
+        twoBPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("2B"))) {
+                twoBPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
+    }
+    
+    public void updateMIPlayers(ObservableList MIPlayers) {
+        MIPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("2B")) ||
+               (((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("SS"))) {
+                MIPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            } 
+        }
+    }
+    
+    public void updateSSPlayers(ObservableList SSPlayers) {
+        SSPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("SS"))) {
+                SSPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
+    }
+    
+    public void updateOFPlayers(ObservableList OFPlayers) {
+        OFPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("OF"))) {
+                OFPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
+    }
+    
+    public void updateUPlayers(ObservableList UPlayers) {
+        UPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if(!(((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("P"))) {
+                UPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
+    }
+    
+    public void updatePPlayers(ObservableList PPlayers) {
+        PPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("P"))) {
+                PPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
     }
  
     public void searchByKey(String oldValue, String newValue, ObservableList CPlayers, 
@@ -880,13 +1069,7 @@ public class WDK_GUI implements DraftDataView {
         
         MLBTeamsScreenButton.setOnAction(e -> {
             screenController.handleMLBScreenRequest(this);
-        });
-        
-        
-        // AND NOW THE PLAYER ADDING AND EDITING CONTROLS
-        
-        playerController = new PlayerController(primaryStage, dataManager.getDraft(), messageDialog, yesNoCancelDialog);
-        
+        });    
     }
 
     // INIT A BUTTON AND ADD IT TO A CONTAINER IN A TOOLBAR
@@ -924,6 +1107,13 @@ public class WDK_GUI implements DraftDataView {
         Label label = initLabel(labelProperty, styleClass);
         container.add(label, col, row, colSpan, rowSpan);
         return label;
+    }
+    
+    // INIT A COMBO BOX AND PUT IT IN A GridPane
+    private ComboBox initGridComboBox(GridPane container, int col, int row, int colSpan, int rowSpan) throws IOException {
+        ComboBox comboBox = new ComboBox();
+        container.add(comboBox, col, row, colSpan, rowSpan);
+        return comboBox;
     }
     
     // INIT A TEXT FIELD AND PUT IT IN A GridPane

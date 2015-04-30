@@ -19,6 +19,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -37,6 +38,7 @@ public class AddNewPlayerDialog  extends Stage {
     
     // GUI CONTROLS FOR OUR DIALOG
     GridPane gridPane;
+    FlowPane flowPane;
     Scene dialogScene;
     Label headingLabel;
     Label firstNameLabel;
@@ -80,10 +82,13 @@ public class AddNewPlayerDialog  extends Stage {
         initOwner(primaryStage);
         
         // FIRST OUR CONTAINER
+        flowPane = new FlowPane();
+        flowPane.setHgap(10);
         gridPane = new GridPane();
         gridPane.setPadding(new Insets(10, 20, 20, 20));
         gridPane.setHgap(10);
         gridPane.setVgap(10);
+        gridPane.setPrefSize(350, 300);
         
         // PUT THE HEADING IN THE GRID
         headingLabel = new Label(PLAYER_HEADING);
@@ -119,71 +124,22 @@ public class AddNewPlayerDialog  extends Stage {
         });
         
         // AND THE POSITION CHECK BOXES (BOTH HITTER AND PITCHER POSITION CANNOT BE SELECTED)
-           
+        
         CCheckBox = new CheckBox("C");
-        CCheckBox.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if(newValue == true) {
-                newPlayer.addOnToQPOrRole("C");
-            }
-            else
-                newPlayer.removeQPOrRole("C");
-        });
         oneBCheckBox = new CheckBox("1B");
-        oneBCheckBox.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if(newValue == true) {
-                newPlayer.addOnToQPOrRole("1B");
-            }
-            else
-                newPlayer.removeQPOrRole("1B");
-        });
-        
         threeBCheckBox = new CheckBox("3B");
-        threeBCheckBox.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if(newValue == true) {
-                newPlayer.addOnToQPOrRole("3B");
-            }
-            else
-                newPlayer.removeQPOrRole("3B");
-        });
-       
-        twoBCheckBox = new CheckBox("2B");
-        twoBCheckBox.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if(newValue == true) {
-                newPlayer.addOnToQPOrRole("2B");
-            }
-            else
-                newPlayer.removeQPOrRole("2B");
-        });
-        
+        twoBCheckBox = new CheckBox("2B"); 
         SSCheckBox = new CheckBox("SS");
-        SSCheckBox.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if(newValue == true) {
-                newPlayer.addOnToQPOrRole("SS");
-            }
-            else
-                newPlayer.removeQPOrRole("SS");
-        });
-        
-        OFCheckBox = new CheckBox("OF");
-        OFCheckBox.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if(newValue == true) {
-                newPlayer.addOnToQPOrRole("OF");
-            }
-            else
-                newPlayer.removeQPOrRole("OF");
-        });
-       
+        OFCheckBox = new CheckBox("OF");      
         PCheckBox = new CheckBox("P");
-        PCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if(newValue == true) {
-                    newPlayer.addOnToQPOrRole("P");
-                }
-                else
-                    newPlayer.removeQPOrRole("P");
-            }
-        });
+        
+        CCheckBox.setOnAction(e -> handleCheckBoxAction(e));
+        oneBCheckBox.setOnAction(e -> handleCheckBoxAction(e));
+        threeBCheckBox.setOnAction(e -> handleCheckBoxAction(e));
+        twoBCheckBox.setOnAction(e -> handleCheckBoxAction(e));
+        SSCheckBox.setOnAction(e -> handleCheckBoxAction(e));
+        OFCheckBox.setOnAction(e -> handleCheckBoxAction(e)); 
+        PCheckBox.setOnAction(e -> handleCheckBoxAction(e));
       
         
         // AND FINALLY, THE BUTTONS
@@ -200,6 +156,14 @@ public class AddNewPlayerDialog  extends Stage {
         cancelButton.setOnAction(completeCancelHandler);
 
         // NOW LET'S ARRANGE THEM ALL AT ONCE
+        flowPane.getChildren().add(CCheckBox);
+        flowPane.getChildren().add(oneBCheckBox);
+        flowPane.getChildren().add(threeBCheckBox);
+        flowPane.getChildren().add(twoBCheckBox);
+        flowPane.getChildren().add(SSCheckBox);
+        flowPane.getChildren().add(OFCheckBox);
+        flowPane.getChildren().add(PCheckBox);
+        
         gridPane.add(headingLabel, 0, 0, 2, 1);
         gridPane.add(firstNameLabel, 0, 1, 1, 1);
         gridPane.add(firstNameTextField, 1, 1, 1, 1);
@@ -207,15 +171,9 @@ public class AddNewPlayerDialog  extends Stage {
         gridPane.add(lastNameTextField, 1, 2, 1, 1);
         gridPane.add(proTeamLabel, 0, 3, 1, 1);
         gridPane.add(proTeamComboBox, 1, 3, 1, 1);
-        gridPane.add(CCheckBox, 0, 4, 1, 1);
-        gridPane.add(oneBCheckBox, 1, 4, 1, 1);
-        gridPane.add(threeBCheckBox, 2, 4, 1, 1);
-        gridPane.add(twoBCheckBox, 3, 4, 1, 1);
-        gridPane.add(SSCheckBox, 4, 4, 1, 1);
-        gridPane.add(OFCheckBox, 5, 4, 1, 1);
-        gridPane.add(PCheckBox, 6, 4, 1, 1);
-        gridPane.add(completeButton, 0, 5, 1, 1);
-        gridPane.add(cancelButton, 1, 5, 1, 1);
+        gridPane.add(flowPane, 0, 6, 3, 1);
+        gridPane.add(completeButton, 0, 8, 1, 1);
+        gridPane.add(cancelButton, 1, 8, 1, 1);
 
         // AND PUT THE GRID PANE IN THE WINDOW
         dialogScene = new Scene(gridPane);
@@ -258,8 +216,14 @@ public class AddNewPlayerDialog  extends Stage {
         firstNameTextField.setText(newPlayer.getFirstName());
         lastNameTextField.setText(newPlayer.getLastName());
         proTeamComboBox.setValue(newPlayer.getMLBTeam());
-      
-        
+        CCheckBox.setSelected(false);
+        oneBCheckBox.setSelected(false);
+        threeBCheckBox.setSelected(false);
+        twoBCheckBox.setSelected(false);
+        SSCheckBox.setSelected(false);
+        OFCheckBox.setSelected(false);
+        PCheckBox.setSelected(false);
+
         // AND OPEN IT UP
         this.showAndWait();
         
@@ -269,4 +233,61 @@ public class AddNewPlayerDialog  extends Stage {
     public boolean wasCompleteSelected() {
         return selection.equals(COMPLETE);
     }
+    
+     private void handleCheckBoxAction(ActionEvent e) {
+        String result = "";                
+        if(CCheckBox.isSelected()) {
+            if(result.equals("")) {
+                result = "C";
+            }
+            else
+                result += "_" + "C";
+        }
+        if(oneBCheckBox.isSelected()) {
+            if(result.equals("")) {
+                result = "1B";
+            }
+            else
+                result += "_" + "1B";
+        }
+        if(threeBCheckBox.isSelected()) {
+            if(result.equals("")) {
+                result = "3B";
+            }
+            else
+                result += "_" + "3B";
+        }
+        if(twoBCheckBox.isSelected()) {
+            if(result.equals("")) {
+                result = "2B";
+            }
+            else
+                result += "_" + "2B";
+        }
+        if(SSCheckBox.isSelected()) {
+            if(result.equals("")) {
+                result = "SS";
+            }
+            else
+                result += "_" + "SS";
+        }
+        if(OFCheckBox.isSelected()) {
+            if(result.equals("")) {
+                result = "OF";
+            }
+            else
+                result += "_" + "OF";
+        }
+        if(PCheckBox.isSelected()) {
+            CCheckBox.setSelected(false);
+            oneBCheckBox.setSelected(false);
+            threeBCheckBox.setSelected(false);
+            twoBCheckBox.setSelected(false);
+            SSCheckBox.setSelected(false);
+            OFCheckBox.setSelected(false);
+            
+            result = "P";
+        }
+        newPlayer.setQPOrRole(result);
+     }
 }
