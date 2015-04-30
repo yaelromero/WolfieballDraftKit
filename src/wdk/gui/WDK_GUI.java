@@ -77,7 +77,7 @@ public class WDK_GUI implements DraftDataView {
     static final String CLASS_PROMPT_LABEL = "prompt_label";
     static final String EMPTY_TEXT = "";
     static final int LARGE_TEXT_FIELD_LENGTH = 100;
-    static final int SMALL_TEXT_FIELD_LENGTH = 5;
+    static final int SMALL_TEXT_FIELD_LENGTH = 20;
 
     // THIS MANAGES ALL OF THE APPLICATION'S DATA
     DraftDataManager dataManager;
@@ -135,7 +135,32 @@ public class WDK_GUI implements DraftDataView {
     
     // THESE ARE THE CONTROLS FOR OUR FANTASY TEAMS SCREEN
     Label fantasyTeamsHeading;
+    GridPane namePlusMinusEditSel;
     VBox fantasyTeamsPane;
+    VBox startingLineupBox;
+    Label startingLineupLabel;
+    Button addTeamButton;
+    Button removeTeamButton;
+    Button editTeamButton;
+    Label draftNameLabel;
+    TextField draftNameTextField;
+    Label selectFantasyTeamLabel;
+    ComboBox selectFantasyTeamComboBox;
+    TableView<Player> teamTable;
+    TableColumn pPositionColumn;
+    TableColumn pFirstNameColumn;
+    TableColumn pLastNameColumn;
+    TableColumn pProTeamColumn;
+    TableColumn pPositionsColumn;
+    TableColumn pRWColumn;
+    TableColumn pHRSVColumn;
+    TableColumn pRBIKColumn;
+    TableColumn pSBERAColumn;
+    TableColumn pBAWHIPColumn;
+    TableColumn pEstimatedValueColumn;
+    TableColumn pContractColumn;
+    TableColumn pSalaryColumn;
+    
     
     // THESE ARE THE CONTROLS FOR OUR DRAFT SCREEN
     Label draftScreenLabel;
@@ -196,6 +221,10 @@ public class WDK_GUI implements DraftDataView {
     static final String COL_BAWHIP = "BA/WHIP";
     static final String COL_EST_VAL = "Estimated Value";
     static final String COL_NOTES = "Notes";
+    
+    static final String COL_POSITION = "Position";
+    static final String COL_CONTRACT = "Contact";
+    static final String COL_SALARY = "Salary";
    
     // HERE ARE OUR DIALOGS
     MessageDialog messageDialog;
@@ -432,6 +461,60 @@ public class WDK_GUI implements DraftDataView {
         fantasyTeamsHeading = initLabel(WDK_PropertyType.FANTASY_HEADING_LABEL, CLASS_HEADING_LABEL);
         fantasyTeamsPane.getChildren().add(fantasyTeamsHeading);
  
+        // THESE ARE THE CONTROLS FOR ADDING A TEAM, REMOVING A TEAM, EDITING A TEAM,
+        // SELECTING A TEAM AND ADDING A DRAFT NAME
+        namePlusMinusEditSel = new GridPane();
+        draftNameLabel = initGridLabel(namePlusMinusEditSel, WDK_PropertyType.DRAFT_NAME_LABEL, CLASS_PROMPT_LABEL, 0, 0, 2, 1);
+        draftNameTextField = initGridTextField(namePlusMinusEditSel, SMALL_TEXT_FIELD_LENGTH, EMPTY_TEXT, true, 2, 0, 4, 1);
+        addTeamButton = initGridButton(namePlusMinusEditSel, WDK_PropertyType.ADD_ICON, WDK_PropertyType.ADD_TEAM_TOOLTIP, false, 0, 1, 1, 1);
+        removeTeamButton = initGridButton(namePlusMinusEditSel, WDK_PropertyType.MINUS_ICON, WDK_PropertyType.REMOVE_TEAM_TOOLTIP, false, 1, 1, 1, 1);
+        editTeamButton = initGridButton(namePlusMinusEditSel, WDK_PropertyType.EDIT_ICON, WDK_PropertyType.EDIT_TEAM_TOOLTIP, false, 2, 1, 1, 1);       
+        selectFantasyTeamLabel = initGridLabel(namePlusMinusEditSel, WDK_PropertyType.SELECT_TEAM_LABEL, CLASS_PROMPT_LABEL, 3, 1, 2, 1);
+        selectFantasyTeamComboBox = initGridComboBox(namePlusMinusEditSel, 5, 1, 1, 1);
+        fantasyTeamsPane.getChildren().add(namePlusMinusEditSel);
+        
+        
+        // THESE ARE THE CONTROLS FOR THE PLAYER TABLE
+        teamTable = new TableView();
+        teamTable.setEditable(true);
+        pPositionColumn = new TableColumn(COL_POSITION);
+        pFirstNameColumn = new TableColumn(COL_FIRST_NAME);
+        pFirstNameColumn.setPrefWidth(120);
+        pLastNameColumn = new TableColumn(COL_LAST_NAME);
+        pLastNameColumn.setPrefWidth(120);
+        pProTeamColumn = new TableColumn(COL_PRO_TEAM);
+        pPositionsColumn = new TableColumn(COL_POSITIONS);
+        pPositionsColumn.setPrefWidth(120);
+        pRWColumn = new TableColumn(COL_RW);
+        pHRSVColumn = new TableColumn(COL_HRSV);
+        pRBIKColumn = new TableColumn(COL_RBIK);
+        pSBERAColumn = new TableColumn(COL_SBERA);
+        pBAWHIPColumn = new TableColumn(COL_BAWHIP);
+        pEstimatedValueColumn = new TableColumn(COL_EST_VAL);
+        pEstimatedValueColumn.setPrefWidth(120);
+        pContractColumn = new TableColumn(COL_CONTRACT);
+        pSalaryColumn = new TableColumn(COL_SALARY);
+        
+        teamTable.getColumns().add(pPositionColumn);
+        teamTable.getColumns().add(pFirstNameColumn);
+        teamTable.getColumns().add(pLastNameColumn);
+        teamTable.getColumns().add(pProTeamColumn);
+        teamTable.getColumns().add(pPositionsColumn);
+        teamTable.getColumns().add(pRWColumn);
+        teamTable.getColumns().add(pHRSVColumn);
+        teamTable.getColumns().add(pRBIKColumn);
+        teamTable.getColumns().add(pSBERAColumn);
+        teamTable.getColumns().add(pBAWHIPColumn);
+        teamTable.getColumns().add(pEstimatedValueColumn);
+        teamTable.getColumns().add(pContractColumn);
+        teamTable.getColumns().add(pSalaryColumn);
+        
+        startingLineupBox = new VBox();
+        startingLineupLabel = initLabel(WDK_PropertyType.STARTING_LINEUP_LABEL, CLASS_SUBHEADING_LABEL);
+        startingLineupBox.getChildren().add(startingLineupLabel);
+        startingLineupBox.getChildren().add(teamTable);
+        startingLineupBox.getStyleClass().add(CLASS_BORDERED_PANE);
+        fantasyTeamsPane.getChildren().add(startingLineupBox);
         workspacePane.setCenter(fantasyTeamsPane);
 
         // AND NOW PUT IT IN THE WORKSPACE
@@ -1024,6 +1107,13 @@ public class WDK_GUI implements DraftDataView {
         Label label = initLabel(labelProperty, styleClass);
         container.add(label, col, row, colSpan, rowSpan);
         return label;
+    }
+    
+    // INIT A COMBO BOX AND PUT IT IN A GridPane
+    private ComboBox initGridComboBox(GridPane container, int col, int row, int colSpan, int rowSpan) throws IOException {
+        ComboBox comboBox = new ComboBox();
+        container.add(comboBox, col, row, colSpan, rowSpan);
+        return comboBox;
     }
     
     // INIT A TEXT FIELD AND PUT IT IN A GridPane

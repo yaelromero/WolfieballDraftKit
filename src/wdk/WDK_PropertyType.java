@@ -22,6 +22,7 @@ public enum WDK_PropertyType {
         EXIT_ICON,
         ADD_ICON,
         MINUS_ICON,
+        EDIT_ICON,
         DRAFT_SCREEN_ICON,
         HOME_ICON,
         MLB_TEAMS_ICON,
@@ -41,14 +42,20 @@ public enum WDK_PropertyType {
         STANDINGS_TOOLTIP, 
         ADD_PLAYER_TOOLTIP,
         REMOVE_PLAYER_TOOLTIP,
+        ADD_TEAM_TOOLTIP,
+        REMOVE_TEAM_TOOLTIP,
+        EDIT_TEAM_TOOLTIP,
 
         // FOR DRAFT EDIT WORKSPACE
         FANTASY_HEADING_LABEL,
         PLAYERS_HEADING_LABEL,
         STANDINGS_HEADING_LABEL,
+        STARTING_LINEUP_LABEL,
         DRAFT_HEADING_LABEL,
         MLB_TEAMS_HEADING_LABEL,
         SEARCH_LABEL,
+        DRAFT_NAME_LABEL,
+        SELECT_TEAM_LABEL,
         
         // ERROR DIALOG MESSAGES
         CLOSE_BUTTON_TEXT,
