@@ -30,11 +30,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -391,7 +389,7 @@ public class WDK_GUI implements DraftDataView {
      * @param draft The draft to be updated using the data from the UI controls.
      */
     public void updateDraftInfo(Draft draft) {
-        draft.setFreeAgents(availablePlayersTable.getItems());
+        draft.setFreeAgents(dataManager.getDraft().getFreeAgents());
     }
     
     private void initDialogs() {
@@ -685,6 +683,7 @@ public class WDK_GUI implements DraftDataView {
                 availablePlayersTable.setItems(PPlayers);
             }
         });
+  
  
         // DETERMINES HOW TO POPULATE THE TABLE WHEN USER TYPES IN THE SEARCH BAR
         searchPlayersTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -714,18 +713,125 @@ public class WDK_GUI implements DraftDataView {
         workspaceScrollPane.setContent(workspacePane);
         
         draftController = new DraftEditController();
+        playerController = new PlayerController(primaryStage, dataManager.getDraft(), messageDialog, yesNoCancelDialog);
         addPlayerButton.setOnAction(e -> {
             playerController.handleAddNewPlayerRequest(this);
             draftController.handleDraftChangeRequest(this);
-            availablePlayersTable.setVisible(false);
-            availablePlayersTable.setVisible(true);
+            updateCPlayers(CPlayers);
+            updateOneBPlayers(oneBPlayers);
+            updateThreeBPlayers(threeBPlayers);
+            updateTwoBPlayers(twoBPlayers);
+            updateMIPlayers(MIPlayers);
+            updateSSPlayers(SSPlayers);
+            updateOFPlayers(OFPlayers);
+            updateUPlayers(UPlayers);
+            updatePPlayers(PPlayers);
         });
         removePlayerButton.setOnAction(e -> {
             playerController.handleRemovePlayerRequest(this, availablePlayersTable.getSelectionModel().getSelectedItem());
             draftController.handleDraftChangeRequest(this);
-            availablePlayersTable.setVisible(false);
-            availablePlayersTable.setVisible(true);
+            updateCPlayers(CPlayers);
+            updateOneBPlayers(oneBPlayers);
+            updateThreeBPlayers(threeBPlayers);
+            updateTwoBPlayers(twoBPlayers);
+            updateMIPlayers(MIPlayers);
+            updateSSPlayers(SSPlayers);
+            updateOFPlayers(OFPlayers);
+            updateUPlayers(UPlayers);
+            updatePPlayers(PPlayers);
         });
+    }
+    
+    public void updateCPlayers(ObservableList CPlayers) {
+        CPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("C"))) {
+                CPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
+    }
+    
+    public void updateOneBPlayers(ObservableList oneBPlayers) {
+        oneBPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("1B"))) {
+                oneBPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
+    }
+    
+    public void updateCIPlayers(ObservableList CIPlayers) {
+        CIPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("1B")) ||
+               (((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("3B"))) {
+                CIPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            } 
+        }
+    }
+    
+    public void updateThreeBPlayers(ObservableList threeBPlayers) {
+        threeBPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("3B"))) {
+                threeBPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
+    }
+    
+    public void updateTwoBPlayers(ObservableList twoBPlayers) {
+        twoBPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("2B"))) {
+                twoBPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
+    }
+    
+    public void updateMIPlayers(ObservableList MIPlayers) {
+        MIPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("2B")) ||
+               (((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("SS"))) {
+                MIPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            } 
+        }
+    }
+    
+    public void updateSSPlayers(ObservableList SSPlayers) {
+        SSPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("SS"))) {
+                SSPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
+    }
+    
+    public void updateOFPlayers(ObservableList OFPlayers) {
+        OFPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("OF"))) {
+                OFPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
+    }
+    
+    public void updateUPlayers(ObservableList UPlayers) {
+        UPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if(!(((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("P"))) {
+                UPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
+    }
+    
+    public void updatePPlayers(ObservableList PPlayers) {
+        PPlayers.clear();
+        for(int i = 0; i < dataManager.getDraft().getFreeAgents().size(); i++) {
+            if((((Player)dataManager.getDraft().getFreeAgents().get(i)).getQPOrRole().contains("P"))) {
+                PPlayers.add((Player)dataManager.getDraft().getFreeAgents().get(i));
+            }
+        }
     }
  
     public void searchByKey(String oldValue, String newValue, ObservableList CPlayers, 
@@ -880,13 +986,7 @@ public class WDK_GUI implements DraftDataView {
         
         MLBTeamsScreenButton.setOnAction(e -> {
             screenController.handleMLBScreenRequest(this);
-        });
-        
-        
-        // AND NOW THE PLAYER ADDING AND EDITING CONTROLS
-        
-        playerController = new PlayerController(primaryStage, dataManager.getDraft(), messageDialog, yesNoCancelDialog);
-        
+        });    
     }
 
     // INIT A BUTTON AND ADD IT TO A CONTAINER IN A TOOLBAR
