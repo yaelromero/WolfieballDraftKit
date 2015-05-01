@@ -94,33 +94,6 @@ public class PlayerController {
             // THE USER MUST HAVE PRESSED CANCEL SO WE DO NOTHING
         }
     }
-
-    public void handleEditPlayerRequest(Draft draft, WDK_GUI gui, Player playerToEdit) {
-        sid.showEditPlayerDialog(draft, playerToEdit);
-        
-        // DID THE USER CONFIRM?
-        if(sid.wasCompleteSelected()) {
-            // UPDATE THE PLAYER
-            // WITH THEIR FANTASY TEAM
-            // AND POSITION
-            // AND CONTRACT
-            // AND SALARY
-            Player p = sid.getPlayer();
-            
-            if(p.getFantasyTeam().equalsIgnoreCase(DEFAULT_FANTASY_TEAM) ||
-                    p.getChosenPosition().equalsIgnoreCase(DEFAULT_CHOSEN_POSITION) ||
-                    p.getContract() == null ||
-                    p.getSalary() == 0) {
-            
-                messageDialog.show("Error: invalid or incomplete values!");
-            }
-            
-                    
-        }
-        else {
-            // THE USER MUST HAVE PRESSED CANCEL SO WE DO NOTHING
-        }
-    }
     
     public void handleRemovePlayerRequest(WDK_GUI gui, Player playerToRemove) {
         // PROMPT THE USER TO SAVE UNSAVED WORK
