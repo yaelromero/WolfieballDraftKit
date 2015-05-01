@@ -13,19 +13,16 @@ import javafx.beans.property.StringProperty;
  */
 public class Pitcher extends Player {
     final IntegerProperty ERStat;
-    final IntegerProperty HStat;
     final IntegerProperty BBStat;
     final DoubleProperty IPStat;
     
     public static final int DEFAULT_ER_STAT = 0;
-    public static final int DEFAULT_H_STAT = 0;
     public static final int DEFAULT_BB_STAT = 0;
     public static final double DEFAULT_IP_STAT = 0.0;
     
     
     public Pitcher() {
         ERStat = new SimpleIntegerProperty(DEFAULT_ER_STAT);
-        HStat = new SimpleIntegerProperty(DEFAULT_H_STAT);
         BBStat = new SimpleIntegerProperty(DEFAULT_BB_STAT);
         IPStat = new SimpleDoubleProperty(DEFAULT_IP_STAT);
     }
@@ -33,7 +30,6 @@ public class Pitcher extends Player {
     @Override
     public void reset() {
         setERStat(DEFAULT_ER_STAT);
-        setHStat(DEFAULT_H_STAT);
         setBBStat(DEFAULT_BB_STAT);
         setIPStat(DEFAULT_IP_STAT);
     }
@@ -48,18 +44,6 @@ public class Pitcher extends Player {
     
     public IntegerProperty ERStatProperty() {
         return ERStat;
-    }
-    
-    public void setHStat(int initHStat) {
-        HStat.set(initHStat);
-    }
-    
-    public int getHStat() {
-        return HStat.get();
-    }
-    
-    public IntegerProperty HStatProperty() {
-        return HStat;
     }
     
     public void setBBStat(int initBBStat) {

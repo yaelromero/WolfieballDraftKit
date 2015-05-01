@@ -277,7 +277,7 @@ public class JsonDraftFileManager implements DraftFileManager {
                                                    .add(JSON_H_STAT, hitter.getHStat())
                                                    .add(JSON_EST_VAL, hitter.getEstVal())
                                                    .add(JSON_NOTES, hitter.getNotes())
-                                                   .add(JSON_POSITION, hitter.getPosition())
+                                                   .add(JSON_POSITION, hitter.getChosenPosition())
                                                    .add(JSON_GAMES_PLAYED, hitter.getGamesPlayed())
                                                    .add(JSON_R_STAT, hitter.getROrWStat())
                                                    .add(JSON_HR_STAT, hitter.getHROrSVStat())

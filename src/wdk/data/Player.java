@@ -21,6 +21,7 @@ public class Player {
     final StringProperty lastName;
     final ObjectProperty contract;
     final StringProperty MLBTeam;
+    final StringProperty fantasyTeam;
     final IntegerProperty salary;
     final IntegerProperty age;
     final StringProperty NOB;
@@ -34,12 +35,14 @@ public class Player {
     final DoubleProperty SBOrERAStat;
     final DoubleProperty BAOrWHIPStat;
     final StringProperty QPOrRole;
+    final StringProperty chosenPosition;
     
     public static final String DEFAULT_FIRST_NAME = "<ENTER FIRST NAME>";
     public static final String DEFAULT_LAST_NAME = "<ENTER LAST NAME>";
-    public static final Contract DEFAULT_CONTRACT = S1;
+    public static final Contract DEFAULT_CONTRACT = null;
     public static final String DEFAULT_MLB_TEAM = "<ENTER MLB TEAM>";
     public static final String DEFAULT_NOB = "<ENTER NOB>";
+    public static final String DEFAULT_FANTASY_TEAM = "";
     public static final int DEFAULT_YOB = 0;
     public static final String DEFAULT_NOTES = "<ENTER NOTES>";
     public static final int DEFAULT_SALARY = 0;
@@ -52,12 +55,14 @@ public class Player {
     public static final Double DEFAULT_SBORERA_STAT = 0.0;
     public static final Double DEFAULT_BAORWHIP_STAT = 0.0;
     public static final String DEFAULT_QPORROLE = "";
+    public static final String DEFAULT_CHOSEN_POSITION = "";
     
     public Player() {
         firstName = new SimpleStringProperty(DEFAULT_FIRST_NAME);
         lastName = new SimpleStringProperty(DEFAULT_LAST_NAME);
         contract = new SimpleObjectProperty(DEFAULT_CONTRACT);
         MLBTeam = new SimpleStringProperty(DEFAULT_MLB_TEAM);
+        fantasyTeam = new SimpleStringProperty(DEFAULT_FANTASY_TEAM);
         NOB = new SimpleStringProperty(DEFAULT_NOB);
         YOB = new SimpleIntegerProperty(DEFAULT_YOB);
         notes = new SimpleStringProperty(DEFAULT_NOTES);
@@ -71,6 +76,7 @@ public class Player {
         SBOrERAStat = new SimpleDoubleProperty(DEFAULT_SBORERA_STAT);
         BAOrWHIPStat = new SimpleDoubleProperty(DEFAULT_BAORWHIP_STAT);
         QPOrRole = new SimpleStringProperty(DEFAULT_QPORROLE);
+        chosenPosition = new SimpleStringProperty(DEFAULT_CHOSEN_POSITION);
     }
     
     public void reset() {
@@ -78,6 +84,7 @@ public class Player {
         setLastName(DEFAULT_LAST_NAME);
         setContract(DEFAULT_CONTRACT);
         setMLBTeam(DEFAULT_MLB_TEAM);
+        setFantasyTeam(DEFAULT_FANTASY_TEAM);
         setNOB(DEFAULT_NOB);
         setNotes(DEFAULT_NOTES);
         setSalary(DEFAULT_SALARY);
@@ -90,7 +97,7 @@ public class Player {
         setSBOrERAStat(DEFAULT_SBORERA_STAT);
         setBAOrWHIPStat(DEFAULT_BAORWHIP_STAT);
         setQPOrRole(DEFAULT_QPORROLE);
-        
+        setChosenPosition(DEFAULT_CHOSEN_POSITION);
     }
     
     public void setQPOrRole(String initQPOrRole) {
@@ -103,6 +110,18 @@ public class Player {
     
     public StringProperty QPOrRoleProperty() {
         return QPOrRole;
+    }
+    
+    public void setChosenPosition(String initChosenPosition) {
+        chosenPosition.set(initChosenPosition);
+    }
+    
+    public String getChosenPosition() {
+        return chosenPosition.get();
+    }
+    
+    public StringProperty chosenPositionProperty() {
+        return chosenPosition;
     }
     
     public void setFirstName(String initFirstName) {
@@ -151,6 +170,18 @@ public class Player {
     
     public StringProperty MLBTeamProperty() {
         return MLBTeam;
+    }
+    
+    public void setFantasyTeam(String initFantasyTeam) {
+        fantasyTeam.set(initFantasyTeam);
+    }
+    
+    public String getFantasyTeam() {
+        return fantasyTeam.get();
+    }
+    
+    public StringProperty fantasyTeamProperty() {
+        return fantasyTeam;
     }
     
     public void setNOB(String initNOB) {
