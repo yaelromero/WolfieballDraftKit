@@ -30,6 +30,16 @@ public class Draft {
         this.listOfTeams = listOfTeams;
     }
     
+    public Team getTeamWithName(String name) {
+        Team result = null;
+        for(Team t: listOfTeams) {
+            if(t.getTeamName().equalsIgnoreCase(name)) {
+                result = t;
+            }
+        }
+        return result;
+    }
+    
     public ObservableList<Team> getListOfTeams() {
         return listOfTeams;
     }
@@ -66,7 +76,7 @@ public class Draft {
         freeAgents.remove(p);
     }
     
-    public boolean checkForSame(Player pl) {
+    public boolean checkForSameInFreeAgents(Player pl) {
         boolean exists = false;
         for(int i = 0; i < freeAgents.size(); i++) {
             if(freeAgents.get(i).getFirstName().equalsIgnoreCase(pl.getFirstName()) &&
@@ -79,5 +89,28 @@ public class Draft {
             }
         }
         return exists;
+    }
+    
+    public boolean checkForSameInGivenTeam(Player p, Team t) {
+        boolean exists = false;
+        for(int i = 0; i < t.getStartingLineup().size(); i++) {
+            if(t.getStartingLineup().get(i).getFirstName().equalsIgnoreCase(p.getFirstName()) &&
+                t.getStartingLineup().get(i).getLastName().equalsIgnoreCase(p.getLastName())) {
+                exists = true;
+                break;
+            }
+            else {
+                exists = false;
+            }
+        }
+        return exists;
+    }
+    
+    public void addPlayerToTeam(Player p, Team t) {
+        for(int i = 0; i < getListOfTeams().size(); i++) {
+            if(t.equals(getListOfTeams().get(i))){
+                getListOfTeams().get(i).addPlayerToStartingLineup(p);
+            }
+        }
     }
 }

@@ -6,6 +6,8 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -16,8 +18,8 @@ public class Team {
     final StringProperty teamName;
     final StringProperty teamOwner;
     final DoubleProperty moneyLeft;
-    private List<Player> taxiSquad;
-    private List<Player> startingLineup;
+    private ObservableList<Player> taxiSquad;
+    private ObservableList<Player> startingLineup;
     
     public static final String DEFAULT_TEAM_NAME = "<ENTER TEAM NAME>";
     public static final String DEFAULT_TEAM_OWNER = "<ENTER TEAM_OWNER>";
@@ -27,8 +29,8 @@ public class Team {
         teamName = new SimpleStringProperty(DEFAULT_TEAM_NAME);
         teamOwner = new SimpleStringProperty(DEFAULT_TEAM_OWNER);
         moneyLeft = new SimpleDoubleProperty(DEFAULT_MONEY_LEFT);
-        taxiSquad = new ArrayList<>();
-        startingLineup = new ArrayList<>();
+        taxiSquad = FXCollections.observableArrayList();
+        startingLineup = FXCollections.observableArrayList();
     }
     
     public void reset() {
@@ -71,19 +73,23 @@ public class Team {
         return moneyLeft;
     }
     
-    public void setTaxiSquad(List<Player> taxiSquad) {
+    public void setTaxiSquad(ObservableList<Player> taxiSquad) {
         this.taxiSquad = taxiSquad;
     }
     
-    public List<Player> getTaxiSquad() {
+    public ObservableList<Player> getTaxiSquad() {
         return taxiSquad;
     }
     
-    public void setStartingLineup(List<Player> startingLineup) {
+    public void setStartingLineup(ObservableList<Player> startingLineup) {
         this.startingLineup = startingLineup;
     }
     
-    public List<Player> getStartingLineup() {
+    public ObservableList<Player> getStartingLineup() {
         return startingLineup;
+    }
+    
+    public void addPlayerToStartingLineup(Player p) {
+        getStartingLineup().add(p);
     }
 }
