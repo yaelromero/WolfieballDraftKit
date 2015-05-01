@@ -16,6 +16,7 @@
         <property name="EXIT_ICON"          value="Exit.png"></property>        
         <property name="ADD_ICON"           value="Add.png"></property>
         <property name="MINUS_ICON"         value="Minus.png"></property>
+        <property name="EDIT_ICON"          value="Edit.png"></property>
         <property name="DRAFT_SCREEN_ICON"  value="Draft.png"></property>
         <property name="HOME_ICON"          value="Home.png"></property>
         <property name="MLB_TEAMS_ICON"     value="MLB.png"></property>
@@ -35,14 +36,19 @@
         <property name="STANDINGS_TOOLTIP"          value="View the Fantasy Standings Screen"></property>
         <property name="ADD_PLAYER_TOOLTIP"         value="Add a New Player"></property>
         <property name="REMOVE_PLAYER_TOOLTIP"      value="Remove Player"></property>
+        <property name="ADD_TEAM_TOOLTIP"           value="Add a New Team"></property>
+        <property name="REMOVE_TEAM_TOOLTIP"        value="Remove Team"></property>
                 
         <!-- GUI LABELS -->
         <property name="FANTASY_HEADING_LABEL"      value="Fantasy Teams"></property>
         <property name="PLAYERS_HEADING_LABEL"      value="Available Players"></property>
         <property name="STANDINGS_HEADING_LABEL"    value="Fantasy Standings"></property>
+        <property name="STARTING_LINEUP_LABEL"      value="Starting Lineup"></property>
         <property name="DRAFT_HEADING_LABEL"        value="Draft Summary"></property>
         <property name="MLB_TEAMS_HEADING_LABEL"    value="MLB Teams"></property>
         <property name="SEARCH_LABEL"               value="Search: "></property>
+        <property name="DRAFT_NAME_LABEL"           value="Draft Name: "></property>
+        <property name="SELECT_TEAM_LABEL"          value="Select Fantasy Team: "></property>
         
         <!-- ERROR MESSAGES -->
         <property name="CLOSE_BUTTON_TEXT"          value="Close"></property>
