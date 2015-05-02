@@ -14,6 +14,8 @@ import static wdk.WDK_PropertyType.REMOVE_ITEM_MESSAGE;
 import wdk.data.Draft;
 import wdk.data.DraftDataManager;
 import wdk.data.Team;
+import static wdk.data.Team.DEFAULT_TEAM_NAME;
+import static wdk.data.Team.DEFAULT_TEAM_OWNER;
 
 /**
  * This controller class handles the responses to all team
@@ -46,8 +48,15 @@ public class TeamController {
             // GET THE LECTURE ITEM
             Team tm = sid.getTeam();
             
-            // ADD THE TEAM TO THE DRAFT
-            draft.addTeam(tm);
+            if(tm.getTeamName().equalsIgnoreCase(DEFAULT_TEAM_NAME) ||
+                    tm.getTeamName().isEmpty() || tm.getTeamOwner().equalsIgnoreCase(DEFAULT_TEAM_OWNER) ||
+                    tm.getTeamOwner().isEmpty()) {
+                messageDialog.show("Please enter valid values for each field.");
+            }
+            else {
+                // ADD THE TEAM TO THE DRAFT
+                draft.addTeam(tm);
+            }
         }
         else {
             // THE USER MUST HAVE PRESSED CANCEL, SO
@@ -70,8 +79,16 @@ public class TeamController {
         if (sid.wasCompleteSelected()) {
             // UPDATE THE TEAM
             Team tm = sid.getTeam();
-            teamToEdit.setTeamName(tm.getTeamName());
-            teamToEdit.setTeamOwner(tm.getTeamOwner());
+            
+            if(tm.getTeamName().equalsIgnoreCase(DEFAULT_TEAM_NAME) ||
+                    tm.getTeamName().isEmpty() || tm.getTeamOwner().equalsIgnoreCase(DEFAULT_TEAM_OWNER) ||
+                    tm.getTeamOwner().isEmpty()) {
+                messageDialog.show("Please enter valid values for each field.");
+            }
+            else {
+                teamToEdit.setTeamName(tm.getTeamName());
+                teamToEdit.setTeamOwner(tm.getTeamOwner());
+            }
         }
         else {
             // THE USER MUST HAVE PRESSED CANCEL, SO

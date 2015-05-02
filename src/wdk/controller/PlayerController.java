@@ -50,8 +50,9 @@ public class PlayerController {
             if(pl.getFirstName().equalsIgnoreCase(DEFAULT_FIRST_NAME) ||
                     pl.getLastName().equalsIgnoreCase(DEFAULT_LAST_NAME) ||
                     pl.getMLBTeam().equalsIgnoreCase(DEFAULT_MLB_TEAM) ||
-                    pl.getQPOrRole().isEmpty()) {
-                messageDialog.show("Please enter all values for the player");
+                    pl.getQPOrRole().isEmpty() || pl.getFirstName().isEmpty() ||
+                    pl.getLastName().isEmpty() || pl.getMLBTeam().isEmpty()) {
+                messageDialog.show("Please enter all values for the player.");
             }
             else {
                 if(draft.checkForSameInFreeAgents(pl) == true) {
@@ -95,6 +96,7 @@ public class PlayerController {
                 }
             }
             else if(((p.getFantasyTeam().equalsIgnoreCase(DEFAULT_FANTASY_TEAM)) ||
+                    (p.getFantasyTeam().isEmpty()) ||
                     (p.getChosenPosition().equalsIgnoreCase("")) ||
                     (p.getContract() == null) ||
                     (p.getSalary() == 0)) && !p.getFantasyTeam().equals("Free Agent")) {
