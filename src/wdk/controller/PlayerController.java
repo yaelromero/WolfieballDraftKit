@@ -11,6 +11,7 @@ import java.util.List;
 import javafx.stage.Stage;
 import properties_manager.PropertiesManager;
 import static wdk.WDK_PropertyType.REMOVE_ITEM_MESSAGE;
+import wdk.data.Contract;
 import wdk.data.Draft;
 import wdk.data.DraftDataManager;
 import static wdk.data.Player.*;
@@ -68,7 +69,9 @@ public class PlayerController {
         }
     }
 
-    public void handleEditPlayerRequest(Draft draft, WDK_GUI gui, Player playerToEdit) {
+    public void handleEditPlayerRequest(WDK_GUI gui, Player playerToEdit) {
+        DraftDataManager ddm = gui.getDataManager();
+        Draft draft = ddm.getDraft();
         sid.showEditPlayerDialog(draft, playerToEdit);
         
         // DID THE USER CONFIRM?
@@ -80,15 +83,45 @@ public class PlayerController {
             // AND SALARY
             Player p = sid.getPlayer();
             
-            if(p.getFantasyTeam().equalsIgnoreCase(DEFAULT_FANTASY_TEAM) ||
-                    p.getChosenPosition().equalsIgnoreCase(DEFAULT_CHOSEN_POSITION) ||
-                    p.getContract() == null ||
-                    p.getSalary() == 0) {
             
+            // CHECK IF THE FANTASY TEAM SELECTED WAS FREE AGENT
+            if(p.getFantasyTeam().equals("Free Agent")) {
+                if(draft.checkForSameInFreeAgents(p) == false) {
+                    draft.addFreeAgent(p);
+                    p.setFantasyTeam("");
+                }
+                else if(draft.checkForSameInFreeAgents(p) == true) {
+                    messageDialog.show("This player is currently in the Free Agent Pool!");
+                }
+            }
+            else if(((p.getFantasyTeam().equalsIgnoreCase(DEFAULT_FANTASY_TEAM)) ||
+                    (p.getChosenPosition().equalsIgnoreCase("")) ||
+                    (p.getContract() == null) ||
+                    (p.getSalary() == 0)) && !p.getFantasyTeam().equals("Free Agent")) {
+                
                 messageDialog.show("Error: invalid or incomplete values!");
             }
-            
-                    
+            else {
+                // NOW WE CHECK THE CASE IF USER HAS SELECTED TO PUT THE PLAYER ON A SPECIFIC TEAM  
+                // REMOVE THEM FROM THE FREE AGENT LIST IF NECESSARY AND ADD THEM TO TEAM
+                // OTHERWISE REMOVE THEM FROM PREVIOUS TEAM AND ADD THEM TO A NEW TEAM
+                if(draft.checkForSameInFreeAgents(p) == false) {
+                    for(int i = 0; i < draft.getListOfTeams().size(); i++) {
+                        if(draft.getListOfTeams().get(i).checkIfPlayerInSL(p) == true) {
+                            draft.getListOfTeams().get(i).removePlayerFromStartingLineup(p);
+                        }
+                    }
+                    if(draft.checkForSameInGivenTeam(p, draft.getTeamWithName(p.getFantasyTeam())) == false) {
+                        draft.addPlayerToTeam(p, draft.getTeamWithName(p.getFantasyTeam()));
+                    }
+                }
+                else {
+                    draft.removeFreeAgent(p);
+                    if(draft.checkForSameInGivenTeam(p, draft.getTeamWithName(p.getFantasyTeam())) == false) {
+                        draft.addPlayerToTeam(p, draft.getTeamWithName(p.getFantasyTeam()));
+                    }
+                }
+            }
         }
         else {
             // THE USER MUST HAVE PRESSED CANCEL SO WE DO NOTHING

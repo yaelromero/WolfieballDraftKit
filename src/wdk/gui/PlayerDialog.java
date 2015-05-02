@@ -1,6 +1,7 @@
 package wdk.gui;
 
 import java.io.File;
+import java.util.ArrayList;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import wdk.WDK_PropertyType;
@@ -394,7 +395,7 @@ public class PlayerDialog  extends Stage {
         playerQP = new Label(newPlayer.getQPOrRole());
         playerQP.getStyleClass().add(CLASS_PROMPT_LABEL);
         
-        // NOW THE PLAYER FANTASY TEAM
+        // NOW THE PLAYER FANTASY TEAM & POSITION
         fantasyTeamLabel = new Label(FANTASY_TEAM_PROMPT);
         fantasyTeamComboBox = new ComboBox();
         ObservableList<String> fantasyTeamChoices = FXCollections.observableArrayList();
@@ -404,30 +405,85 @@ public class PlayerDialog  extends Stage {
         }
         fantasyTeamComboBox.setItems(fantasyTeamChoices);
         fantasyTeamComboBox.setOnAction(e -> {
-            /*
-            if(((String)fantasyTeamComboBox.getValue()).equalsIgnoreCase("Free Agent")
-                    && draft.checkForSameInFreeAgents(p) == false) {
-                draft.addFreeAgent(p);
-            }
-            else if(((String)fantasyTeamComboBox.getValue()).equalsIgnoreCase("Free Agent")
-                    && draft.checkForSameInFreeAgents(p) == true) {
-            }
-            else {
-                draft.removeFreeAgent(p);
-                if(draft.checkForSameInGivenTeam(p, draft.getTeamWithName((String)fantasyTeamComboBox.getValue())) == false) {
-                    p.setFantasyTeam((String)fantasyTeamComboBox.getValue());
-                    draft.addPlayerToTeam(p, 
-                        draft.getTeamWithName((String)fantasyTeamComboBox.getValue()));
-                }
-            }
-            */
             newPlayer.setFantasyTeam((String)fantasyTeamComboBox.getValue());
+        });
+        
+        positionComboBox = new ComboBox();
+        fantasyTeamComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldTeam, Object newTeam) {
+                String oldTeamName = (String)oldTeam;
+                String newTeamName = (String)newTeam;
+                
+                if(newTeamName.equals("Free Agent")) {
+                    positionComboBox.setDisable(true);
+                    contractComboBox.setDisable(true);
+                    salaryTextField.setDisable(true);
+                }
+                else {
+                    ObservableList positionChoices = FXCollections.observableArrayList();
+                    String arrayQPString = newPlayer.getQPOrRole();
+ 
+                    if(arrayQPString.contains("1B") || arrayQPString.contains("3B")) {
+                        if(draft.getTeamWithName(newTeamName).getCICount() < 1) {
+                            positionChoices.add("CI");
+                        }
+                    }
+                    if(arrayQPString.contains("1B")) {
+                        if(draft.getTeamWithName(newTeamName).get1BCount() < 1) {
+                            positionChoices.add("1B");
+                        }
+                    }
+                    if(arrayQPString.contains("3B")) {
+                        if(draft.getTeamWithName(newTeamName).get3BCount() < 1) {
+                            positionChoices.add("3B");
+                        }
+                    }
+                    if(arrayQPString.contains("C")) {
+                        if(draft.getTeamWithName(newTeamName).getCCount() < 2) {
+                            positionChoices.add("C");
+                        }
+                    }
+                    if(arrayQPString.contains("2B") || arrayQPString.contains("SS")) {
+                        if(draft.getTeamWithName(newTeamName).getSSCount() < 1) {
+                            positionChoices.add("MI");
+                        }
+                    }
+                    if(arrayQPString.contains("2B")) {
+                        if(draft.getTeamWithName(newTeamName).get2BCount() < 1) {
+                            positionChoices.add("2B");
+                        }
+                    }
+                    if(arrayQPString.contains("SS")) {
+                        if(draft.getTeamWithName(newTeamName).getSSCount() < 1) {
+                            positionChoices.add("SS");
+                        }
+                    }
+                    if(!arrayQPString.contains("P")) {
+                        if(draft.getTeamWithName(newTeamName).getUCount() < 1) {
+                            positionChoices.add("U");
+                        }
+                    }
+                    if(arrayQPString.contains("P")) {
+                        if(draft.getTeamWithName(newTeamName).getPCount() < 9) {
+                            positionChoices.add("P");
+                        }
+                    }
+                    if(arrayQPString.contains("OF")) {
+                        if(draft.getTeamWithName(newTeamName).getOFCount() < 5) {
+                            positionChoices.add("OF");
+                        }
+                    }
+                    positionComboBox.setItems(positionChoices);
+                }
+                positionComboBox.setOnAction(e -> {
+                    newPlayer.setChosenPosition((String)positionComboBox.getValue());
+                });
+            }
         });
         
         // NOW THE PLAYER POSITION
         positionLabel = new Label(POSITION_PROMPT);
-        positionComboBox = new ComboBox();
-        ////////////////// REMEMBER TO DO THIS LOADING THE COMBO BOX IS IMPORTANT OK MUST DO
         
         // NOW THE PLAYER CONTRACT
         contractLabel = new Label(CONTRACT_PROMPT);
@@ -488,13 +544,6 @@ public class PlayerDialog  extends Stage {
         this.setScene(editDialogScene);
         
         setTitle(EDIT_PLAYER_TITLE);
-        
-        // LOAD THE PLAYER INTO OUR LOCAL OBJECT
-        //newPlayer.setFantasyTeam(playerToEdit.getFantasyTeam());
-        //newPlayer.setChosenPosition(itemToEdit.getSessions());
-        
-        // AND THEN INTO OUR GUI
-        //loadGUIData();
                
         // AND OPEN IT UP
         this.showAndWait();

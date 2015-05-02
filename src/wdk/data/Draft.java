@@ -73,7 +73,12 @@ public class Draft {
     }
     
     public void removeFreeAgent(Player p) {
-        freeAgents.remove(p);
+        for(int i = 0; i < freeAgents.size(); i++) {
+            if(freeAgents.get(i).getFirstName().equalsIgnoreCase(p.getFirstName()) &&
+                    freeAgents.get(i).getLastName().equalsIgnoreCase(p.getLastName())) {
+                freeAgents.remove(i);
+            }
+        }
     }
     
     public boolean checkForSameInFreeAgents(Player pl) {
@@ -110,6 +115,14 @@ public class Draft {
         for(int i = 0; i < getListOfTeams().size(); i++) {
             if(t.equals(getListOfTeams().get(i))){
                 getListOfTeams().get(i).addPlayerToStartingLineup(p);
+            }
+        }
+    }
+    
+    public void removePlayerFromTeam(Player p, Team t) {
+        for(int i = 0; i < getListOfTeams().size(); i++) {
+            if(t.equals(getListOfTeams().get(i))) {
+                getListOfTeams().get(i).removePlayerFromStartingLineup(p);
             }
         }
     }

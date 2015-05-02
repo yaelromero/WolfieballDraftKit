@@ -92,4 +92,129 @@ public class Team {
     public void addPlayerToStartingLineup(Player p) {
         getStartingLineup().add(p);
     }
+    
+    public void removePlayerFromStartingLineup(Player p) {
+        for(int i = 0; i < getStartingLineup().size(); i++) {
+            if(getStartingLineup().get(i).getFirstName().equalsIgnoreCase(p.getFirstName()) &&
+                    getStartingLineup().get(i).getLastName().equalsIgnoreCase(p.getLastName())) {
+                getStartingLineup().remove(i);
+            }
+        }
+        getStartingLineup().remove(p);
+    }
+    
+    public boolean checkIfPlayerInSL(Player p) {
+        boolean exists = false;
+        for(int i = 0; i < getStartingLineup().size(); i++) {
+            if(getStartingLineup().get(i).getFirstName().equalsIgnoreCase(p.getFirstName()) &&
+                    getStartingLineup().get(i).getLastName().equalsIgnoreCase(p.getLastName())) {
+                exists = true;
+                break;
+            }
+            else
+                exists = false;
+        }
+        return exists;
+    }
+    
+    public int getCCount() {
+        int count = 0;
+        for(int i = 0; i < getStartingLineup().size(); i++) {
+            if(getStartingLineup().get(i).getChosenPosition().contains("C")) {
+                count++;
+            }      
+        }
+        return count;
+    }
+    
+    public int get1BCount() {
+        int count = 0;
+        for(int i = 0; i < getStartingLineup().size(); i++) {
+            if(getStartingLineup().get(i).getChosenPosition().contains("1B")) {
+                count++;
+            }      
+        }
+        return count;
+    }
+    
+    public int getCICount() {
+        int count = 0;
+        for(int i = 0; i < getStartingLineup().size(); i++) {
+            if(getStartingLineup().get(i).getChosenPosition().contains("CI")) {
+                count++;
+            }      
+        }
+        return count;
+    }
+    
+    public int get3BCount() {
+        int count = 0;
+        for(int i = 0; i < getStartingLineup().size(); i++) {
+            if(getStartingLineup().get(i).getChosenPosition().contains("3B")) {
+                count++;
+            }      
+        }
+        return count;
+    }
+    
+    public int get2BCount() {
+        int count = 0;
+        for(int i = 0; i < getStartingLineup().size(); i++) {
+            if(getStartingLineup().get(i).getChosenPosition().contains("2B")) {
+                count++;
+            }      
+        }
+        return count;
+    }
+    
+    public int getMICount() {
+        int count = 0;
+        for(int i = 0; i < getStartingLineup().size(); i++) {
+            if(getStartingLineup().get(i).getChosenPosition().contains("MI")) {
+                count++;
+            }      
+        }
+        return count;
+    }
+    
+    public int getSSCount() {
+        int count = 0;
+        for(int i = 0; i < getStartingLineup().size(); i++) {
+            if(getStartingLineup().get(i).getChosenPosition().contains("SS")) {
+                count++;
+            }      
+        }
+        return count;
+    }
+    
+    public int getUCount() {
+        int count = 0;
+        for(int i = 0; i < getStartingLineup().size(); i++) {
+            if(getStartingLineup().get(i).getChosenPosition().contains("U")) {
+                count++;
+            }      
+        }
+        return count;
+    }
+    
+    public int getOFCount() {
+        int count = 0;
+        for(int i = 0; i < getStartingLineup().size(); i++) {
+            if(getStartingLineup().get(i).getChosenPosition().contains("OF")) {
+                count++;
+            }      
+        }
+        return count;
+    }
+    
+    public int getPCount() {
+        int count = 0;
+        for(int i = 0; i < getStartingLineup().size(); i++) {
+            if(getStartingLineup().get(i).getChosenPosition().contains("P")) {
+                count++;
+            }      
+        }
+        return count;
+    }
+    
 }

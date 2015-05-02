@@ -227,7 +227,7 @@ public class WDK_GUI implements DraftDataView {
     static final String COL_NOTES = "Notes";
     
     static final String COL_POSITION = "Position";
-    static final String COL_CONTRACT = "Contact";
+    static final String COL_CONTRACT = "Contract";
     static final String COL_SALARY = "Salary";
    
     // HERE ARE OUR DIALOGS
@@ -565,6 +565,7 @@ public class WDK_GUI implements DraftDataView {
                 teamController.handleRemoveTeamRequest(this, dataManager.getDraft().getTeamWithName((String)selectFantasyTeamComboBox.getSelectionModel().getSelectedItem()));
                 loadFantasyTeamsComboBox(dataManager.getDraft().getListOfTeams());
                 draftController.handleDraftChangeRequest(this);
+                
             }
             else {
                 messageDialog.show("Please select a team!");
@@ -584,9 +585,20 @@ public class WDK_GUI implements DraftDataView {
             pEstimatedValueColumn.setCellValueFactory(new PropertyValueFactory<Player, Integer>("EstValStat"));
             pContractColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("contract"));
             pSalaryColumn.setCellValueFactory(new PropertyValueFactory<Player, Integer>("salary"));
-            teamTable.setItems(dataManager.getDraft().getTeamWithName((String)selectFantasyTeamComboBox.getValue()).getStartingLineup());
+            if(((String)selectFantasyTeamComboBox.getValue()) == null)
+                teamTable.setItems(null);
+            else
+                teamTable.setItems(dataManager.getDraft().getTeamWithName((String)selectFantasyTeamComboBox.getValue()).getStartingLineup());
         });
        
+        teamTable.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                // OPEN UP THE PLAYER EDITOR
+                playerController.handleEditPlayerRequest(this, teamTable.getSelectionModel().getSelectedItem());
+                draftController.handleDraftChangeRequest(this);               
+            }
+        });
+        
         // NOTE THAT WE HAVE NOT PUT THE WORKSPACE INTO THE WINDOW,
         // THAT WILL BE DONE WHEN THE USER EITHER CREATES A NEW
         // COURSE OR LOADS AN EXISTING ONE FOR EDITING
@@ -889,10 +901,18 @@ public class WDK_GUI implements DraftDataView {
         
         availablePlayersTable.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
-                // OPEN UP THE SCHEDULE ITEM EDITOR
-                Player p = availablePlayersTable.getSelectionModel().getSelectedItem();
-                playerController.handleEditPlayerRequest(dataManager.getDraft(), this, p);
+                // OPEN UP THE PLAYER EDITOR
+                playerController.handleEditPlayerRequest(this, availablePlayersTable.getSelectionModel().getSelectedItem());
                 draftController.handleDraftChangeRequest(this);
+                updateCPlayers(CPlayers);
+                updateOneBPlayers(oneBPlayers);
+                updateThreeBPlayers(threeBPlayers);
+                updateTwoBPlayers(twoBPlayers);
+                updateMIPlayers(MIPlayers);
+                updateSSPlayers(SSPlayers);
+                updateOFPlayers(OFPlayers);
+                updateUPlayers(UPlayers);
+                updatePPlayers(PPlayers);                
             }
         });
     }
