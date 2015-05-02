@@ -110,13 +110,14 @@ public class TeamController {
         String selection = yesNoCancelDialog.getSelection();
 
         // IF THE USER SAID YES, THEN SAVE BEFORE MOVING ON
-        if (selection.equals(YesNoCancelDialog.YES)) { 
+        if (selection.equals(YesNoCancelDialog.YES)) {   
             for(Player p: teamToRemove.getStartingLineup()) {
-                // remove player from team
-                // and then add to free agent
                 gui.getDataManager().getDraft().addFreeAgent(p);
+            }
+            for(Player p: teamToRemove.getStartingLineup()) {
                 gui.getDataManager().getDraft().removePlayerFromTeam(p, teamToRemove);             
             }
+            
             teamToRemove.getStartingLineup().clear();
             gui.getDataManager().getDraft().removeTeam(teamToRemove);       
         }
