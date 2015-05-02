@@ -88,6 +88,11 @@ public class PlayerController {
             // CHECK IF THE FANTASY TEAM SELECTED WAS FREE AGENT
             if(p.getFantasyTeam().equals("Free Agent")) {
                 if(draft.checkForSameInFreeAgents(p) == false) {
+                    for(int i = 0; i < draft.getListOfTeams().size(); i++) {
+                        if(draft.getListOfTeams().get(i).checkIfPlayerInSL(p) == true) {
+                            draft.getListOfTeams().get(i).removePlayerFromStartingLineup(p);
+                        }
+                    }
                     draft.addFreeAgent(p);
                     p.setFantasyTeam("");
                 }
@@ -107,22 +112,29 @@ public class PlayerController {
                 // NOW WE CHECK THE CASE IF USER HAS SELECTED TO PUT THE PLAYER ON A SPECIFIC TEAM  
                 // REMOVE THEM FROM THE FREE AGENT LIST IF NECESSARY AND ADD THEM TO TEAM
                 // OTHERWISE REMOVE THEM FROM PREVIOUS TEAM AND ADD THEM TO A NEW TEAM
-                if(draft.checkForSameInFreeAgents(p) == false) {
-                    for(int i = 0; i < draft.getListOfTeams().size(); i++) {
-                        if(draft.getListOfTeams().get(i).checkIfPlayerInSL(p) == true) {
-                            draft.getListOfTeams().get(i).removePlayerFromStartingLineup(p);
+                
+                if(draft.checkForSameInFreeAgents(p) == false) { // DO NOT COME FROM FREE AGENT POOL
+                    if(draft.checkForSameInGivenTeam(p, draft.getTeamWithName(p.getFantasyTeam())) == true) {
+                        messageDialog.show("This player already exists on this team!");
+                    }
+                    else if(draft.checkForSameInGivenTeam(p, draft.getTeamWithName(p.getFantasyTeam())) == false) {
+                        for(int i = 0; i < draft.getListOfTeams().size(); i++) {
+                            if(draft.getListOfTeams().get(i).checkIfPlayerInSL(p) == true) {
+                                draft.getListOfTeams().get(i).removePlayerFromStartingLineup(p);
+                            }
                         }
-                    }
-                    if(draft.checkForSameInGivenTeam(p, draft.getTeamWithName(p.getFantasyTeam())) == false) {
                         draft.addPlayerToTeam(p, draft.getTeamWithName(p.getFantasyTeam()));
                     }
                 }
-                else {
-                    draft.removeFreeAgent(p);
-                    if(draft.checkForSameInGivenTeam(p, draft.getTeamWithName(p.getFantasyTeam())) == false) {
-                        draft.addPlayerToTeam(p, draft.getTeamWithName(p.getFantasyTeam()));
+                else { // COME FROM FREE AGENT POOL
+                    if(draft.checkForSameInGivenTeam(p, draft.getTeamWithName(p.getFantasyTeam())) == true) {
+                        messageDialog.show("This player already exists on this team!");
                     }
-                }
+                    else if(draft.checkForSameInGivenTeam(p, draft.getTeamWithName(p.getFantasyTeam())) == false) {
+                        draft.addPlayerToTeam(p, draft.getTeamWithName(p.getFantasyTeam()));
+                        draft.removeFreeAgent(p);
+                    }
+                }           
             }
         }
         else {

@@ -111,17 +111,14 @@ public class TeamController {
 
         // IF THE USER SAID YES, THEN SAVE BEFORE MOVING ON
         if (selection.equals(YesNoCancelDialog.YES)) { 
-            Team removal = gui.getDataManager().getDraft().getTeamWithName(teamToRemove.getTeamName());
-            for(int i = 0; i < removal.getStartingLineup().size(); i++) {
+            for(Player p: teamToRemove.getStartingLineup()) {
                 // remove player from team
                 // and then add to free agent
-                gui.getDataManager().getDraft().removePlayerFromTeam(removal.getStartingLineup().get(i), removal);
-                gui.getDataManager().getDraft().addFreeAgent(removal.getStartingLineup().get(i));
-                removal.getStartingLineup().clear();
-                gui.updateDraftInfo(gui.getDataManager().getDraft());
+                gui.getDataManager().getDraft().addFreeAgent(p);
+                gui.getDataManager().getDraft().removePlayerFromTeam(p, teamToRemove);             
             }
-            gui.getDataManager().getDraft().removeTeam(teamToRemove);
-            
+            teamToRemove.getStartingLineup().clear();
+            gui.getDataManager().getDraft().removeTeam(teamToRemove);       
         }
         if(gui.getDataManager().getDraft().getListOfTeams().size() == 0) {
             gui.updateFantasyTeamToolbarControls(true);
