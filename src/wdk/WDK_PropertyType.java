@@ -56,6 +56,7 @@ public enum WDK_PropertyType {
         SEARCH_LABEL,
         DRAFT_NAME_LABEL,
         SELECT_TEAM_LABEL,
+        SELECT_PRO_TEAM_LABEL,
         
         // ERROR DIALOG MESSAGES
         CLOSE_BUTTON_TEXT,

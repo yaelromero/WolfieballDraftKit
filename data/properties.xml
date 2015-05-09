@@ -49,6 +49,7 @@
         <property name="SEARCH_LABEL"               value="Search: "></property>
         <property name="DRAFT_NAME_LABEL"           value="Draft Name: "></property>
         <property name="SELECT_TEAM_LABEL"          value="Select Fantasy Team: "></property>
+        <property name="SELECT_PRO_TEAM_LABEL"      value="Select Pro Team: "></property>
         
         <!-- ERROR MESSAGES -->
         <property name="CLOSE_BUTTON_TEXT"          value="Close"></property>

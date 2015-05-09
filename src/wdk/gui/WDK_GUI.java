@@ -5,21 +5,12 @@ import wdk.WDK_PropertyType;
 import wdk.controller.FileController;
 import wdk.file.DraftFileManager;
 import wdk.file.DraftSiteExporter;
-import wdk.data.Contract;
 import wdk.data.Draft;
 import wdk.data.DraftDataManager;
 import wdk.data.DraftDataView;
-import wdk.data.Hitter;
-import wdk.data.Pitcher;
 import wdk.data.Player;
 import wdk.data.Team;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -28,7 +19,6 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -46,17 +36,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import properties_manager.PropertiesManager;
-import sun.plugin2.jvm.RemoteJVMLauncher.CallBack;
 import wdk.controller.DraftEditController;
 import wdk.controller.PlayerController;
 import wdk.controller.ScreenController;
 import wdk.controller.TeamController;
+import wdk.data.MLBTeam;
 
 /**
  * This class provides the Graphical User Interface for this application,
@@ -176,7 +165,14 @@ public class WDK_GUI implements DraftDataView {
     
     // THESE ARE THE CONTROLS FOR OUR MLB TEAM SCREEN
     Label MLBTeamsScreenLabel;
+    GridPane proTeamLabelAndBox;
     VBox MLBTeamsScreenPane;
+    Label selectProTeamLabel;
+    ComboBox selectProTeamComboBox;
+    TableView<Player> playersOnProTeamTable;
+    TableColumn MLBPlayerFirstNameColumn;
+    TableColumn MLBPlayerLastNameColumn;
+    TableColumn MLBPlayerQPColumn;
 
     // THESE ARE THE CONTROLS FOR OUR AVAILABLE PLAYERS SCREEN
     VBox availablePlayersPane;
@@ -1096,10 +1092,61 @@ public class WDK_GUI implements DraftDataView {
         workspaceScrollPane.setContent(workspacePane);
     }
     
-    public void showMLBScreen() {
+    public void showMLBScreen() throws IOException {
         MLBTeamsScreenPane = new VBox();
         MLBTeamsScreenLabel = initLabel(WDK_PropertyType.MLB_TEAMS_HEADING_LABEL, CLASS_HEADING_LABEL);
         MLBTeamsScreenPane.getChildren().add(MLBTeamsScreenLabel);
+        
+        proTeamLabelAndBox = new GridPane();
+        selectProTeamLabel = initGridLabel(proTeamLabelAndBox, WDK_PropertyType.SELECT_PRO_TEAM_LABEL, CLASS_PROMPT_LABEL, 0, 0, 1, 1);
+        selectProTeamComboBox = initGridComboBox(proTeamLabelAndBox, 1, 0, 1, 1);
+        
+        ObservableList<String> proTeamChoices = FXCollections.observableArrayList();
+        for(MLBTeam m: MLBTeam.values()) {
+            proTeamChoices.add(m.toString());
+        }
+        selectProTeamComboBox.setItems(proTeamChoices);
+        
+        playersOnProTeamTable = new TableView();
+        MLBPlayerFirstNameColumn = new TableColumn(COL_FIRST_NAME);
+        MLBPlayerLastNameColumn = new TableColumn(COL_LAST_NAME);
+        MLBPlayerQPColumn = new TableColumn(COL_POSITIONS);
+        
+        playersOnProTeamTable.getColumns().add(MLBPlayerFirstNameColumn);
+        playersOnProTeamTable.getColumns().add(MLBPlayerLastNameColumn);
+        playersOnProTeamTable.getColumns().add(MLBPlayerQPColumn);
+        
+        selectProTeamComboBox.setOnAction(e -> {
+            ObservableList<Player> playersWithTeam = FXCollections.observableArrayList();
+            for(Player p: dataManager.getDraft().getFreeAgents()) {
+                if(p.getMLBTeam().equalsIgnoreCase((String)selectProTeamComboBox.getSelectionModel().getSelectedItem()))
+                    playersWithTeam.add(p);
+            }
+            for(Team t: dataManager.getDraft().getListOfTeams()) {
+                for(int i = 0; i < dataManager.getDraft().getTeamWithName(t.getTeamName()).getStartingLineup().size(); i++) {
+                    if(dataManager.getDraft().getTeamWithName(t.getTeamName()).getStartingLineup().get(i).getMLBTeam().equalsIgnoreCase(((String)selectProTeamComboBox.getSelectionModel().getSelectedItem())))
+                        playersWithTeam.add(dataManager.getDraft().getTeamWithName(t.getTeamName()).getStartingLineup().get(i));
+                }       
+            }
+            for(Team t: dataManager.getDraft().getListOfTeams()) {
+                for(int i = 0; i < dataManager.getDraft().getTeamWithName(t.getTeamName()).getTaxiSquad().size(); i++) {
+                    if(dataManager.getDraft().getTeamWithName(t.getTeamName()).getTaxiSquad().get(i).getMLBTeam().equalsIgnoreCase(((String)selectProTeamComboBox.getSelectionModel().getSelectedItem())))
+                        playersWithTeam.add(dataManager.getDraft().getTeamWithName(t.getTeamName()).getTaxiSquad().get(i));
+                }    
+            } 
+            MLBPlayerFirstNameColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("firstName"));
+            MLBPlayerLastNameColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("lastName"));
+            MLBPlayerQPColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("QPOrRole"));
+            
+            if(((String)selectProTeamComboBox.getValue()) == null)
+                playersOnProTeamTable.setItems(null);
+            else
+                playersOnProTeamTable.setItems(playersWithTeam);
+        
+        });
+        
+        MLBTeamsScreenPane.getChildren().add(proTeamLabelAndBox);
+        MLBTeamsScreenPane.getChildren().add(playersOnProTeamTable);
         workspacePane.setCenter(MLBTeamsScreenPane);
         workspaceScrollPane.setContent(workspacePane);
 
