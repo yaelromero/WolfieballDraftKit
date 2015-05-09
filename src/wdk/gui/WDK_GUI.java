@@ -496,22 +496,35 @@ public class WDK_GUI implements DraftDataView {
         teamTable = new TableView();
         teamTable.setEditable(true);
         pPositionColumn = new TableColumn(COL_POSITION);
+        pPositionColumn.setSortable(false);
         pFirstNameColumn = new TableColumn(COL_FIRST_NAME);
+        pFirstNameColumn.setSortable(false);
         pFirstNameColumn.setPrefWidth(120);
         pLastNameColumn = new TableColumn(COL_LAST_NAME);
+        pLastNameColumn.setSortable(false);
         pLastNameColumn.setPrefWidth(120);
         pProTeamColumn = new TableColumn(COL_PRO_TEAM);
+        pProTeamColumn.setSortable(false);
         pPositionsColumn = new TableColumn(COL_POSITIONS);
+        pPositionsColumn.setSortable(false);
         pPositionsColumn.setPrefWidth(120);
         pRWColumn = new TableColumn(COL_RW);
+        pRWColumn.setSortable(false);
         pHRSVColumn = new TableColumn(COL_HRSV);
+        pHRSVColumn.setSortable(false);
         pRBIKColumn = new TableColumn(COL_RBIK);
+        pRBIKColumn.setSortable(false);
         pSBERAColumn = new TableColumn(COL_SBERA);
+        pSBERAColumn.setSortable(false);
         pBAWHIPColumn = new TableColumn(COL_BAWHIP);
+        pBAWHIPColumn.setSortable(false);
         pEstimatedValueColumn = new TableColumn(COL_EST_VAL);
+        pEstimatedValueColumn.setSortable(false);
         pEstimatedValueColumn.setPrefWidth(120);
         pContractColumn = new TableColumn(COL_CONTRACT);
+        pContractColumn.setSortable(false);
         pSalaryColumn = new TableColumn(COL_SALARY);
+        pSalaryColumn.setSortable(false);
         
         teamTable.getColumns().add(pPositionColumn);
         teamTable.getColumns().add(pFirstNameColumn);
@@ -565,9 +578,8 @@ public class WDK_GUI implements DraftDataView {
                 teamController.handleRemoveTeamRequest(this, dataManager.getDraft().getTeamWithName((String)selectFantasyTeamComboBox.getSelectionModel().getSelectedItem()));
                 loadFantasyTeamsComboBox(dataManager.getDraft().getListOfTeams());
                 draftController.handleDraftChangeRequest(this);
-                
             }
-            else {
+            else if(selectFantasyTeamComboBox.getSelectionModel().getSelectedItem() == null){
                 messageDialog.show("Please select a team!");
             } 
         });

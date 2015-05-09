@@ -1,6 +1,7 @@
 package wdk.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -8,6 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import wdk.gui.PlayerPositionComparator;
 
 /**
  *
@@ -91,6 +93,7 @@ public class Team {
     
     public void addPlayerToStartingLineup(Player p) {
         getStartingLineup().add(p);
+        Collections.sort(getStartingLineup(), new PlayerPositionComparator());
     }
     
     public void removePlayerFromStartingLineup(Player p) {
