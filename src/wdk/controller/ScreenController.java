@@ -33,7 +33,7 @@ public class ScreenController {
         gui.showStandingsScreen();
     }
     
-    public void handleMLBScreenRequest(WDK_GUI gui) {
+    public void handleMLBScreenRequest(WDK_GUI gui) throws IOException {
         gui.showMLBScreen();
     }
 }

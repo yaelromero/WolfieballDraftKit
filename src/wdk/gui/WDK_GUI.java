@@ -11,6 +11,8 @@ import wdk.data.DraftDataView;
 import wdk.data.Player;
 import wdk.data.Team;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -131,7 +133,9 @@ public class WDK_GUI implements DraftDataView {
     GridPane namePlusMinusEditSel;
     VBox fantasyTeamsPane;
     VBox startingLineupBox;
+    VBox taxiSquadBox;
     Label startingLineupLabel;
+    Label taxiSquadLabel;
     Button addTeamButton;
     Button removeTeamButton;
     Button editTeamButton;
@@ -140,6 +144,7 @@ public class WDK_GUI implements DraftDataView {
     Label selectFantasyTeamLabel;
     ComboBox selectFantasyTeamComboBox;
     TableView<Player> teamTable;
+    TableView<Player> taxiSquadTable;
     TableColumn pPositionColumn;
     TableColumn pFirstNameColumn;
     TableColumn pLastNameColumn;
@@ -490,6 +495,7 @@ public class WDK_GUI implements DraftDataView {
         
         // THESE ARE THE CONTROLS FOR THE PLAYER TABLE
         teamTable = new TableView();
+        taxiSquadTable = new TableView();
         teamTable.setEditable(true);
         pPositionColumn = new TableColumn(COL_POSITION);
         pPositionColumn.setSortable(false);
@@ -535,13 +541,33 @@ public class WDK_GUI implements DraftDataView {
         teamTable.getColumns().add(pEstimatedValueColumn);
         teamTable.getColumns().add(pContractColumn);
         teamTable.getColumns().add(pSalaryColumn);
-        
+        taxiSquadTable.getColumns().add(pPositionColumn);
+        taxiSquadTable.getColumns().add(pFirstNameColumn);
+        taxiSquadTable.getColumns().add(pLastNameColumn);
+        taxiSquadTable.getColumns().add(pProTeamColumn);
+        taxiSquadTable.getColumns().add(pPositionsColumn);
+        taxiSquadTable.getColumns().add(pRWColumn);
+        taxiSquadTable.getColumns().add(pHRSVColumn);
+        taxiSquadTable.getColumns().add(pRBIKColumn);
+        taxiSquadTable.getColumns().add(pSBERAColumn);
+        taxiSquadTable.getColumns().add(pBAWHIPColumn);
+        taxiSquadTable.getColumns().add(pEstimatedValueColumn);
+        taxiSquadTable.getColumns().add(pContractColumn);
+        taxiSquadTable.getColumns().add(pSalaryColumn);
+              
         startingLineupBox = new VBox();
         startingLineupLabel = initLabel(WDK_PropertyType.STARTING_LINEUP_LABEL, CLASS_SUBHEADING_LABEL);
         startingLineupBox.getChildren().add(startingLineupLabel);
         startingLineupBox.getChildren().add(teamTable);
         startingLineupBox.getStyleClass().add(CLASS_BORDERED_PANE);
+        
+        taxiSquadBox = new VBox();
+        taxiSquadLabel = initLabel(WDK_PropertyType.TAXI_SQUAD_LABEL, CLASS_SUBHEADING_LABEL);
+        taxiSquadBox.getChildren().add(taxiSquadLabel);
+        taxiSquadBox.getChildren().add(taxiSquadTable);
+        taxiSquadBox.getStyleClass().add(CLASS_BORDERED_PANE);
         fantasyTeamsPane.getChildren().add(startingLineupBox);
+        fantasyTeamsPane.getChildren().add(taxiSquadBox);
         workspacePane.setCenter(fantasyTeamsPane);
 
         // AND NOW PUT IT IN THE WORKSPACE
@@ -595,8 +621,10 @@ public class WDK_GUI implements DraftDataView {
             pSalaryColumn.setCellValueFactory(new PropertyValueFactory<Player, Integer>("salary"));
             if(((String)selectFantasyTeamComboBox.getValue()) == null)
                 teamTable.setItems(null);
-            else
+            else {
                 teamTable.setItems(dataManager.getDraft().getTeamWithName((String)selectFantasyTeamComboBox.getValue()).getStartingLineup());
+                teamTable.setItems(dataManager.getDraft().getTeamWithName((String)selectFantasyTeamComboBox.getValue()).getTaxiSquad());
+            }
         });
        
         teamTable.setOnMouseClicked(e -> {
@@ -1219,7 +1247,11 @@ public class WDK_GUI implements DraftDataView {
         });
         
         MLBTeamsScreenButton.setOnAction(e -> {
-            screenController.handleMLBScreenRequest(this);
+            try {
+                screenController.handleMLBScreenRequest(this);
+            } catch (IOException ex) {
+                Logger.getLogger(WDK_GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });    
     }
 

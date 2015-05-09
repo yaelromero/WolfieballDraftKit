@@ -44,6 +44,7 @@
         <property name="PLAYERS_HEADING_LABEL"      value="Available Players"></property>
         <property name="STANDINGS_HEADING_LABEL"    value="Fantasy Standings"></property>
         <property name="STARTING_LINEUP_LABEL"      value="Starting Lineup"></property>
+        <property name="TAXI_SQUAD_LABEL"           value="Taxi Squad"></property>
         <property name="DRAFT_HEADING_LABEL"        value="Draft Summary"></property>
         <property name="MLB_TEAMS_HEADING_LABEL"    value="MLB Teams"></property>
         <property name="SEARCH_LABEL"               value="Search: "></property>
