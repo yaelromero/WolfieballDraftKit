@@ -91,6 +91,20 @@ public class PlayerController {
                     for(int i = 0; i < draft.getListOfTeams().size(); i++) {
                         if(draft.getListOfTeams().get(i).checkIfPlayerInSL(p) == true) {
                             draft.getListOfTeams().get(i).removePlayerFromStartingLineup(p);
+                            draft.getListOfTeams().get(i).setPlayersNeeded(23 - draft.getListOfTeams().get(i).getStartingLineup().size());
+                            draft.getListOfTeams().get(i).setMoneyLeft(draft.getListOfTeams().get(i).calcMoneyLeft());
+                            draft.getListOfTeams().get(i).setMoneyPerPlayer(draft.getListOfTeams().get(i).calcMoneyPerPlayer());
+                            draft.getListOfTeams().get(i).setAggRStat(draft.getListOfTeams().get(i).calcAggRStat());
+                            draft.getListOfTeams().get(i).setAggHRStat(draft.getListOfTeams().get(i).calcAggHRStat());
+                            draft.getListOfTeams().get(i).setAggRBIStat(draft.getListOfTeams().get(i).calcAggRBIStat());
+                            draft.getListOfTeams().get(i).setAggSBStat(draft.getListOfTeams().get(i).calcAggSBStat());
+                            draft.getListOfTeams().get(i).setAggBAStat(draft.getListOfTeams().get(i).calcAggBAStat());
+                            draft.getListOfTeams().get(i).setAggWStat(draft.getListOfTeams().get(i).calcAggWStat());
+                            draft.getListOfTeams().get(i).setAggSVStat(draft.getListOfTeams().get(i).calcAggSVStat());
+                            draft.getListOfTeams().get(i).setAggKStat(draft.getListOfTeams().get(i).calcAggKStat());
+                            draft.getListOfTeams().get(i).setAggERAStat(draft.getListOfTeams().get(i).calcAggERAStat());
+                            draft.getListOfTeams().get(i).setAggWHIPStat(draft.getListOfTeams().get(i).calcAggWHIPStat());
+                            draft.getListOfTeams().get(i).setTotalPoints(draft.getListOfTeams().get(i).calcTotalPoints());
                         }
                     }
                     draft.addFreeAgent(p);
@@ -121,9 +135,37 @@ public class PlayerController {
                         for(int i = 0; i < draft.getListOfTeams().size(); i++) {
                             if(draft.getListOfTeams().get(i).checkIfPlayerInSL(p) == true) {
                                 draft.getListOfTeams().get(i).removePlayerFromStartingLineup(p);
+                                draft.getListOfTeams().get(i).setPlayersNeeded(23 - draft.getListOfTeams().get(i).getStartingLineup().size());
+                                draft.getListOfTeams().get(i).setMoneyLeft(draft.getListOfTeams().get(i).calcMoneyLeft());
+                                draft.getListOfTeams().get(i).setMoneyPerPlayer(draft.getListOfTeams().get(i).calcMoneyPerPlayer());
+                                draft.getListOfTeams().get(i).setAggRStat(draft.getListOfTeams().get(i).calcAggRStat());
+                                draft.getListOfTeams().get(i).setAggHRStat(draft.getListOfTeams().get(i).calcAggHRStat());
+                                draft.getListOfTeams().get(i).setAggRBIStat(draft.getListOfTeams().get(i).calcAggRBIStat());
+                                draft.getListOfTeams().get(i).setAggSBStat(draft.getListOfTeams().get(i).calcAggSBStat());
+                                draft.getListOfTeams().get(i).setAggBAStat(draft.getListOfTeams().get(i).calcAggBAStat());
+                                draft.getListOfTeams().get(i).setAggWStat(draft.getListOfTeams().get(i).calcAggWStat());
+                                draft.getListOfTeams().get(i).setAggSVStat(draft.getListOfTeams().get(i).calcAggSVStat());
+                                draft.getListOfTeams().get(i).setAggKStat(draft.getListOfTeams().get(i).calcAggKStat());
+                                draft.getListOfTeams().get(i).setAggERAStat(draft.getListOfTeams().get(i).calcAggERAStat());
+                                draft.getListOfTeams().get(i).setAggWHIPStat(draft.getListOfTeams().get(i).calcAggWHIPStat());
+                                draft.getListOfTeams().get(i).setTotalPoints(draft.getListOfTeams().get(i).calcTotalPoints());
                             }
                         }
                         draft.addPlayerToTeam(p, draft.getTeamWithName(p.getFantasyTeam()));
+                        draft.getTeamWithName(p.getFantasyTeam()).setPlayersNeeded(23 - draft.getTeamWithName(p.getFantasyTeam()).getStartingLineup().size());
+                        draft.getTeamWithName(p.getFantasyTeam()).setMoneyLeft(draft.getTeamWithName(p.getFantasyTeam()).calcMoneyLeft());
+                        draft.getTeamWithName(p.getFantasyTeam()).setMoneyPerPlayer(draft.getTeamWithName(p.getFantasyTeam()).calcMoneyPerPlayer());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggRStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggRStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggHRStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggHRStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggRBIStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggRBIStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggSBStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggSBStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggBAStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggBAStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggWStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggWStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggSVStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggSVStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggKStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggKStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggERAStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggERAStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggWHIPStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggWHIPStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setTotalPoints(draft.getTeamWithName(p.getFantasyTeam()).calcTotalPoints());
                     }
                 }
                 else { // COME FROM FREE AGENT POOL
@@ -132,6 +174,20 @@ public class PlayerController {
                     }
                     else if(draft.checkForSameInGivenTeam(p, draft.getTeamWithName(p.getFantasyTeam())) == false) {
                         draft.addPlayerToTeam(p, draft.getTeamWithName(p.getFantasyTeam()));
+                        draft.getTeamWithName(p.getFantasyTeam()).setPlayersNeeded(23 - draft.getTeamWithName(p.getFantasyTeam()).getStartingLineup().size());
+                        draft.getTeamWithName(p.getFantasyTeam()).setMoneyLeft(draft.getTeamWithName(p.getFantasyTeam()).calcMoneyLeft());
+                        draft.getTeamWithName(p.getFantasyTeam()).setMoneyPerPlayer(draft.getTeamWithName(p.getFantasyTeam()).calcMoneyPerPlayer());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggRStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggRStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggHRStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggHRStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggRBIStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggRBIStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggSBStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggSBStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggBAStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggBAStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggWStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggWStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggSVStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggSVStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggKStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggKStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggERAStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggERAStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setAggWHIPStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggWHIPStat());
+                        draft.getTeamWithName(p.getFantasyTeam()).setTotalPoints(draft.getTeamWithName(p.getFantasyTeam()).calcTotalPoints());
                         draft.removeFreeAgent(p);
                     }
                 }           

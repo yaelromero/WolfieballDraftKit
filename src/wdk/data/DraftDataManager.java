@@ -56,7 +56,7 @@ public class DraftDataManager {
             }
             else {
                 double tempBAOrWHIP = ((double)(h.getHStat()) / h.getABStat());
-                BigDecimal db = new BigDecimal(tempBAOrWHIP).setScale(2, RoundingMode.HALF_EVEN);
+                BigDecimal db = new BigDecimal(tempBAOrWHIP).setScale(3, RoundingMode.HALF_EVEN);
                 tempBAOrWHIP = db.doubleValue();
                 h.setBAOrWHIPStat(tempBAOrWHIP);
             }
