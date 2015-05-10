@@ -1,7 +1,20 @@
 package wdk.data;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
+import wdk.comparators.TeamBAStatComparator;
+import wdk.comparators.TeamERAStatComparator;
+import wdk.comparators.TeamHRStatComparator;
+import wdk.comparators.TeamKStatComparator;
+import wdk.comparators.TeamRBIStatComparator;
+import wdk.comparators.TeamRStatComparator;
+import wdk.comparators.TeamSBStatComparator;
+import wdk.comparators.TeamSVStatComparator;
+import wdk.comparators.TeamWHIPStatComparator;
+import wdk.comparators.TeamWStatComparator;
 
 /**
  *
@@ -126,4 +139,227 @@ public class Draft {
             }
         }
     }
+  
+    public void calcPointsForWHIP() {
+        int maxPointsForWHIP = listOfTeams.size();
+        
+        ArrayList<Team> teams = new ArrayList<Team>();
+        for(Team t: listOfTeams) {
+            teams.add(t);
+        }
+        Collections.sort(teams, new TeamWHIPStatComparator());
+        
+        for(int i = 0; i < teams.size(); i++) {
+            teams.get(i).setWHIPPoints(maxPointsForWHIP);
+            maxPointsForWHIP--;
+        }
+        
+        for(int i = 0; i < teams.size() - 1; i++) {
+            if(teams.get(i).getAggWHIPStat() == teams.get(i+1).getAggWHIPStat()) {
+                teams.get(i+1).setWHIPPoints(teams.get(i).getWHIPPoints());
+            }
+        }
+    }
+    
+    public void calcPointsForERA() {
+        int maxPointsForERA = listOfTeams.size();
+        
+        ArrayList<Team> teams = new ArrayList<Team>();
+        for(Team t: listOfTeams) {
+            teams.add(t);
+        }
+        Collections.sort(teams, new TeamERAStatComparator());
+        
+        for(int i = 0; i < teams.size(); i++) {
+            teams.get(i).setERAPoints(maxPointsForERA);
+            maxPointsForERA--;
+        }
+        
+        for(int i = 0; i < teams.size() - 1; i++) {
+            if(teams.get(i).getAggERAStat() == teams.get(i+1).getAggERAStat()) {
+                teams.get(i+1).setERAPoints(teams.get(i).getERAPoints());
+            }
+        }
+    }
+    
+    public void calcPointsForK() {
+        int maxPointsForK = listOfTeams.size();
+        
+        ArrayList<Team> teams = new ArrayList<Team>();
+        for(Team t: listOfTeams) {
+            teams.add(t);
+        }
+        Collections.sort(teams, new TeamKStatComparator());
+        
+        for(int i = 0; i < teams.size(); i++) {
+            teams.get(i).setKPoints(maxPointsForK);
+            maxPointsForK--;
+        }
+        
+        for(int i = 0; i < teams.size() - 1; i++) {
+            if(teams.get(i).getAggKStat() == teams.get(i+1).getAggKStat()) {
+                teams.get(i+1).setKPoints(teams.get(i).getKPoints());
+            }
+        }
+    }
+    
+    public void calcPointsForSV() {
+        int maxPointsForSV = listOfTeams.size();
+        
+        ArrayList<Team> teams = new ArrayList<Team>();
+        for(Team t: listOfTeams) {
+            teams.add(t);
+        }
+        Collections.sort(teams, new TeamSVStatComparator());
+        
+        for(int i = 0; i < teams.size(); i++) {
+            teams.get(i).setSVPoints(maxPointsForSV);
+            maxPointsForSV--;
+        }
+        
+        for(int i = 0; i < teams.size() - 1; i++) {
+            if(teams.get(i).getAggSVStat() == teams.get(i+1).getAggSVStat()) {
+                teams.get(i+1).setSVPoints(teams.get(i).getSVPoints());
+            }
+        }
+    }
+    
+    public void calcPointsForW() {
+        int maxPointsForW = listOfTeams.size();
+        
+        ArrayList<Team> teams = new ArrayList<Team>();
+        for(Team t: listOfTeams) {
+            teams.add(t);
+        }
+        Collections.sort(teams, new TeamWStatComparator());
+        
+        for(int i = 0; i < teams.size(); i++) {
+            teams.get(i).setWPoints(maxPointsForW);
+            maxPointsForW--;
+        }
+        
+        for(int i = 0; i < teams.size() - 1; i++) {
+            if(teams.get(i).getAggWStat() == teams.get(i+1).getAggWStat()) {
+                teams.get(i+1).setWPoints(teams.get(i).getWPoints());
+            }
+        }
+    }
+    
+    public void calcPointsForBA() {
+        int maxPointsForBA = listOfTeams.size();
+        
+        ArrayList<Team> teams = new ArrayList<Team>();
+        for(Team t: listOfTeams) {
+            teams.add(t);
+        }
+        Collections.sort(teams, new TeamBAStatComparator());
+        
+        for(int i = 0; i < teams.size(); i++) {
+            teams.get(i).setBAPoints(maxPointsForBA);
+            maxPointsForBA--;
+        }
+        
+        for(int i = 0; i < teams.size() - 1; i++) {
+            if(teams.get(i).getAggBAStat() == teams.get(i+1).getAggBAStat()) {
+                teams.get(i+1).setBAPoints(teams.get(i).getBAPoints());
+            }
+        }
+    }
+    
+    public void calcPointsForSB() {
+        int maxPointsForSB = listOfTeams.size();
+        
+        ArrayList<Team> teams = new ArrayList<Team>();
+        for(Team t: listOfTeams) {
+            teams.add(t);
+        }
+        Collections.sort(teams, new TeamSBStatComparator());
+        
+        for(int i = 0; i < teams.size(); i++) {
+            teams.get(i).setSBPoints(maxPointsForSB);
+            maxPointsForSB--;
+        }
+        
+        for(int i = 0; i < teams.size() - 1; i++) {
+            if(teams.get(i).getAggSBStat() == teams.get(i+1).getAggSBStat()) {
+                teams.get(i+1).setSBPoints(teams.get(i).getSBPoints());
+            }
+        }
+    }
+    
+    public void calcPointsForRBI() {
+        int maxPointsForRBI = listOfTeams.size();
+        
+        ArrayList<Team> teams = new ArrayList<Team>();
+        for(Team t: listOfTeams) {
+            teams.add(t);
+        }
+        Collections.sort(teams, new TeamRBIStatComparator());
+        
+        for(int i = 0; i < teams.size(); i++) {
+            teams.get(i).setRBIPoints(maxPointsForRBI);
+            maxPointsForRBI--;
+        }
+        
+        for(int i = 0; i < teams.size() - 1; i++) {
+            if(teams.get(i).getAggRBIStat() == teams.get(i+1).getAggRBIStat()) {
+                teams.get(i+1).setRBIPoints(teams.get(i).getRBIPoints());
+            }
+        }
+    }
+    
+    public void calcPointsForHR() {
+        int maxPointsForHR = listOfTeams.size();
+        
+        ArrayList<Team> teams = new ArrayList<Team>();
+        for(Team t: listOfTeams) {
+            teams.add(t);
+        }
+        Collections.sort(teams, new TeamHRStatComparator());
+        
+        for(int i = 0; i < teams.size(); i++) {
+            teams.get(i).setHRPoints(maxPointsForHR);
+            maxPointsForHR--;
+        }
+        
+        for(int i = 0; i < teams.size() - 1; i++) {
+            if(teams.get(i).getAggHRStat() == teams.get(i+1).getAggHRStat()) {
+                teams.get(i+1).setHRPoints(teams.get(i).getHRPoints());
+            }
+        }
+    }
+    
+    public void calcPointsForR() {
+        int maxPointsForR = listOfTeams.size();
+        
+        ArrayList<Team> teams = new ArrayList<Team>();
+        for(Team t: listOfTeams) {
+            teams.add(t);
+        }
+        Collections.sort(teams, new TeamRStatComparator());
+        
+        for(int i = 0; i < teams.size(); i++) {
+            teams.get(i).setRPoints(maxPointsForR);
+            maxPointsForR--;
+        }
+        
+        for(int i = 0; i < teams.size() - 1; i++) {
+            if(teams.get(i).getAggRStat() == teams.get(i+1).getAggRStat()) {
+                teams.get(i+1).setRPoints(teams.get(i).getRPoints());
+            }
+        }
+    }
+    
+    public void calcTotalPoints() {
+        
+        for(int i = 0; i < listOfTeams.size(); i++) {
+            listOfTeams.get(i).setTotalPoints(listOfTeams.get(i).getWHIPPoints() +
+                    listOfTeams.get(i).getERAPoints() + listOfTeams.get(i).getKPoints() +
+                    listOfTeams.get(i).getSVPoints() + listOfTeams.get(i).getWPoints() +
+                    listOfTeams.get(i).getBAPoints() + listOfTeams.get(i).getSBPoints() +
+                    listOfTeams.get(i).getRBIPoints() + listOfTeams.get(i).getHRPoints() + 
+                    listOfTeams.get(i).getRPoints());
+        }
+    }
+    
 }

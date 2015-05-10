@@ -13,7 +13,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import wdk.gui.PlayerPositionComparator;
+import wdk.comparators.PlayerPositionComparator;
 
 /**
  *
@@ -36,6 +36,16 @@ public class Team {
     final IntegerProperty aggKStat;
     final DoubleProperty aggERAStat;
     final DoubleProperty aggWHIPStat;
+    final IntegerProperty WHIPPoints;
+    final IntegerProperty ERAPoints;
+    final IntegerProperty KPoints;
+    final IntegerProperty SVPoints;
+    final IntegerProperty WPoints;
+    final IntegerProperty BAPoints;
+    final IntegerProperty SBPoints;
+    final IntegerProperty RBIPoints;
+    final IntegerProperty HRPoints;
+    final IntegerProperty RPoints;
     final IntegerProperty totalPoints;
     private ObservableList<Player> taxiSquad;
     private ObservableList<Player> startingLineup;
@@ -51,6 +61,16 @@ public class Team {
     public static final int DEFAULT_SB_STAT = 0;     
     public static final int DEFAULT_SV_STAT = 0;
     public static final int DEFAULT_K_STAT = 0;  
+    public static final int DEFAULT_WHIP_POINTS = 0;
+    public static final int DEFAULT_ERA_POINTS = 0;
+    public static final int DEFAULT_K_POINTS = 0;
+    public static final int DEFAULT_SV_POINTS = 0;
+    public static final int DEFAULT_W_POINTS = 0;
+    public static final int DEFAULT_BA_POINTS = 0;
+    public static final int DEFAULT_SB_POINTS = 0;
+    public static final int DEFAULT_RBI_POINTS = 0;
+    public static final int DEFAULT_HR_POINTS = 0;
+    public static final int DEFAULT_R_POINTS = 0;
     public static final int DEFAULT_TOTAL_POINTS = 0;      
     public static final double DEFAULT_BA_STAT = 0.0;
     public static final int DEFAULT_W_STAT = 0;
@@ -73,6 +93,16 @@ public class Team {
         aggKStat = new SimpleIntegerProperty(DEFAULT_K_STAT);
         aggERAStat = new SimpleDoubleProperty(DEFAULT_ERA_STAT);
         aggWHIPStat = new SimpleDoubleProperty(DEFAULT_WHIP_STAT);
+        WHIPPoints = new SimpleIntegerProperty(DEFAULT_WHIP_POINTS);
+        ERAPoints = new SimpleIntegerProperty(DEFAULT_ERA_POINTS);
+        KPoints = new SimpleIntegerProperty(DEFAULT_K_POINTS);
+        SVPoints = new SimpleIntegerProperty(DEFAULT_SV_POINTS);
+        WPoints = new SimpleIntegerProperty(DEFAULT_W_POINTS);
+        BAPoints = new SimpleIntegerProperty(DEFAULT_BA_POINTS);
+        SBPoints = new SimpleIntegerProperty(DEFAULT_SB_POINTS);
+        RBIPoints = new SimpleIntegerProperty(DEFAULT_RBI_POINTS);
+        HRPoints = new SimpleIntegerProperty(DEFAULT_HR_POINTS);
+        RPoints = new SimpleIntegerProperty(DEFAULT_R_POINTS);
         totalPoints = new SimpleIntegerProperty(DEFAULT_TOTAL_POINTS);
         taxiSquad = FXCollections.observableArrayList();
         startingLineup = FXCollections.observableArrayList();
@@ -212,6 +242,126 @@ public class Team {
     
     public IntegerProperty aggKStatProperty() {
         return aggKStat;
+    }
+    
+    public void setWHIPPoints(int initWHIPPoints) {
+        WHIPPoints.set(initWHIPPoints);
+    }
+    
+    public int getWHIPPoints() {
+        return WHIPPoints.get();
+    }
+    
+    public IntegerProperty WHIPPointsProperty() {
+        return WHIPPoints;
+    }
+    
+    public void setERAPoints(int initERAPoints) {
+        ERAPoints.set(initERAPoints);
+    }
+    
+    public int getERAPoints() {
+        return ERAPoints.get();
+    }
+    
+    public IntegerProperty ERAPointsProperty() {
+        return ERAPoints;
+    }
+    
+    public void setKPoints(int initKPoints) {
+        KPoints.set(initKPoints);
+    }
+    
+    public int getKPoints() {
+        return KPoints.get();
+    }
+    
+    public IntegerProperty KPointsProperty() {
+        return KPoints;
+    }
+  
+    public void setSVPoints(int initSVPoints) {
+        SVPoints.set(initSVPoints);
+    }
+    
+    public int getSVPoints() {
+        return SVPoints.get();
+    }
+    
+    public IntegerProperty SVPointsProperty() {
+        return SVPoints;
+    }
+    
+    public void setWPoints(int initWPoints) {
+        WPoints.set(initWPoints);
+    }
+    
+    public int getWPoints() {
+        return WPoints.get();
+    }
+    
+    public IntegerProperty WPointsProperty() {
+        return WPoints;
+    }
+    
+    public void setBAPoints(int initBAPoints) {
+        BAPoints.set(initBAPoints);
+    }
+    
+    public int getBAPoints() {
+        return BAPoints.get();
+    }
+    
+    public IntegerProperty BAPointsProperty() {
+        return BAPoints;
+    }
+    
+    public void setSBPoints(int initSBPoints) {
+        SBPoints.set(initSBPoints);
+    }
+    
+    public int getSBPoints() {
+        return SBPoints.get();
+    }
+    
+    public IntegerProperty SBPointsProperty() {
+        return SBPoints;
+    }
+    
+    public void setRBIPoints(int initRBIPoints) {
+        RBIPoints.set(initRBIPoints);
+    }
+    
+    public int getRBIPoints() {
+        return RBIPoints.get();
+    }
+    
+    public IntegerProperty RBIPointsProperty() {
+        return RBIPoints;
+    }
+    
+    public void setHRPoints(int initHRPoints) {
+        HRPoints.set(initHRPoints);
+    }
+    
+    public int getHRPoints() {
+        return HRPoints.get();
+    }
+    
+    public IntegerProperty HRPointsProperty() {
+        return HRPoints;
+    }
+    
+    public void setRPoints(int initRPoints) {
+        RPoints.set(initRPoints);
+    }
+    
+    public int getRPoints() {
+        return RPoints.get();
+    }
+    
+    public IntegerProperty RPointsProperty() {
+        return RPoints;
     }
     
     public void setTotalPoints(int initTotalPoints) {
@@ -502,11 +652,6 @@ public class Team {
             }
         }    
         return aggw;
-    }
-    
-    public int calcTotalPoints() {
-        
-        return 0;
     }
     
     public double calcAggBAStat() {

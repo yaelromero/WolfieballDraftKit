@@ -1,4 +1,4 @@
-package wdk.gui;
+package wdk.comparators;
 
 import java.util.Comparator;
 import wdk.data.Player;

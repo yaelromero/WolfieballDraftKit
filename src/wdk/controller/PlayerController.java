@@ -103,8 +103,18 @@ public class PlayerController {
                             draft.getListOfTeams().get(i).setAggSVStat(draft.getListOfTeams().get(i).calcAggSVStat());
                             draft.getListOfTeams().get(i).setAggKStat(draft.getListOfTeams().get(i).calcAggKStat());
                             draft.getListOfTeams().get(i).setAggERAStat(draft.getListOfTeams().get(i).calcAggERAStat());
-                            draft.getListOfTeams().get(i).setAggWHIPStat(draft.getListOfTeams().get(i).calcAggWHIPStat());
-                            draft.getListOfTeams().get(i).setTotalPoints(draft.getListOfTeams().get(i).calcTotalPoints());
+                            draft.getListOfTeams().get(i).setAggWHIPStat(draft.getListOfTeams().get(i).calcAggWHIPStat());  
+                            draft.calcPointsForWHIP();
+                            draft.calcPointsForERA();
+                            draft.calcPointsForK();
+                            draft.calcPointsForSV();
+                            draft.calcPointsForW();
+                            draft.calcPointsForBA();
+                            draft.calcPointsForSB();
+                            draft.calcPointsForRBI();
+                            draft.calcPointsForHR();
+                            draft.calcPointsForR();
+                            draft.calcTotalPoints();
                         }
                     }
                     draft.addFreeAgent(p);
@@ -148,7 +158,17 @@ public class PlayerController {
                                 draft.getListOfTeams().get(i).setAggKStat(draft.getListOfTeams().get(i).calcAggKStat());
                                 draft.getListOfTeams().get(i).setAggERAStat(draft.getListOfTeams().get(i).calcAggERAStat());
                                 draft.getListOfTeams().get(i).setAggWHIPStat(draft.getListOfTeams().get(i).calcAggWHIPStat());
-                                draft.getListOfTeams().get(i).setTotalPoints(draft.getListOfTeams().get(i).calcTotalPoints());
+                                draft.calcPointsForWHIP();
+                                draft.calcPointsForERA();
+                                draft.calcPointsForK();
+                                draft.calcPointsForSV();
+                                draft.calcPointsForW();
+                                draft.calcPointsForBA();
+                                draft.calcPointsForSB();
+                                draft.calcPointsForRBI();
+                                draft.calcPointsForHR();
+                                draft.calcPointsForR();
+                                draft.calcTotalPoints();
                             }
                         }
                         draft.addPlayerToTeam(p, draft.getTeamWithName(p.getFantasyTeam()));
@@ -165,7 +185,17 @@ public class PlayerController {
                         draft.getTeamWithName(p.getFantasyTeam()).setAggKStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggKStat());
                         draft.getTeamWithName(p.getFantasyTeam()).setAggERAStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggERAStat());
                         draft.getTeamWithName(p.getFantasyTeam()).setAggWHIPStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggWHIPStat());
-                        draft.getTeamWithName(p.getFantasyTeam()).setTotalPoints(draft.getTeamWithName(p.getFantasyTeam()).calcTotalPoints());
+                        draft.calcPointsForWHIP();
+                        draft.calcPointsForERA();
+                        draft.calcPointsForK();
+                        draft.calcPointsForSV();
+                        draft.calcPointsForW();
+                        draft.calcPointsForBA();
+                        draft.calcPointsForSB();
+                        draft.calcPointsForRBI();
+                        draft.calcPointsForHR();
+                        draft.calcPointsForR();
+                        draft.calcTotalPoints();
                     }
                 }
                 else { // COME FROM FREE AGENT POOL
@@ -187,7 +217,17 @@ public class PlayerController {
                         draft.getTeamWithName(p.getFantasyTeam()).setAggKStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggKStat());
                         draft.getTeamWithName(p.getFantasyTeam()).setAggERAStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggERAStat());
                         draft.getTeamWithName(p.getFantasyTeam()).setAggWHIPStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggWHIPStat());
-                        draft.getTeamWithName(p.getFantasyTeam()).setTotalPoints(draft.getTeamWithName(p.getFantasyTeam()).calcTotalPoints());
+                        draft.calcPointsForWHIP();
+                        draft.calcPointsForERA();
+                        draft.calcPointsForK();
+                        draft.calcPointsForSV();
+                        draft.calcPointsForW();
+                        draft.calcPointsForBA();
+                        draft.calcPointsForSB();
+                        draft.calcPointsForRBI();
+                        draft.calcPointsForHR();
+                        draft.calcPointsForR();
+                        draft.calcTotalPoints();
                         draft.removeFreeAgent(p);
                     }
                 }           
