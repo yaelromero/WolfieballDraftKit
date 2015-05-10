@@ -28,6 +28,9 @@ public enum WDK_PropertyType {
         MLB_TEAMS_ICON,
         PLAYERS_ICON,
         STANDINGS_ICON,
+        BEST_ICON,
+        PLAY_ICON,
+        PAUSE_ICON,
         
         // APPLICATION TOOLTIPS FOR BUTTONS
         NEW_DRAFT_TOOLTIP,
@@ -45,6 +48,9 @@ public enum WDK_PropertyType {
         ADD_TEAM_TOOLTIP,
         REMOVE_TEAM_TOOLTIP,
         EDIT_TEAM_TOOLTIP,
+        DRAFT_PLAYER_TOOLTIP,
+        START_AUTO_TOOLTIP,
+        PAUSE_AUTO_TOOLTIP,
 
         // FOR DRAFT EDIT WORKSPACE
         FANTASY_HEADING_LABEL,

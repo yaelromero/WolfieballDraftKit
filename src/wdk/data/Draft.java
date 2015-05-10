@@ -25,10 +25,12 @@ public class Draft {
     String draftName;
     ObservableList<Team> listOfTeams;
     ObservableList<Player> freeAgents;
+    ObservableList<Player> draftedPlayers;
     
     public Draft(ObservableList initFreeAgents) {
         listOfTeams = FXCollections.observableArrayList();
         freeAgents = initFreeAgents;
+        draftedPlayers = FXCollections.observableArrayList();
     }
     
     public String getDraftName() {
@@ -59,6 +61,26 @@ public class Draft {
     
     public void clearListOfTeams() {
         listOfTeams.clear();
+    }
+    
+    public void setDraftedPlayers(ObservableList<Player> draftedPlayers) {
+        this.draftedPlayers = draftedPlayers;
+    }
+    
+    public ObservableList<Player> getDraftedPlayers() {
+        return draftedPlayers;
+    }
+    
+    public void clearDraftedPlayers() {
+        draftedPlayers.clear();
+    }
+    
+    public void addDraftedPlayer(Player p) {
+        draftedPlayers.add(p);
+    }
+    
+    public void removeDraftedPlayer(Player p) {
+        draftedPlayers.remove(p);
     }
     
     public void addTeam(Team a) {

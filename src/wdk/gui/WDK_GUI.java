@@ -175,6 +175,17 @@ public class WDK_GUI implements DraftDataView {
     // THESE ARE THE CONTROLS FOR OUR DRAFT SCREEN
     Label draftScreenLabel;
     VBox draftScreenPane;
+    GridPane bestPlayPause;
+    Button draftBest;
+    Button startAutoDraft;
+    Button pauseAutoDraft;
+    TableView<Player> draftedPlayers;
+    TableColumn pickNumberColumn;
+    TableColumn draftedFirstNameColumn;
+    TableColumn draftedLastNameColumn;
+    TableColumn draftedTeamNameColumn;
+    TableColumn draftedContractColumn;
+    TableColumn draftedSalaryColumn;
     
     // THESE ARE THE CONTROLS FOR OUR STANDINGS SCREEN
     Label standingsScreenLabel;
@@ -269,7 +280,7 @@ public class WDK_GUI implements DraftDataView {
     static final String COL_BAWHIP = "BA/WHIP";
     static final String COL_EST_VAL = "Estimated Value";
     static final String COL_NOTES = "Notes";
-    
+    static final String COL_PICK_NUMBER = "Pick #";
     static final String COL_POSITION = "Position";
     static final String COL_CONTRACT = "Contract";
     static final String COL_SALARY = "Salary";
@@ -1181,7 +1192,28 @@ public class WDK_GUI implements DraftDataView {
     public void showDraftScreen() {
         draftScreenPane = new VBox();
         draftScreenLabel = initLabel(WDK_PropertyType.DRAFT_HEADING_LABEL, CLASS_HEADING_LABEL);
+        bestPlayPause = new GridPane();
+        draftBest = initGridButton(bestPlayPause, WDK_PropertyType.BEST_ICON, WDK_PropertyType.DRAFT_PLAYER_TOOLTIP, false, 0, 0, 1, 1);
+        startAutoDraft = initGridButton(bestPlayPause, WDK_PropertyType.PLAY_ICON, WDK_PropertyType.START_AUTO_TOOLTIP, false, 1, 0, 1, 1);
+        pauseAutoDraft = initGridButton(bestPlayPause, WDK_PropertyType.PAUSE_ICON, WDK_PropertyType.PAUSE_AUTO_TOOLTIP, false, 2, 0, 1, 1);
+        draftedPlayers = new TableView();
+        pickNumberColumn = new TableColumn(COL_PICK_NUMBER);
+        draftedFirstNameColumn = new TableColumn(COL_FIRST_NAME);
+        draftedLastNameColumn = new TableColumn(COL_LAST_NAME);
+        draftedTeamNameColumn = new TableColumn(COL_TEAM_NAME);
+        draftedTeamNameColumn.setPrefWidth(150);
+        draftedContractColumn = new TableColumn(COL_CONTRACT);
+        draftedSalaryColumn = new TableColumn(COL_SALARY);
+        draftedPlayers.getColumns().add(pickNumberColumn);
+        draftedPlayers.getColumns().add(draftedFirstNameColumn);
+        draftedPlayers.getColumns().add(draftedLastNameColumn);
+        draftedPlayers.getColumns().add(draftedTeamNameColumn);
+        draftedPlayers.getColumns().add(draftedContractColumn);
+        draftedPlayers.getColumns().add(draftedSalaryColumn);
+        
         draftScreenPane.getChildren().add(draftScreenLabel);
+        draftScreenPane.getChildren().add(bestPlayPause);
+        draftScreenPane.getChildren().add(draftedPlayers);
         workspacePane.setCenter(draftScreenPane);
         workspaceScrollPane.setContent(workspacePane);     
     }
