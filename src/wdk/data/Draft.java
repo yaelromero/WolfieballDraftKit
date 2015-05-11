@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import wdk.comparators.TeamBAStatComparator;
 import wdk.comparators.TeamERAStatComparator;
 import wdk.comparators.TeamHRStatComparator;
@@ -384,4 +383,40 @@ public class Draft {
         }
     }
     
+    public ArrayList<Player> playersEligibleForPosition(String s) {
+        
+        ArrayList<Player> playersEligible = new ArrayList<Player>();
+        
+        for(Player p: getFreeAgents()) {
+            if(s.equalsIgnoreCase("MI")) {
+                if(p.getQPOrRole().contains("2B") || p.getQPOrRole().contains("SS")) {
+                    playersEligible.add(p);
+                }
+            }
+            else if(s.equalsIgnoreCase("U")) {
+                if(!p.getQPOrRole().contains("P")) {
+                    playersEligible.add(p);
+                }
+            }
+            else if(s.equalsIgnoreCase("CI")) {
+                if(p.getQPOrRole().contains("1B") || p.getQPOrRole().contains("3B")) {
+                    playersEligible.add(p);
+                }
+            }
+            else if(p.getQPOrRole().contains(s)) {
+                playersEligible.add(p);
+            }
+        }
+        return playersEligible;
+    }
+    
+    public ArrayList<Player> playersForTaxiSquad() {
+        ArrayList<Player> taxiSquadPlayers = new ArrayList<Player>();
+        
+        for(Player p: getFreeAgents()) {
+            taxiSquadPlayers.add(p);
+        }
+        
+        return taxiSquadPlayers;
+    }
 }

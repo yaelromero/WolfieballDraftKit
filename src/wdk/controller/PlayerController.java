@@ -91,7 +91,7 @@ public class PlayerController {
                     for(int i = 0; i < draft.getListOfTeams().size(); i++) {
                         if(draft.getListOfTeams().get(i).checkIfPlayerInSL(p) == true) {
                             draft.getListOfTeams().get(i).removePlayerFromStartingLineup(p);
-                            draft.getListOfTeams().get(i).setPlayersNeeded(23 - draft.getListOfTeams().get(i).getStartingLineup().size());
+                            draft.getListOfTeams().get(i).setPlayersNeededForSL(23 - draft.getListOfTeams().get(i).getStartingLineup().size());
                             draft.getListOfTeams().get(i).setMoneyLeft(draft.getListOfTeams().get(i).calcMoneyLeft());
                             draft.getListOfTeams().get(i).setMoneyPerPlayer(draft.getListOfTeams().get(i).calcMoneyPerPlayer());
                             draft.getListOfTeams().get(i).setAggRStat(draft.getListOfTeams().get(i).calcAggRStat());
@@ -145,7 +145,7 @@ public class PlayerController {
                         for(int i = 0; i < draft.getListOfTeams().size(); i++) {
                             if(draft.getListOfTeams().get(i).checkIfPlayerInSL(p) == true) {
                                 draft.getListOfTeams().get(i).removePlayerFromStartingLineup(p);
-                                draft.getListOfTeams().get(i).setPlayersNeeded(23 - draft.getListOfTeams().get(i).getStartingLineup().size());
+                                draft.getListOfTeams().get(i).setPlayersNeededForSL(23 - draft.getListOfTeams().get(i).getStartingLineup().size());
                                 draft.getListOfTeams().get(i).setMoneyLeft(draft.getListOfTeams().get(i).calcMoneyLeft());
                                 draft.getListOfTeams().get(i).setMoneyPerPlayer(draft.getListOfTeams().get(i).calcMoneyPerPlayer());
                                 draft.getListOfTeams().get(i).setAggRStat(draft.getListOfTeams().get(i).calcAggRStat());
@@ -172,7 +172,7 @@ public class PlayerController {
                             }
                         }
                         draft.addPlayerToTeam(p, draft.getTeamWithName(p.getFantasyTeam()));
-                        draft.getTeamWithName(p.getFantasyTeam()).setPlayersNeeded(23 - draft.getTeamWithName(p.getFantasyTeam()).getStartingLineup().size());
+                        draft.getTeamWithName(p.getFantasyTeam()).setPlayersNeededForSL(23 - draft.getTeamWithName(p.getFantasyTeam()).getStartingLineup().size());
                         draft.getTeamWithName(p.getFantasyTeam()).setMoneyLeft(draft.getTeamWithName(p.getFantasyTeam()).calcMoneyLeft());
                         draft.getTeamWithName(p.getFantasyTeam()).setMoneyPerPlayer(draft.getTeamWithName(p.getFantasyTeam()).calcMoneyPerPlayer());
                         draft.getTeamWithName(p.getFantasyTeam()).setAggRStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggRStat());
@@ -204,7 +204,7 @@ public class PlayerController {
                     }
                     else if(draft.checkForSameInGivenTeam(p, draft.getTeamWithName(p.getFantasyTeam())) == false) {
                         draft.addPlayerToTeam(p, draft.getTeamWithName(p.getFantasyTeam()));
-                        draft.getTeamWithName(p.getFantasyTeam()).setPlayersNeeded(23 - draft.getTeamWithName(p.getFantasyTeam()).getStartingLineup().size());
+                        draft.getTeamWithName(p.getFantasyTeam()).setPlayersNeededForSL(23 - draft.getTeamWithName(p.getFantasyTeam()).getStartingLineup().size());
                         draft.getTeamWithName(p.getFantasyTeam()).setMoneyLeft(draft.getTeamWithName(p.getFantasyTeam()).calcMoneyLeft());
                         draft.getTeamWithName(p.getFantasyTeam()).setMoneyPerPlayer(draft.getTeamWithName(p.getFantasyTeam()).calcMoneyPerPlayer());
                         draft.getTeamWithName(p.getFantasyTeam()).setAggRStat(draft.getTeamWithName(p.getFantasyTeam()).calcAggRStat());

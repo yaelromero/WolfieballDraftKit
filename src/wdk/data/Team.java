@@ -23,7 +23,8 @@ import wdk.comparators.PlayerPositionComparator;
 public class Team {
     final StringProperty teamName;
     final StringProperty teamOwner;
-    final IntegerProperty playersNeeded;
+    final IntegerProperty playersNeededForSL;
+    final IntegerProperty playersNeededForTS;
     final IntegerProperty moneyLeft;
     final IntegerProperty moneyPerPlayer;
     final IntegerProperty aggRStat;
@@ -53,6 +54,7 @@ public class Team {
     public static final String DEFAULT_TEAM_NAME = "<ENTER TEAM NAME>";
     public static final String DEFAULT_TEAM_OWNER = "<ENTER TEAM_OWNER>";
     public static final int DEFAULT_PLAYERS_NEEDED = 23;
+    public static final int DEFAULT_PLAYERS_TS_NEEDED = 8;
     public static final int DEFAULT_MONEY_LEFT = 260;
     public static final int DEFAULT_MON_PER_PLAYER = 260/23;
     public static final int DEFAULT_R_STAT = 0;
@@ -80,7 +82,8 @@ public class Team {
     public Team() {
         teamName = new SimpleStringProperty(DEFAULT_TEAM_NAME);
         teamOwner = new SimpleStringProperty(DEFAULT_TEAM_OWNER);
-        playersNeeded = new SimpleIntegerProperty(DEFAULT_PLAYERS_NEEDED);
+        playersNeededForSL = new SimpleIntegerProperty(DEFAULT_PLAYERS_NEEDED);
+        playersNeededForTS = new SimpleIntegerProperty(DEFAULT_PLAYERS_TS_NEEDED);
         moneyLeft = new SimpleIntegerProperty(DEFAULT_MONEY_LEFT);
         moneyPerPlayer = new SimpleIntegerProperty(DEFAULT_MON_PER_PLAYER);
         aggRStat = new SimpleIntegerProperty(DEFAULT_R_STAT);
@@ -136,16 +139,28 @@ public class Team {
         return teamOwner;
     }
     
-    public void setPlayersNeeded(int initPlayersNeeded) {
-        playersNeeded.set(initPlayersNeeded);
+    public void setPlayersNeededForSL(int initPlayersNeededForSL) {
+        playersNeededForSL.set(initPlayersNeededForSL);
     }
     
-    public int getPlayersNeeded() {
-        return playersNeeded.get();
+    public int getPlayersNeededForSL() {
+        return playersNeededForSL.get();
     }
     
-    public IntegerProperty playersNeededProperty() {
-        return playersNeeded;
+    public IntegerProperty playersNeededForSLProperty() {
+        return playersNeededForSL;
+    }
+    
+    public void setPlayersNeededForTS(int initPlayersNeededForTS) {
+        playersNeededForTS.set(initPlayersNeededForTS);
+    }
+    
+    public int getPlayersNeededForTS() {
+        return playersNeededForTS.get();
+    }
+    
+    public IntegerProperty playersNeededForTSProperty() {
+        return playersNeededForTS;
     }
     
     public void setMoneyLeft(int initMoneyLeft) {
@@ -445,6 +460,10 @@ public class Team {
         Collections.sort(getStartingLineup(), new PlayerPositionComparator());
     }
     
+    public void addPlayerToTaxiSquad(Player p) {
+        getTaxiSquad().add(p);
+    }
+    
     public void removePlayerFromStartingLineup(Player p) {
         for(int i = 0; i < getStartingLineup().size(); i++) {
             if(getStartingLineup().get(i).getFirstName().equalsIgnoreCase(p.getFirstName()) &&
@@ -580,7 +599,14 @@ public class Team {
     }
     
     public int calcMoneyPerPlayer() {
-        int monpp = getMoneyLeft() / getPlayersNeeded();
+        
+        int monpp;
+        if(getPlayersNeededForSL() > 0) {
+            monpp = getMoneyLeft() / getPlayersNeededForSL();
+        }
+        else {
+            monpp = -1;
+        }
         return monpp;
     }
     
@@ -744,5 +770,44 @@ public class Team {
         }
         return aggwhip;
         
+    }
+    
+    public ArrayList<String> getPositionsNeeded() {
+        // Check which positions the team still needs
+        
+        ArrayList<String> positionsNeeded = new ArrayList<String>();
+        
+        if(this.getCCount() < 2) {
+            positionsNeeded.add("C");    
+        }
+        if(this.get1BCount() < 1) {
+            positionsNeeded.add("1B");
+        }
+        if(this.getCICount() < 1) {
+            positionsNeeded.add("CI");
+        }
+        if(this.get3BCount() < 1) {
+            positionsNeeded.add("3B");
+        }
+        if(this.get2BCount() < 1) {
+            positionsNeeded.add("2B");
+        }
+        if(this.getMICount() < 1) {
+            positionsNeeded.add("MI");
+        }
+        if(this.getSSCount() < 1) {
+            positionsNeeded.add("SS");
+        }
+        if(this.getUCount() < 1) {
+            positionsNeeded.add("U");
+        }
+        if(this.getOFCount() < 5) {
+            positionsNeeded.add("OF");
+        }
+        if(this.getPCount() < 9) {
+            positionsNeeded.add("P");
+        }
+        
+        return positionsNeeded;
     }
 }

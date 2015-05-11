@@ -11,10 +11,17 @@ import wdk.data.DraftDataView;
 import wdk.data.Player;
 import wdk.data.Team;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -26,6 +33,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -42,11 +50,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import properties_manager.PropertiesManager;
 import wdk.controller.DraftEditController;
 import wdk.controller.PlayerController;
 import wdk.controller.ScreenController;
 import wdk.controller.TeamController;
+import wdk.data.Contract;
 import wdk.data.MLBTeam;
 
 /**
@@ -1211,11 +1221,116 @@ public class WDK_GUI implements DraftDataView {
         draftedPlayers.getColumns().add(draftedContractColumn);
         draftedPlayers.getColumns().add(draftedSalaryColumn);
         
+        pickNumberColumn.setCellValueFactory(new Callback<CellDataFeatures<Player, String>, ObservableValue<String>>() {
+            @Override 
+            public ObservableValue<String> call(CellDataFeatures<Player, String> p) {
+                return new ReadOnlyObjectWrapper(draftedPlayers.getItems().indexOf(p.getValue()) + 1 + "");
+            }   
+        });  
+        draftedFirstNameColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("firstName"));
+        draftedLastNameColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("lastName"));
+        draftedTeamNameColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("fantasyTeam"));
+        draftedContractColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("contract"));
+        draftedSalaryColumn.setCellValueFactory(new PropertyValueFactory<Player, Integer>("salary")); 
+        draftBest.setOnAction((ActionEvent e) -> {  
+            
+            boolean SLDone = false;
+            for(Team t: dataManager.getDraft().getListOfTeams()) {
+                if(t.getPlayersNeededForSL() == 0) {
+                    SLDone = true;
+                }
+                else {
+                    SLDone = false;
+                    break;
+                }
+            }
+            
+            if(SLDone == false) {
+                handleDraftStartingLineupPlayers();            
+            }
+            else
+                handleDraftTaxiSquadPlayers();
+        });
+        
+        draftedPlayers.setItems(dataManager.getDraft().getDraftedPlayers());
         draftScreenPane.getChildren().add(draftScreenLabel);
         draftScreenPane.getChildren().add(bestPlayPause);
         draftScreenPane.getChildren().add(draftedPlayers);
         workspacePane.setCenter(draftScreenPane);
         workspaceScrollPane.setContent(workspacePane);     
+    }
+    
+    public void handleDraftStartingLineupPlayers() {
+        for(Team t: dataManager.getDraft().getListOfTeams()) {
+            boolean skip = false;
+            if(t.getPlayersNeededForSL() > 0) {
+                for(String p: t.getPositionsNeeded()) {
+                    // FIND THE SELECTED PLAYERS ELIGIBLE FOR THAT POSITION
+                    // AND SELECT THE FIRST PLAYER
+                    Player m = dataManager.getDraft().playersEligibleForPosition(p).get(0);
+                    m.setFantasyTeam(t.getTeamName());
+                    m.setContract(Contract.S2);
+                    m.setSalary(1);
+                    m.setChosenPosition(p);
+                    dataManager.getDraft().addPlayerToTeam(m, t);
+                    dataManager.getDraft().addDraftedPlayer(m);
+                    dataManager.getDraft().removeFreeAgent(m);
+                    t.setPlayersNeededForSL(23 - (t.getStartingLineup().size()));
+                    t.setMoneyLeft(t.calcMoneyLeft());
+                    t.setMoneyPerPlayer(t.calcMoneyPerPlayer());
+                    t.setAggRStat(t.calcAggRStat());
+                    t.setAggHRStat(t.calcAggHRStat());
+                    t.setAggRBIStat(t.calcAggRBIStat());
+                    t.setAggSBStat(t.calcAggSBStat());
+                    t.setAggBAStat(t.calcAggBAStat());
+                    t.setAggWStat(t.calcAggWStat());
+                    t.setAggSVStat(t.calcAggSVStat());
+                    t.setAggKStat(t.calcAggKStat());
+                    t.setAggERAStat(t.calcAggERAStat());
+                    t.setAggWHIPStat(t.calcAggWHIPStat());
+                    dataManager.getDraft().calcPointsForWHIP();
+                    dataManager.getDraft().calcPointsForERA();
+                    dataManager.getDraft().calcPointsForK();
+                    dataManager.getDraft().calcPointsForSV();
+                    dataManager.getDraft().calcPointsForW();
+                    dataManager.getDraft().calcPointsForBA();
+                    dataManager.getDraft().calcPointsForSB();
+                    dataManager.getDraft().calcPointsForRBI();
+                    dataManager.getDraft().calcPointsForHR();
+                    dataManager.getDraft().calcPointsForR();
+                    dataManager.getDraft().calcTotalPoints();
+                    skip = true;
+                    break;
+                }
+            }
+            if(skip) {
+                break;
+            }
+        }
+    }
+    
+    public void handleDraftTaxiSquadPlayers() {
+        for(Team t: dataManager.getDraft().getListOfTeams()) {
+            boolean skip = false;
+            if(t.getPlayersNeededForTS() > 0) {
+                // FIND THE SELECTED PLAYERS ELIGIBLE FOR THAT POSITION
+                // AND SELECT THE FIRST PLAYER
+                Player m = dataManager.getDraft().playersForTaxiSquad().get(0);
+                m.setFantasyTeam(t.getTeamName());
+                m.setContract(Contract.X);
+                m.setSalary(1);
+                m.setChosenPosition(dataManager.getDraft().playersForTaxiSquad().get(0).getQPOrRole().split("_")[0]);
+                t.addPlayerToTaxiSquad(m);
+                dataManager.getDraft().addDraftedPlayer(m);
+                dataManager.getDraft().removeFreeAgent(m);
+                t.setPlayersNeededForTS(8 - (t.getTaxiSquad().size()));
+                skip = true;
+                break;
+            }
+            if(skip) {
+                break;
+            }
+        }
     }
     
     public void showStandingsScreen() {
@@ -1243,7 +1358,7 @@ public class WDK_GUI implements DraftDataView {
         totalPointsColumn = new TableColumn(COL_TOTAL_POINTS);
         
         teamNameColumn.setCellValueFactory(new PropertyValueFactory<Team, String>("teamName"));
-        playersNeededColumn.setCellValueFactory(new PropertyValueFactory<Team, Integer>("playersNeeded"));
+        playersNeededColumn.setCellValueFactory(new PropertyValueFactory<Team, Integer>("playersNeededForSL"));
         moneyLeftColumn.setCellValueFactory(new PropertyValueFactory<Team, Integer>("moneyLeft"));
         moneyPerPlayerColumn.setCellValueFactory(new PropertyValueFactory<Team, Integer>("moneyPerPlayer"));
         aggRColumn.setCellValueFactory(new PropertyValueFactory<Team, Integer>("aggRStat"));
