@@ -1252,6 +1252,10 @@ public class WDK_GUI implements DraftDataView {
                 handleDraftTaxiSquadPlayers();
         });
         
+        startAutoDraft.setOnAction((ActionEvent e) -> {
+            AutomatedDrafting ad = new AutomatedDrafting(this);
+        });
+        
         draftedPlayers.setItems(dataManager.getDraft().getDraftedPlayers());
         draftScreenPane.getChildren().add(draftScreenLabel);
         draftScreenPane.getChildren().add(bestPlayPause);
