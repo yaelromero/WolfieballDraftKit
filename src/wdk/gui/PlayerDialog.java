@@ -34,6 +34,7 @@ import wdk.data.Contract;
 import wdk.data.Hitter;
 import wdk.data.MLBTeam;
 import wdk.data.Pitcher;
+import wdk.data.Team;
 import static wdk.gui.WDK_GUI.CLASS_SUBHEADING_LABEL;
 
 /**
@@ -403,6 +404,24 @@ public class PlayerDialog  extends Stage {
         for(int i = 0; i < draft.getListOfTeams().size(); i++) {
             fantasyTeamChoices.add(draft.getListOfTeams().get(i).getTeamName());
         }
+        boolean SLDone = false;
+            for(Team t: draft.getListOfTeams()) {
+                if(t.getPlayersNeededForSL() == 0) {
+                    SLDone = true;
+                }
+                else {
+                    SLDone = false;
+                    break;
+                }
+            }
+            
+            if(SLDone == true) {
+                for(Team t: draft.getListOfTeams()) {
+                    if(t.getPlayersNeededForTS() > 0) {
+                        fantasyTeamChoices.add(t.getTeamName() + "'s" + " Taxi Squad");         
+                    }
+                }
+             }
         fantasyTeamComboBox.setItems(fantasyTeamChoices);
         fantasyTeamComboBox.setOnAction(e -> {
             newPlayer.setFantasyTeam((String)fantasyTeamComboBox.getValue());
@@ -419,6 +438,19 @@ public class PlayerDialog  extends Stage {
                     positionComboBox.setDisable(true);
                     contractComboBox.setDisable(true);
                     salaryTextField.setDisable(true);
+                }
+                else if(newTeamName.contains("Taxi")) {
+                    ObservableList taxiPositions = FXCollections.observableArrayList();
+                    if(newPlayer.getQPOrRole().equalsIgnoreCase("P")) {
+                        taxiPositions.add("P");
+                    }
+                    else {
+                        String[] possible = newPlayer.getQPOrRole().split("_");
+                        for(int i = 0; i < possible.length; i++) {
+                            taxiPositions.add(possible[i]);
+                        }
+                    }
+                    positionComboBox.setItems(taxiPositions);
                 }
                 else {
                     ObservableList positionChoices = FXCollections.observableArrayList();

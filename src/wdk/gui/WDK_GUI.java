@@ -717,16 +717,25 @@ public class WDK_GUI implements DraftDataView {
                 taxiSquadTable.setItems(null);
             }
             else {
+                showPlayersScreen();
+                showFantasyTeamsScreen();
+                
                 teamTable.setItems(dataManager.getDraft().getTeamWithName((String)selectFantasyTeamComboBox.getValue()).getStartingLineup());
-                taxiSquadTable.setItems(dataManager.getDraft().getTeamWithName((String)selectFantasyTeamComboBox.getValue()).getTaxiSquad());
+                taxiSquadTable.setItems(dataManager.getDraft().getTeamWithName((String)selectFantasyTeamComboBox.getValue()).getTaxiSquad());              
             }
         });
    
         teamTable.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
                 // OPEN UP THE PLAYER EDITOR
-                playerController.handleEditPlayerRequest(this, teamTable.getSelectionModel().getSelectedItem());
-                draftController.handleDraftChangeRequest(this);               
+                try {
+                    playerController.handleEditPlayerRequest(this, teamTable.getSelectionModel().getSelectedItem());
+                    draftController.handleDraftChangeRequest(this); 
+                } catch(Exception f) {
+                    int selected = teamTable.getSelectionModel().getSelectedIndex();
+                    teamTable.getSelectionModel().clearSelection();
+                    teamTable.getSelectionModel().select(selected); 
+                }
             }
         });
         
@@ -1277,9 +1286,12 @@ public class WDK_GUI implements DraftDataView {
                     m.setSalary(1);
                     m.setChosenPosition(p);
                     dataManager.getDraft().addPlayerToTeam(m, t);
-                    dataManager.getDraft().addDraftedPlayer(m);
+                    dataManager.getDraft().addDraftedPlayer(m); 
                     dataManager.getDraft().removeFreeAgent(m);
-                    t.setPlayersNeededForSL(23 - (t.getStartingLineup().size()));
+                    skip = true;
+                    break;
+                }
+                t.setPlayersNeededForSL(23 - (t.getStartingLineup().size()));
                     t.setMoneyLeft(t.calcMoneyLeft());
                     t.setMoneyPerPlayer(t.calcMoneyPerPlayer());
                     t.setAggRStat(t.calcAggRStat());
@@ -1303,9 +1315,7 @@ public class WDK_GUI implements DraftDataView {
                     dataManager.getDraft().calcPointsForHR();
                     dataManager.getDraft().calcPointsForR();
                     dataManager.getDraft().calcTotalPoints();
-                    skip = true;
-                    break;
-                }
+                    
             }
             if(skip) {
                 break;

@@ -91,6 +91,7 @@ public class PlayerController {
                     for(int i = 0; i < draft.getListOfTeams().size(); i++) {
                         if(draft.getListOfTeams().get(i).checkIfPlayerInSL(p) == true) {
                             draft.getListOfTeams().get(i).removePlayerFromStartingLineup(p);
+                            draft.removeDraftedPlayer(p);
                             draft.getListOfTeams().get(i).setPlayersNeededForSL(23 - draft.getListOfTeams().get(i).getStartingLineup().size());
                             draft.getListOfTeams().get(i).setMoneyLeft(draft.getListOfTeams().get(i).calcMoneyLeft());
                             draft.getListOfTeams().get(i).setMoneyPerPlayer(draft.getListOfTeams().get(i).calcMoneyPerPlayer());
@@ -132,6 +133,12 @@ public class PlayerController {
                 
                 messageDialog.show("Error: invalid or incomplete values!");
             }
+            else if(p.getFantasyTeam().contains("Taxi")) {
+                int i = p.getFantasyTeam().indexOf('\'');
+                String pla = p.getFantasyTeam().substring(0, i);
+                draft.removeFreeAgent(p);
+                draft.addPlayerToTS(p, draft.getTeamWithName(pla));
+            }
             else {
                 // NOW WE CHECK THE CASE IF USER HAS SELECTED TO PUT THE PLAYER ON A SPECIFIC TEAM  
                 // REMOVE THEM FROM THE FREE AGENT LIST IF NECESSARY AND ADD THEM TO TEAM
@@ -145,6 +152,7 @@ public class PlayerController {
                         for(int i = 0; i < draft.getListOfTeams().size(); i++) {
                             if(draft.getListOfTeams().get(i).checkIfPlayerInSL(p) == true) {
                                 draft.getListOfTeams().get(i).removePlayerFromStartingLineup(p);
+                                draft.removeDraftedPlayer(p);
                                 draft.getListOfTeams().get(i).setPlayersNeededForSL(23 - draft.getListOfTeams().get(i).getStartingLineup().size());
                                 draft.getListOfTeams().get(i).setMoneyLeft(draft.getListOfTeams().get(i).calcMoneyLeft());
                                 draft.getListOfTeams().get(i).setMoneyPerPlayer(draft.getListOfTeams().get(i).calcMoneyPerPlayer());
@@ -172,6 +180,9 @@ public class PlayerController {
                             }
                         }
                         draft.addPlayerToTeam(p, draft.getTeamWithName(p.getFantasyTeam()));
+                        if(p.getContract().equals(Contract.S2)) {
+                            draft.addDraftedPlayer(p);
+                        }
                         draft.getTeamWithName(p.getFantasyTeam()).setPlayersNeededForSL(23 - draft.getTeamWithName(p.getFantasyTeam()).getStartingLineup().size());
                         draft.getTeamWithName(p.getFantasyTeam()).setMoneyLeft(draft.getTeamWithName(p.getFantasyTeam()).calcMoneyLeft());
                         draft.getTeamWithName(p.getFantasyTeam()).setMoneyPerPlayer(draft.getTeamWithName(p.getFantasyTeam()).calcMoneyPerPlayer());
@@ -204,6 +215,9 @@ public class PlayerController {
                     }
                     else if(draft.checkForSameInGivenTeam(p, draft.getTeamWithName(p.getFantasyTeam())) == false) {
                         draft.addPlayerToTeam(p, draft.getTeamWithName(p.getFantasyTeam()));
+                        if(p.getContract().equals(Contract.S2)) {
+                            draft.addDraftedPlayer(p);
+                        }
                         draft.getTeamWithName(p.getFantasyTeam()).setPlayersNeededForSL(23 - draft.getTeamWithName(p.getFantasyTeam()).getStartingLineup().size());
                         draft.getTeamWithName(p.getFantasyTeam()).setMoneyLeft(draft.getTeamWithName(p.getFantasyTeam()).calcMoneyLeft());
                         draft.getTeamWithName(p.getFantasyTeam()).setMoneyPerPlayer(draft.getTeamWithName(p.getFantasyTeam()).calcMoneyPerPlayer());

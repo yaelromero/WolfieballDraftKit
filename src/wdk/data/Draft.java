@@ -79,7 +79,12 @@ public class Draft {
     }
     
     public void removeDraftedPlayer(Player p) {
-        draftedPlayers.remove(p);
+        for(int i = 0; i < draftedPlayers.size(); i++) {
+            if(draftedPlayers.get(i).getFirstName().equalsIgnoreCase(p.getFirstName()) &&
+                    draftedPlayers.get(i).getLastName().equalsIgnoreCase(p.getLastName())) {
+                draftedPlayers.remove(i);
+            }
+        }
     }
     
     public void addTeam(Team a) {
@@ -134,7 +139,10 @@ public class Draft {
         boolean exists = false;
         for(int i = 0; i < t.getStartingLineup().size(); i++) {
             if(t.getStartingLineup().get(i).getFirstName().equalsIgnoreCase(p.getFirstName()) &&
-                t.getStartingLineup().get(i).getLastName().equalsIgnoreCase(p.getLastName())) {
+                t.getStartingLineup().get(i).getLastName().equalsIgnoreCase(p.getLastName()) &&
+                t.getStartingLineup().get(i).getContract().equals(p.getContract()) &&
+                t.getStartingLineup().get(i).getChosenPosition().equals(p.getChosenPosition()) &&
+                t.getStartingLineup().get(i).getSalary() == p.getSalary()) {
                 exists = true;
                 break;
             }
@@ -149,6 +157,14 @@ public class Draft {
         for(int i = 0; i < getListOfTeams().size(); i++) {
             if(t.equals(getListOfTeams().get(i))){
                 getListOfTeams().get(i).addPlayerToStartingLineup(p);
+            }
+        }
+    }
+    
+    public void addPlayerToTS(Player p, Team t) {
+        for(int i = 0; i < getListOfTeams().size(); i++) {
+            if(t.equals(getListOfTeams().get(i))){
+                getListOfTeams().get(i).addPlayerToTaxiSquad(p);
             }
         }
     }
